@@ -5,17 +5,17 @@
   
   <title>eventbus | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Eventbus可代替：handler/message、intent、broadcast #基本用法  ##建立javaBean类    用来存放发送和接收的消息的实体类。  ##接收方    1&amp;gt; 注册和解注册         onCreate()中EventBus.getDefault().register(this);         onDestroy()中EventBus.getD">
+  <meta name="description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法##c1.建立javaBean类    用来存放发送和接收的消息的实体类。 2.接收方1&amp;gt; 注册和解注册      onCreate()中EventBus.getDefault().register(this);      onDestroy()中EventBus.getDefault().">
 <meta name="keywords" content="Code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="eventbus">
 <meta property="og:url" content="http://yoursite.com/2017/05/13/eventbus/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Eventbus可代替：handler/message、intent、broadcast #基本用法  ##建立javaBean类    用来存放发送和接收的消息的实体类。  ##接收方    1&amp;gt; 注册和解注册         onCreate()中EventBus.getDefault().register(this);         onDestroy()中EventBus.getD">
-<meta property="og:updated_time" content="2017-05-13T09:23:12.000Z">
+<meta property="og:description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法##c1.建立javaBean类    用来存放发送和接收的消息的实体类。 2.接收方1&amp;gt; 注册和解注册      onCreate()中EventBus.getDefault().register(this);      onDestroy()中EventBus.getDefault().">
+<meta property="og:updated_time" content="2017-05-13T15:52:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="eventbus">
-<meta name="twitter:description" content="Eventbus可代替：handler/message、intent、broadcast #基本用法  ##建立javaBean类    用来存放发送和接收的消息的实体类。  ##接收方    1&amp;gt; 注册和解注册         onCreate()中EventBus.getDefault().register(this);         onDestroy()中EventBus.getD">
+<meta name="twitter:description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法##c1.建立javaBean类    用来存放发送和接收的消息的实体类。 2.接收方1&amp;gt; 注册和解注册      onCreate()中EventBus.getDefault().register(this);      onDestroy()中EventBus.getDefault().">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -53,9 +53,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -67,7 +67,7 @@
         <section id="main"><article id="post-eventbus" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/05/13/eventbus/" class="article-date">
-  <time datetime="2017-05-13T09:20:18.000Z" itemprop="datePublished">2017-05-13</time>
+  <time datetime="2017-05-13T15:51:21.000Z" itemprop="datePublished">2017-05-13</time>
 </a>
     
   </div>
@@ -87,11 +87,20 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Eventbus可代替：handler/message、intent、broadcast</p>
-<p>#基本用法</p>
-<p> ##建立javaBean类<br>    用来存放发送和接收的消息的实体类。</p>
-<p> ##接收方<br>    1&gt; 注册和解注册<br>         onCreate()中EventBus.getDefault().register(this);<br>         onDestroy()中EventBus.getDefault().unregister(this);<br>    2&gt; 新建接受方法<br>         加入注解：@Subscribe(threadMode = ThreadMode.XXX)<br>         接受方法参数为javaBean类对象。该方法必须是public。<br>    3&gt;ThreadMode分类<br>         四种：Main，background，async，posting</p>
-<p> ##发送方<br>    新建javaBean类对象，通过构造器传入数据。<br>    Event.getDefault().post(javaBean类对象)</p>
-<p>#粘性事件用法<br> 1.与基本用法区别：基本用法接收方先注册，发送方发送的一瞬间接受方立马会接收到；粘性事件先发送方先发送，接收方注册的一瞬间接受消息，不注册则发送方已发送的消息会一直存在于虚空中无法接受到。<br> 2.发送方<br>   EventBus.getDefault().postSticky(javaBean对象)<br> 3.接收方<br>   加入注解：@Subscribe(threadMode = ThreadMode.XXX, sticky = true)<br>   写接受方法<br> 4.接收方注册和解注册<br>    注册：EventBus.getDefault().register(this)<br>    解注册：EventBus.getDefault().removeAllStickyEvents()</p>
+<h1 id="一、基本用法"><a href="#一、基本用法" class="headerlink" title="一、基本用法"></a>一、基本用法</h1><p>##c1.建立javaBean类<br>    用来存放发送和接收的消息的实体类。</p>
+<h2 id="2-接收方"><a href="#2-接收方" class="headerlink" title="2.接收方"></a>2.接收方</h2><pre><code>1&gt; 注册和解注册
+     onCreate()中EventBus.getDefault().register(this);
+     onDestroy()中EventBus.getDefault().unregister(this);
+2&gt; 新建接受方法
+     加入注解：@Subscribe(threadMode = ThreadMode.XXX)
+     接受方法参数为javaBean类对象。该方法必须是public。
+3&gt;ThreadMode分类
+     四种：Main，background，async，posting
+</code></pre><h2 id="3-发送方"><a href="#3-发送方" class="headerlink" title="3.发送方"></a>3.发送方</h2><pre><code>新建javaBean类对象，通过构造器传入数据。
+Event.getDefault().post(javaBean类对象)
+</code></pre><h1 id="二、粘性事件用法"><a href="#二、粘性事件用法" class="headerlink" title="二、粘性事件用法"></a>二、粘性事件用法</h1><pre><code>1.与基本用法区别：基本用法接收方先注册，发送方发送的一瞬间接受方立马会接收到；粘性事件先发送方先发送，接收方注册的一瞬间接受消息，不注册则发送方已发送的消息会一直存在于虚空中无法接受到。
+2.发送方
+</code></pre><p>   EventBus.getDefault().postSticky(javaBean对象)<br>           3.接收方<br>   加入注解：@Subscribe(threadMode = ThreadMode.XXX, sticky = true)<br>   写接受方法<br>         4.接收方注册和解注册<br>    注册：EventBus.getDefault().register(this)<br>    解注册：EventBus.getDefault().removeAllStickyEvents()</p>
 <p>注意点：</p>
 <ol>
 <li>subscriber修饰的方法名字可以随便起，但一定得是public。</li>
@@ -102,7 +111,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/13/eventbus/" data-id="cj2n2dmg00000mapd7r9tr5o3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/05/13/eventbus/" data-id="cj2ngaqy0000e6vpd2jyu136p" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -114,9 +123,9 @@
 <nav id="article-nav">
   
   
-    <a href="/2017/05/13/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2016/09/19/github模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">MVP模式</div>
     </a>
   
 </nav>
@@ -133,9 +142,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
     </div>
   </div>
 
@@ -143,9 +152,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Code/" style="font-size: 10px;">Code</a>
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
     </div>
   </div>
 
@@ -154,7 +163,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
     </div>
   </div>
 
@@ -162,7 +171,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -171,7 +180,19 @@
           </li>
         
           <li>
-            <a href="/2017/05/13/hello-world/">Hello World</a>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
           </li>
         
       </ul>
@@ -187,7 +208,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

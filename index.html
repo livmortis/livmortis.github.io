@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-eventbus" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/04/18/hello-world/" class="article-date">
-  <time datetime="2017-04-18T04:11:07.000Z" itemprop="datePublished">2017-04-18</time>
+    <a href="/2017/05/13/eventbus/" class="article-date">
+  <time datetime="2017-05-13T15:51:21.000Z" itemprop="datePublished">2017-05-13</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/18/hello-world/">Hello World</a>
+      <a class="article-title" href="/2017/05/13/eventbus/">eventbus</a>
     </h1>
   
 
@@ -83,23 +83,36 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is my very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. </p>
-<p>  If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static  files"></a>Generate static  files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>Eventbus可代替：handler/message、intent、broadcast</p>
+<h1 id="一、基本用法"><a href="#一、基本用法" class="headerlink" title="一、基本用法"></a>一、基本用法</h1><p>##c1.建立javaBean类<br>    用来存放发送和接收的消息的实体类。</p>
+<h2 id="2-接收方"><a href="#2-接收方" class="headerlink" title="2.接收方"></a>2.接收方</h2><pre><code>1&gt; 注册和解注册
+     onCreate()中EventBus.getDefault().register(this);
+     onDestroy()中EventBus.getDefault().unregister(this);
+2&gt; 新建接受方法
+     加入注解：@Subscribe(threadMode = ThreadMode.XXX)
+     接受方法参数为javaBean类对象。该方法必须是public。
+3&gt;ThreadMode分类
+     四种：Main，background，async，posting
+</code></pre><h2 id="3-发送方"><a href="#3-发送方" class="headerlink" title="3.发送方"></a>3.发送方</h2><pre><code>新建javaBean类对象，通过构造器传入数据。
+Event.getDefault().post(javaBean类对象)
+</code></pre><h1 id="二、粘性事件用法"><a href="#二、粘性事件用法" class="headerlink" title="二、粘性事件用法"></a>二、粘性事件用法</h1><pre><code>1.与基本用法区别：基本用法接收方先注册，发送方发送的一瞬间接受方立马会接收到；粘性事件先发送方先发送，接收方注册的一瞬间接受消息，不注册则发送方已发送的消息会一直存在于虚空中无法接受到。
+2.发送方
+</code></pre><p>   EventBus.getDefault().postSticky(javaBean对象)<br>           3.接收方<br>   加入注解：@Subscribe(threadMode = ThreadMode.XXX, sticky = true)<br>   写接受方法<br>         4.接收方注册和解注册<br>    注册：EventBus.getDefault().register(this)<br>    解注册：EventBus.getDefault().removeAllStickyEvents()</p>
+<p>注意点：</p>
+<ol>
+<li>subscriber修饰的方法名字可以随便起，但一定得是public。</li>
+<li>两个activity之间跳转，要用粘性事件，普通的不行。</li>
+<li>threadmode为main和posting的时候，自定义方法里才可以写操作ui的逻辑。</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/04/18/hello-world/" data-id="cj2n6xntk000ivdpdimpln3lr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/05/13/eventbus/" data-id="cj2ngaqy0000e6vpd2jyu136p" class="article-share-link">Partager</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
     </footer>
   </div>
   
@@ -152,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/09/19/github模式/" data-id="cj2n6xntg000dvdpdebwgf8lc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/09/19/github模式/" data-id="cj2ngaqy2000g6vpdci9v4e8e" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -255,7 +268,7 @@ spannableString.setSpan(new ForegroundColorSpan (getResouces().getColor(R.color.
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/09/17/跟投设置页面开发笔记/" data-id="cj2n6xnuk001fvdpddyeo9pze" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/09/17/跟投设置页面开发笔记/" data-id="cj2ngaqz6001f6vpdpd13jqx0" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -313,7 +326,7 @@ int h = dm.heightPixels * dm.density
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/09/14/获取屏幕数值/" data-id="cj2n6xnui001dvdpdpvifbkd1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/09/14/获取屏幕数值/" data-id="cj2ngaqyx001d6vpdhgxte825" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -393,7 +406,7 @@ int h = dm.heightPixels * dm.density
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/09/11/支付宝支付和微信支付SDK的使用/" data-id="cj2n6xnu50017vdpdyci3tfg9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/09/11/支付宝支付和微信支付SDK的使用/" data-id="cj2ngaqyp00156vpdyqvhu4yp" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -437,7 +450,7 @@ int h = dm.heightPixels * dm.density
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/25/2016-8-12晚观星/" data-id="cj2n6xnsu0001vdpdsef4e7hn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/25/2016-8-12晚观星/" data-id="cj2ngaqx900016vpdxslgl5s1" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/science/">science</a></li></ul>
@@ -480,7 +493,7 @@ int h = dm.heightPixels * dm.density
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/01/AS实用插件总结/" data-id="cj2n6xnsy0002vdpdyaqmpqt6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/01/AS实用插件总结/" data-id="cj2ngaqxl00056vpd3l029zzx" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -539,7 +552,7 @@ website=&apos;&apos;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/31/自制Library并上传至Jcenter/" data-id="cj2n6xnue0019vdpdmd66aakt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/31/自制Library并上传至Jcenter/" data-id="cj2ngaqyv00196vpdaf0pr5tm" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -741,7 +754,7 @@ private static Object appendArray(Object obj, Object obj2) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/22/Android热更新的实现/" data-id="cj2n6xnta0009vdpd8rpo0q35" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/22/Android热更新的实现/" data-id="cj2ngaqxn00066vpdvhqfcdkq" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -867,7 +880,7 @@ Object instance = localConstructor.newInstance(new Object[] {});
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/19/动态加载DL框架的使用/" data-id="cj2n6xnu20013vdpdmwt8549n" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/19/动态加载DL框架的使用/" data-id="cj2ngaqym00126vpd0dh2icbo" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -893,7 +906,7 @@ Object instance = localConstructor.newInstance(new Object[] {});
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
     </div>
@@ -903,7 +916,7 @@ Object instance = localConstructor.newInstance(new Object[] {});
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
     </div>
@@ -914,7 +927,7 @@ Object instance = localConstructor.newInstance(new Object[] {});
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
     </div>
   </div>
 
@@ -922,12 +935,12 @@ Object instance = localConstructor.newInstance(new Object[] {});
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/04/18/hello-world/">Hello World</a>
+            <a href="/2017/05/13/eventbus/">eventbus</a>
           </li>
         
           <li>
@@ -959,7 +972,7 @@ Object instance = localConstructor.newInstance(new Object[] {});
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
