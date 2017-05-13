@@ -1,0 +1,54 @@
+广播的基础知识点不多，但最近都没怎么用到回头看看发现有些生疏，现总结一下方便以后快速回忆。
+
+发送广播：
+         1. 标准广播（Normal broadcasts）-异步执行：
+             Intent+sendBroadcast()。
+             Intent可以显式或隐式，显式即两个参数类和接收器，隐式一个参数为该广播的action。一般选择隐式发送。
+ 
+         2. 有序广播(Orderd broadcasts)-同步执行：
+             Intent+sendOrderedBroadcast()。
+             sendOrderedBroadcast()会有两个参数第二个为null。
+             接收器可以在<intent-filter>标签中添加priority优先级。（标准广播也可以设置优先级）
+             接收器可以在onReceive()方法中使用abortBroadcast()截断广播。
+
+接收广播：
+          注册广播+创建广播接收器子类
+          1.注册广播：是"广播接收器"(主语)注册自己想要接收的"广播"(宾语)。
+
+              1. 动态注册（通过IntentFilter类）（必须程序启动后才能接受广播）
+          
+          
+                 1、先判断接收器为null即尚未创建对象，然后建广播接收器（系统的或自定义的）的子类的对象。
+                 2、建IntentFilter对象，构造函数为目标广播action，或者对象调用addAction()来传入目标广播action。（通过action来选择监听什么广播）
+                 3、调用registerReceiver()方法，参数一为接收器子类的对象，参数二为IntentFilter对象。（参数1为"主语"接收器，参数2为"宾语"广播）
+          
+    
+              2. 静态注册（通过intent-filter标签）
+
+                 1、manifest中建立<receiver>标签，name写BroadcastReceiver子类名。
+                 2、其中再建立<intent-filter>标签，name可以写priority。
+                 3、其中再建立<action>标签，name写目标广播action。
+                 4、若是接受系统广播，可能还要在<uses-permission>中添加权限。
+
+          2.注销广播：活动的onDestroy()方法中，先判断接收器不为Null，调用unregisterReceiver()，参数之一为receiver子类对象。接收器设为null。
+          3.创建广播接收器子类。 new---other---BroadcastReceiver。或者自建class继承BroadcastReceiver，并在manifest中声明<receiver>。
+
+回应广播：重写BroadcastReceiver的子类中的onReceive()方法。
+
+
+
+本地广播
+比起全局广播仅有以下两个区别：
+1、发送广播：sendBroadcast()方法要用LocalBroadcastManager类的对象来调用，其创建对象通过getInstance()方法。
+2、注册广播：registerReceiver()方法和unregisterReceiver()方法也要用LocalBroadcastManager类的对象来调用。
+3、本地广播不能用隐式注册，本地广播不怕机密数据泄漏、不怕恶意数据安全漏洞、更高效。
+
+
+intent的action。1.自定义的action的命名一般是包名+.+大写。
+                2.系统的action举例。 
+                  1.网络变化：android.net.conn.CONNECTIVITY_CHANGE。
+                    1.对应的类为ConnectivityManager，创建方式getSystemService(Context.CONNECTIVITY_SERVICE)
+                    2.该类拥有的方法是getActiveNetworkInfo()，获取当前网络状况。
+                    3.当前网络状况类NetworkInfo，拥有方法isAvailable()是否网络畅通，返回boolean值。
+                    4.对应权限：ACCESS_NETWORK_STATE
+                  2.开机：android.intent.action.BOOT_COMPLETED。对应权限：RECEIVE_BOOT_COMPLETED。

@@ -1,0 +1,20 @@
+Google在Browser中大量使用了异步任务作为处理耗时的I/O操作，比如下载文件、读写数据库等等。在android中，耗时任务放在主线程会导致阻塞，所以主线程只能操作UI。同时也只有主线程能操作UI，子线程若想借助主线程影响UI，就是今天要讨论的异步操作。经过学习积累，总结异步实现的方法有如下几种。
+
+1.Thread-Handler消息传递机制
+  首先是定义并启动一个子线程。继承Thread类和实现Runnable接口都是可以的，总之是要重写它们的run()方法，在里面运行子线程任务。
+  Message负责线程之间传递消息。包括what，arg1,arg2（携带整型数据）,obj（携带object对象）四种字段。Handler拥有的setMessage（）和handlerMessage（）方法用来传递和接受消息。
+  MessageQueue消息队列，存放消息。Looper拥有的loop（）方法会无限循环传递MessageQueue中的一条条消息。Looper是与Handler一一对应的。一个线程中只有一个MessageQueue，也只有一个Looper。
+  所以流程大致是，需要进行后台任务的Thread子线程中创建Message对象并为其赋予一个专属字段，用Hadler对象调用setMessage（）方法将消息发送到MessageQueue队列中。接着主线程中已经建好的Handler对象所对应的Looper会负责读取消息，回掉dispatchMessage()方法将消息传给Handler，Handler中重写父类的handlerMessage()方法，其参数接受一个Message对象，在方法体中判断Message对象字段匹配后执行UI操作。
+  缺点：有时可能消息队列阻塞或其他原因无法准确的使用。
+2.AsyncTask机制
+  首先要明确AsyncTask机制的实现原理也是基于消息传递机制的。
+  AsyncTask是抽象类，第一步当然就是创建子类继承它，继承是需要制定三个泛型参数，分别是Params--需要传入的参数比如HTTP请求的URL，Progress--后台执行时的进度如一个表示百分数的数组，Result--执行完毕后的Boolean类型结果。接着是重写父类的四个方法。
+  onPreExecute()。执行前的初始化，可执行UI任务，比如show一个ProgressDialog。
+  doInBackground()。我们的子线任务就是在这里执行，不能执行UI操作。与第三个方法互动---可以用pulishProgress()方法讲任务进度传递出去。与第四个方法互动---返回一个boolean类型值，表示任务成功结束否。
+  onProgressUpdate()。如果上一个方法传递了任务进度，就用这个方法来显示（该方法是被UI主线程调用）。参数一般是不定长度的Interger数组，即Interger...i (三个点表示不定长度参数，i相当于一个int数组)，利用ProgressDialog的setMessage()将进度数组显示在进度条上。
+  onPostExecute()。任务结束后的收尾。可以dismiss()那个进度条。参数是第二个方法返回的Boolean值，因为也是被UI现成调用所以可以将boolean结果显示出来。
+  四个方法不能手动去调用，在主线程中想启动任务，要在主线程中创建任务对象后，调用execute（）即可。
+3.runOnUiThread方法
+  在thread子线程的run()中若想进行UI操作，直接调用Activity的一个方法runOnUiThread（），它同Thread的构造器一样接受一个Runnable参数，于是可以用同样的匿名类方式写，在重写的run()方法中进行UI操作即可。之后没有.start()。
+4.Handler的post(Runnabel r)方法
+  就是post一个runnable对象到消息队列，用来更新UI。用法类似于3，在子线程中创建一个Handler对象并调用post()方法，其参数是Runnable对象，匿名类并重写run()方法，在里面UI操作。

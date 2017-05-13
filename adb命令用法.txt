@@ -1,0 +1,80 @@
+1、adb命令管理设备
+   adb devices 查看连接到电脑的手机，返回手机的序列号。
+   adb get-serialno 
+   adb reboot 手机重启
+   adb reboot bootloader 手机重启进入fastboot模式。
+   adb reboot recovery 手机重启进入恢复模式
+   adb shell 只有一台手机连接情况下，进入设备
+   adb -s 序列号 shell 进入指定序列号手机
+   adb -e shell 进入模拟器
+   adb -d shell 进入真实设备
+   
+2、adb自身管理
+   adb重启三部曲：
+   adb kill-server 
+   adb start-server 
+   adb root  获取root权限
+
+3、获取设备硬件信息
+   adb shell cat /sys/class/net/wlan0/address  获取mac地址
+   adb shell cat /proc/cpuinfo 获取cpu信息
+   adb shell cat /system/build.prop 获取系统配置属性
+   adb shell cat /data/misc/wifi/*.conf 获取wifi密码
+
+4、管理设备app
+   adb install XXX.apk 安装apk
+   adb shell pm list package 获取手机所有APP包名
+   adb uninstall XXX包名  卸载某包名的app
+   adb shell top 查看所有应用占用的内存情况
+   adb shell top -m 数字  查看前几个的应用内存情况
+   adb shell service list 查看后台服务信息
+   adb shell cat /proc/meminfo 查看当前内存情况
+   adb shell cat /proc/iomem 查看内存分区情况
+
+5、进行文件操作
+   adb shell ls mnt 所有存储设备
+   adb remount 将system变为可读写分区
+   adb push XXX.apk /sdcard/ 将电脑apk放入手机sd卡
+   adb pull /sdcard/XXX.apk /文件名/ 将手机apk放入电脑文件下
+   adb shell ls 手机根目录文件夹名
+   rm 删除 rename 重命名 rm -r 删除目录 mv 移动 mkdir 新建文件夹 cat 查看文件
+
+   
+6、其他
+   adb shell input text "字符串"  手机输入框放入字符串
+   adb shell input keyevent KEYCODE_HOME 点home键
+   adb shell vm size 获取手机分辨率
+   adb shell getprop ro.build.version.sdk 获取折设备参数例如sdk版本
+   adb shell setenforce 0 删除系统文件
+
+
+7、截屏
+   adb shell screencap -p 路径(如/sdcard/)+图名  截屏
+   adb pull 手机路径+图名 电脑路径 拉取图片
+
+8、录屏android4.4以上
+   adb shell screenrecord -参数 路径+文件名  录屏
+       参数：--size WIDTH*HEIGHT 设置分辨率 （*可能是x）
+             --bit-rate RATE 设置比特率
+             --time-limit TIME  设置录制时长
+             --rotate 
+        ctrl+c 停止录制
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

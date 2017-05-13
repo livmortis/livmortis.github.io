@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android热更新的实现 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="发展逻辑　　一个dex最多65536个方法。———-(1)插件化即独立功能做成独立apk，dexClassLoader动态加载反射调用插件中的类和方法（插件化只适合比较独立模块+必须使用框架）。——–(2)dex分包法，核心功能类放入第一个dex，其他放入第二个以及其余的dex中并以资源文件的形式打包入apk，多个dex文件都塞入classLoader中。———(3)QQ空间把修改过的类的cl">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android热更新的实现">
+<meta property="og:url" content="http://yoursite.com/2016/07/22/Android热更新的实现/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="发展逻辑　　一个dex最多65536个方法。———-(1)插件化即独立功能做成独立apk，dexClassLoader动态加载反射调用插件中的类和方法（插件化只适合比较独立模块+必须使用框架）。——–(2)dex分包法，核心功能类放入第一个dex，其他放入第二个以及其余的dex中并以资源文件的形式打包入apk，多个dex文件都塞入classLoader中。———(3)QQ空间把修改过的类的cl">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/index2.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/index.png">
+<meta property="og:updated_time" content="2017-04-18T04:10:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android热更新的实现">
+<meta name="twitter:description" content="发展逻辑　　一个dex最多65536个方法。———-(1)插件化即独立功能做成独立apk，dexClassLoader动态加载反射调用插件中的类和方法（插件化只适合比较独立模块+必须使用框架）。——–(2)dex分包法，核心功能类放入第一个dex，其他放入第二个以及其余的dex中并以资源文件的形式打包入apk，多个dex文件都塞入classLoader中。———(3)QQ空间把修改过的类的cl">
+<meta name="twitter:image" content="http://7xs17a.com1.z0.glb.clouddn.com/index2.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android热更新的实现" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/22/Android热更新的实现/" class="article-date">
+  <time datetime="2016-07-22T15:43:00.000Z" itemprop="datePublished">2016-07-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android热更新的实现
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　发展逻辑<br>　　一个dex最多65536个方法。———-(1)插件化即独立功能做成独立apk，dexClassLoader动态加载反射调用插件中的类和方法（插件化只适合比较独立模块+必须使用框架）。——–(2)dex分包法，核心功能类放入第一个dex，其他放入第二个以及其余的dex中并以资源文件的形式打包入apk，多个dex文件都塞入classLoader中。———(3)QQ空间把修改过的类的class文件打包成patch.dex。</p>
+<p>　　QQ空间hotfix框架。<br>　　相关框架：HotFix-Nuwa-RocooFix , DroidFix。<br>　　hotfix地址：<a href="https://github.com/dodola/HotFix.git" target="_blank" rel="external">https://github.com/dodola/HotFix.git</a></p>
+<p>　　CLASS_ISPREVERIFIED的问题。<br>　　1、在虚拟机启动的时候，当verify选项被打开的时候(doVerify变量为true)，如果static方法、private方法、构造函数等，其中的直接引用（第一层关系）到的类都在同一个dex文件中，那么该类就会被打上CLASS_ISPREVERIFIED标志。那么，我们要做的就是，阻止该类打上CLASS_ISPREVERIFIED的标志。<br>　　2、举例：A类中的方法所引用到的B类和A类本身都在一个dex文件中，A就会被打上CLASS_ISPREVERIFIED标志。这是如果更新B补丁就会出错。<br>　　3、解决方案：AntilazyLoad类被打包成单独的hack.dex，让所有的类都在构造方法中引用AntilazyLoad类，就防止了类被打上CLASS_ISPREVERIFIED的标志了，只要没被打上这个标志的类都可以进行打补丁操作。注意hack.dex包要被优先加载。<br>　　4、解决方法：在dx工具执行之前，将LoadBugClass.class文件进行修改，再其构造中添加System.out.println(dodola.hackdex.AntilazyLoad.class)，然后继续打包的流程。注意：AntilazyLoad.class这个类是独立在hack.dex中。<br>　　5、解决过程：</p>
+<p>　　1&gt;.javassist修改类的class文件。</p>
+<pre><code>String path = &quot;/Users/zhy/develop_work/eclipse_android/imooc/JavassistTest/&quot;;
+        ClassPool classes = ClassPool.getDefault();
+        classes.appendClassPath(path + &quot;bin&quot;);//项目的bin目录即可
+        CtClass c = classes.get(&quot;dodola.hotfix.LoadBugClass&quot;);
+        CtConstructor ctConstructor = c.getConstructors()[0];
+        ctConstructor
+                .insertAfter(&quot;System.out.println(dodola.hackdex.AntilazyLoad.class);&quot;);
+        c.writeFile(path + &quot;/output&quot;);
+</code></pre><p>　　（为什么不编译时就修改呢?答：源码方式的引用会将引用的类打入同一个dex中，所以我们需要找到一种既能编译通过并且将两个互相引用的类分离到不同的dex中，于是就有了这个动态的代码植入方式。）<br>　　2&gt;.在dx之前进行javassist操作。只需修改app/build.gradle</p>
+<h2 id="一、注意点"><a href="#一、注意点" class="headerlink" title="一、注意点"></a>一、注意点</h2><p>　　1.由于原理是在数组中补丁类放在bug之前，优先执行从而使bug类不在执行，那么只要轮到bug执行了补丁就不会再被执行。所以demo无法实现使使用者看到bug由错误到正确的过程。<br>　　2.CLASS_ISPREVERIFIED的问题出现在较多类存在而发生的处在同一Dex中的问题，demo主程序规模较小，暂不考虑这个问题。<br>　　3.补丁类必须和bug类包名+类名完全相同。<br>　　4.dex文件中可以有多个类，由于一个完整的类是由包名+类名组成，在将.java类文件转换为dex文件过程中，.java和.class文件是不包含包名信息的，输入时必须前面跟上包名，所以若要使jar包中有包结构，即包含包名信息，class打包时要连同包路径一起打。</p>
+<h2 id="二、编写程序。"><a href="#二、编写程序。" class="headerlink" title="二、编写程序。"></a>二、编写程序。</h2><p>　　1.新建一个准备被替换的类BugClass，它肯定不会被执行。</p>
+<p>　　2.建一个与BugClass类包名+类名完全相同的补丁类，加入语句：</p>
+<pre><code>public class BugClass {
+     public String bug(){
+     return &quot;this is a bug&quot;;
+     }
+ }
+</code></pre><p>　　将它进行如下转换.java–&gt;.class–&gt;.jar–&gt;dex包，变为BugClass_dex.jar放入src-main-assets文件夹下，等待主程序中调用。</p>
+<p>　　3.新建一个类继承Application，它生命周期的onCreate()会优先于Activity的onCreate()，所以将引入补丁语句放到这里会保证它门能优先于Bug类执行，同理将CLASS_ISPREVERIFIED问题中的引入AntilazyLoad类语句放到这里，也是处于相同考虑，保证在类被贴上CLASS_ISPREVERIFIED标志前引用到AntilazyLoad类。加入语句如下：</p>
+<pre><code>public void onCreate() {
+    super.onCreate();
+    FileTrans mFileTrans= new FileTrans();
+    Fixbug mFixbug = new Fixbug();
+
+    File dexPath = new File(getDir(&quot;dex&quot;, Context.MODE_PRIVATE), &quot;BugClass_dex.jar&quot;);
+    mFileTrans.prepareDex(this.getApplicationContext(), dexPath, &quot;BugClass_dex.jar&quot;);
+    mFixbug.patch(this, dexPath.getAbsolutePath(), &quot;com.example.administrator.test.BugClass&quot;);
+}
+</code></pre><p>　　新建一个File对象用来存放我们暂存在assets中的dex文件。File构造器参数为File类型路径和String类型文件名，这里getDir采用了MODE_PRIVATE模式，这个私有路径是在/data/data/包名/files下，没刷root的机子是无法看到/data分区的，dex放在这里能增强隐蔽性。将返回的补丁文件路径传入trans()方法进行dex转移。再将这个路径下转移来的dex文件传入patch()方法。</p>
+<p>　　4.读取并转移dex，trans()方法如下：</p>
+<pre><code>public boolean trans(Context context, File dexInternalStoragePath, String dex_file) {
+        BufferedInputStream bis = null;
+        OutputStream dexWriter = null;
+
+        try {
+            bis = new BufferedInputStream(context.getAssets().open(dex_file));
+            dexWriter = new BufferedOutputStream(new FileOutputStream(dexInternalStoragePath));
+            byte[] buf = new byte[BUF_SIZE];
+            int len;
+            while ((len = bis.read(buf, 0, BUF_SIZE)) &gt; 0) {
+                dexWriter.write(buf, 0, len);
+            }
+            dexWriter.close();
+            bis.close();
+            return true;
+        } catch (IOException e) {
+            if (dexWriter != null) {
+                try {
+                    dexWriter.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+            return false;
+        }
+    }
+</code></pre><p>　　代码利用简单的输入输出流将dex从assets转移到了app的/data私人目录下。</p>
+<p>　　5.patch()方法如下：</p>
+<pre><code>public void patch(Context context, String patchDexFile, String patchClassName) {
+        if (patchDexFile != null &amp;&amp; new File(patchDexFile).exists()) {
+            try {
+                if (hasDexClassLoader()) {
+                    injectAboveEqualApiLevel14(context, patchDexFile, patchClassName);
+                } 
+            } catch (Throwable th) {
+            }
+        }
+    }
+private static boolean hasDexClassLoader() {
+    try {
+        Class.forName(&quot;dalvik.system.BaseDexClassLoader&quot;);
+        return true;
+    } catch (ClassNotFoundException e) {
+        return false;
+    }
+}
+</code></pre><p>　　这里加入一个判断句确保可以得到系统的DexClassLoader，接下来调用injectAboveEqualApiLevel14()方法，将补丁类路径patchDexFile和补丁类名patchClassName传入。</p>
+<p>　　6.下面到了最关键部分，injectAboveEqualApiLevel14()方法调用完便完成了补丁注入，具体内容如下：</p>
+<pre><code>private static void injectAboveEqualApiLevel14(Context context, String str, String str2)
+        throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+
+    PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();
+    Object a = combineArray(getDexElements(getPathList(pathClassLoader)),
+                            getDexElements(getPathList(
+                                new DexClassLoader(str, context.getDir(&quot;dex&quot;, 0).getAbsolutePath(), str,                                                        context.getClassLoader()  )
+                              )
+            ));
+    Object a2 = getPathList(pathClassLoader);
+    setField(a2, a2.getClass(), &quot;dexElements&quot;, a);
+    pathClassLoader.loadClass(str2);
+}
+</code></pre><p>　　简单说，得到了两个类加载器，PathClassLoader和DexClassLoader，前者由系统context.getClassLoader()获得，负责加载主程序中的类，将它传入getPathList(pathClassLoader)方法即可获得PathList对象，通过pathList对象，即将它传入getElements(pathList)即可获得dexElements数组，dexElements数组的每个元素是一个dex文件，每个Dex文件中保存着多个类，类加载便是遍历数组找类对应的dexFile。<br>　　从后者DexClassLoader的构造方法可以看出它是用来加载我们那个补丁dex中的类的一款类加载器。之前DL框架中研究过它的构造方法，这里在复习一遍，四个参数：</p>
+<pre><code>dexPath     需要装载的APK或者Jar文件的路径。包含多个路径用File.pathSeparator间隔开,在Android上默认是 &quot;:&quot; 
+optimizedDirectory     优化后的dex文件存放目录，不能为null
+libraryPath     目标类中使用的C/C++库的列表,每个目录用File.pathSeparator间隔开; 可以为 null
+parent     该类装载器的父装载器，一般用当前执行类的装载器
+</code></pre><p>　　我们这里的第一个参数正是上面传入的补丁BugClass_dex.jar的路径，所以创建对象时的构造方法即决定了一个DexClassLoader将要加载的是哪个类。然后是同样的方法的到补丁包的dexElements数组，我们这里只有一个元素BugClass.dex。<br>　　下一步利用combineArray()方法将两个数组合并，第二个放在第一个前面，得到新数组a。<br>　　旧pathList是a2，然后用setField(a2, a2.getClass(), “dexElements”, a)方法，这个方法就是反射得到“dexElements”成员变量，然后将第四个参数a即新数组放入了第一个参数a2即pathList中。方法的具体实现逻辑稍后再说。<br>　　补丁注入完成，简单来说这个方法的逻辑：PathClassLoader得到主程序的pathList中的dexElements数组，DexClassLoader得到我们补丁的pathList中DexClassLoader，两数组合并，新数组再放入pathList中，大功告成。</p>
+<p>　　7.介绍上一步调用的getPathList()getDexElements() getField() setField()combineArray()appendArray()六个方法内部逻辑。</p>
+<pre><code>private static Object getPathList(Object obj) throws ClassNotFoundException, NoSuchFieldException,
+        IllegalAccessException {
+    return getField(obj, Class.forName(&quot;dalvik.system.BaseDexClassLoader&quot;), &quot;pathList&quot;);
+}
+
+private static Object getDexElements(Object obj) throws NoSuchFieldException, IllegalAccessException {
+    return getField(obj, obj.getClass(), &quot;dexElements&quot;);
+}
+
+private static Object getField(Object obj, Class cls, String str)
+        throws NoSuchFieldException, IllegalAccessException {
+    Field declaredField = cls.getDeclaredField(str);
+    declaredField.setAccessible(true);
+    return declaredField.get(obj);
+}
+</code></pre><p>　　getPathList()和getDexElements()，本质上都是利用getField()得到自己所需的成员变量PathList和Elements。在看getField()，这里集中体现了反射思想，第二个参数是class对象，利用它可以调用该Class的变量、方法、构造方法等。这里调用了第三个参数为名字的成员变量，设好访问权限，返回该成员变量。<br>　　放到getPathList()，即是用BaseDexClassLoader的class对象调用并返回它的pathList变量。放到getDexElements()中，就是调用并返回PathList类的dexElements变量</p>
+<p>   8.</p>
+<pre><code>private static void setField(Object obj, Class cls, String str, Object obj2)
+        throws NoSuchFieldException, IllegalAccessException {
+    Field declaredField = cls.getDeclaredField(str);
+    declaredField.setAccessible(true);
+    declaredField.set(obj, obj2);
+}
+</code></pre><p>　　类似getField()，但是得到成员变量后，将其值由第一个参数值变为第四个参数值。回顾上面引用该方法的injectAboveEqualApiLevel14()，里面即是用新pathList替换旧pathList。</p>
+<p>   9.数组合并方法</p>
+<pre><code>private static Object combineArray(Object obj, Object obj2) {
+    Class componentType = obj2.getClass().getComponentType();
+    int length = Array.getLength(obj2);
+    int length2 = Array.getLength(obj) + length;
+    Object newInstance = Array.newInstance(componentType, length2);
+    for (int i = 0; i &lt; length2; i++) {
+        if (i &lt; length) {
+            Array.set(newInstance, i, Array.get(obj2, i));
+        } else {
+            Array.set(newInstance, i, Array.get(obj, i - length));
+        }
+    }
+    return newInstance;
+}
+
+private static Object appendArray(Object obj, Object obj2) {
+    Class componentType = obj.getClass().getComponentType();
+    int length = Array.getLength(obj);
+    Object newInstance = Array.newInstance(componentType, length + 1);
+    Array.set(newInstance, 0, obj2);
+    for (int i = 1; i &lt; length + 1; i++) {
+        Array.set(newInstance, i, Array.get(obj, i - 1));
+    }
+    return newInstance;
+}
+</code></pre><p>　　前者是将一个数组放在另一个数组前，后者是将一个对象放入一个数组前，这里用了前者。逻辑很好理解，看下图即可，需要一步反射得到参数类型作为新数组的元素类型。</p>
+<p>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/index2.png" alt="1"><br>　<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/index.png" alt="2"></p>
+<p>　　附：</p>
+<p>　　补丁类变为dex:<br>　　1. java-&gt;class, cmd进入java源码目录下(不是类所在目录，而是包目录，即上升3到4个目录)，<br>    [javac -source 1.6 -target 1.6 包名\abc.java]<br>　　2. class-&gt;jar,<br>    [jar cvf abc.jar  包名\abc.class]；<br>　　3. jar-&gt;dex, 先要进入dx所在文件（dx工具要复制到sdk的platform-tools下）。将jar包拷过来。<br>    [dx –dex –output abc_dex.jar  abc.jar], <em>*</em>是abc.jar的绝对路径；<br>　　4. 完成。</p>
+<p>　　反编译：<br>　　1.将dex反编译为jar<br>　　使用dex2jar工具，要将目标dex文件复制到dex2jar.bat所在目录dex2jar-0.0.9.15 文件夹。先进入该文件夹。<br>    [dex2jar.bat dex文件名]<br>　　2.读取jar文件<br>　　jd-gui工具。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/22/Android热更新的实现/" data-id="cj2n6xnta0009vdpd8rpo0q35" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/31/自制Library并上传至Jcenter/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          自制Library并上传至Jcenter
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/19/动态加载DL框架的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">android studio下动态加载DL框架的使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

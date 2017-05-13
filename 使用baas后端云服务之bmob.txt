@@ -1,0 +1,9 @@
+1.bmob注册账号，下载sdk，将文件中的两个jar包导入到项目lib中依赖之。
+2.打开自己的项目，在网站中找到所需权限，复制到项目的manifest中。
+
+一、云数据库添加数据
+1.MainActivity中初始化Bmob,Bmob.initialize(this,ApplicationID),后者在网站账户中找。
+2.将实体类继承BmobObject类。
+3.主代码中，实体类创建对象并且赋值后，调用其save(context,new SaveListener())方法，重写后者的两个onSuccess()和onFailure()方法。即可上传数据。
+
+二、云数据库查找数据

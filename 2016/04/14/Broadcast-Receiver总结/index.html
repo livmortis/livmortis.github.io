@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Broadcast_Receiver总结 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="广播的基础知识点不多，但最近都没怎么用到回头看看发现有些生疏，现总结一下方便以后快速回忆。 一、发送广播：1. 标准广播　　（Normal broadcasts）-异步执行：　　Intent+sendBroadcast()。　　Intent可以显式或隐式，显式即两个参数类和接收器，隐式一个参数为该广播的action。一般选择隐式发送。 2. 有序广播　　(Orderd broadcasts)-">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Broadcast_Receiver总结">
+<meta property="og:url" content="http://yoursite.com/2016/04/14/Broadcast-Receiver总结/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="广播的基础知识点不多，但最近都没怎么用到回头看看发现有些生疏，现总结一下方便以后快速回忆。 一、发送广播：1. 标准广播　　（Normal broadcasts）-异步执行：　　Intent+sendBroadcast()。　　Intent可以显式或隐式，显式即两个参数类和接收器，隐式一个参数为该广播的action。一般选择隐式发送。 2. 有序广播　　(Orderd broadcasts)-">
+<meta property="og:updated_time" content="2017-04-18T04:10:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Broadcast_Receiver总结">
+<meta name="twitter:description" content="广播的基础知识点不多，但最近都没怎么用到回头看看发现有些生疏，现总结一下方便以后快速回忆。 一、发送广播：1. 标准广播　　（Normal broadcasts）-异步执行：　　Intent+sendBroadcast()。　　Intent可以显式或隐式，显式即两个参数类和接收器，隐式一个参数为该广播的action。一般选择隐式发送。 2. 有序广播　　(Orderd broadcasts)-">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Broadcast-Receiver总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/14/Broadcast-Receiver总结/" class="article-date">
+  <time datetime="2016-04-14T15:13:54.000Z" itemprop="datePublished">2016-04-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Broadcast_Receiver总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　广播的基础知识点不多，但最近都没怎么用到回头看看发现有些生疏，现总结一下方便以后快速回忆。</p>
+<h2 id="一、发送广播："><a href="#一、发送广播：" class="headerlink" title="一、发送广播："></a>一、发送广播：</h2><h4 id="1-标准广播"><a href="#1-标准广播" class="headerlink" title="1. 标准广播"></a>1. 标准广播</h4><p>　　（Normal broadcasts）-异步执行：<br>　　Intent+sendBroadcast()。<br>　　Intent可以显式或隐式，显式即两个参数类和接收器，隐式一个参数为该广播的action。一般选择隐式发送。</p>
+<h4 id="2-有序广播"><a href="#2-有序广播" class="headerlink" title="2. 有序广播"></a>2. 有序广播</h4><p>　　(Orderd broadcasts)-同步执行：<br>　　Intent+<strong>sendOrderedBroadcast()</strong>。<br>　　sendOrderedBroadcast()会有两个参数第二个为null。<br>　　接收器可以在<intent-filter>标签中添加priority优先级。（标准广播也可以设置优先级）<br>　　接收器可以在onReceive()方法中使用abortBroadcast()截断广播。</intent-filter></p>
+<h2 id="二、接收广播："><a href="#二、接收广播：" class="headerlink" title="二、接收广播："></a>二、接收广播：</h2><p>　　注册广播+创建广播接收器子类</p>
+<h4 id="1-注册广播：是”广播接收器”-主语-注册自己想要接收的”广播”-宾语-。"><a href="#1-注册广播：是”广播接收器”-主语-注册自己想要接收的”广播”-宾语-。" class="headerlink" title="1.注册广播：是”广播接收器”(主语)注册自己想要接收的”广播”(宾语)。"></a>1.注册广播：是”广播接收器”(主语)注册自己想要接收的”广播”(宾语)。</h4><p>　　1&gt; 动态注册（通过IntentFilter类）（必须程序启动后才能接受广播）</p>
+<ul>
+<li>1、先判断接收器为null即尚未创建对象，然后建广播接收器（系统的或自定义的）的子类的对象。</li>
+<li>2、建<strong>IntentFilter</strong>对象，构造函数为目标广播action，或者对象调用addAction()来传入目标广播action。（通过action来选择监听什么广播）</li>
+<li>3、调用<strong>registerReceiver()</strong>方法，参数一为接收器子类的对象，参数二为IntentFilter对象。（参数1为”主语”接收器，参数2为”宾语”广播）</li>
+</ul>
+<p>　　2&gt; 静态注册（通过intent-filter标签）</p>
+<ul>
+<li>1、manifest中建立<receiver>标签，name写BroadcastReceiver子类名。</receiver></li>
+<li>2、其中再建立<intent-filter>标签，name可以写priority。</intent-filter></li>
+<li>3、其中再建立<action>标签，name写目标广播action。</action></li>
+<li>4、若是接受系统广播，可能还要在<uses-permission>中添加权限。</uses-permission></li>
+</ul>
+<h4 id="2-注销广播"><a href="#2-注销广播" class="headerlink" title="2.注销广播"></a>2.注销广播</h4><p>　　活动的onDestroy()方法中，先判断接收器不为Null，调用<strong>unregisterReceiver()</strong>，参数之一为receiver子类对象。接收器设为null。</p>
+<h4 id="3-创建广播接收器子类。"><a href="#3-创建广播接收器子类。" class="headerlink" title="3.创建广播接收器子类。"></a>3.创建广播接收器子类。</h4><p>　　new—other—BroadcastReceiver。或者自建class继承BroadcastReceiver，并在manifest中声明<receiver>。</receiver></p>
+<h2 id="三、回应广播"><a href="#三、回应广播" class="headerlink" title="三、回应广播"></a>三、回应广播</h2><p>　　重写BroadcastReceiver的子类中的onReceive()方法。</p>
+<h2 id="四、本地广播"><a href="#四、本地广播" class="headerlink" title="四、本地广播"></a>四、本地广播</h2><p>比起全局广播仅有以下两个区别：<br>1、发送广播：sendBroadcast()方法要用<strong>LocalBroadcastManager</strong>类的对象来调用，其创建对象通过getInstance()方法。<br>2、注册广播：registerReceiver()方法和unregisterReceiver()方法也要用LocalBroadcastManager类的对象来调用。<br>3、本地广播不能用隐式注册，本地广播不怕机密数据泄漏、不怕恶意数据安全漏洞、更高效。</p>
+<h2 id="五、intent的action。"><a href="#五、intent的action。" class="headerlink" title="五、intent的action。"></a>五、intent的action。</h2><p>　　1.自定义的action的命名一般是包名+.+大写。<br>　　2.系统的action举例。<br>　　　　1&gt;网络变化：<code>android.net.conn.CONNECTIVITY_CHANGE</code>。</p>
+<ul>
+<li>1.对应的类为<strong>ConnectivityManager</strong>，创建方式getSystemService(Context.CONNECTIVITY_SERVICE)</li>
+<li>2.该类拥有的方法是<strong>getActiveNetworkInfo()</strong>，获取当前网络状况。</li>
+<li>3.当前网络状况类<strong>NetworkInfo</strong>，拥有方法<strong>isAvailable()</strong>是否网络畅通，返回boolean值。</li>
+<li>4.对应权限：<code>ACCESS_NETWORK_STATE</code><br>　　　　2&gt;开机：<code>android.intent.action.BOOT_COMPLETED</code>。对应权限：<code>RECEIVE_BOOT_COMPLETED</code>。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/14/Broadcast-Receiver总结/" data-id="cj2n6xnt70006vdpdi2n38pfa" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/18/五个角度分析android性能优化问题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          五个角度分析android性能优化问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/13/AIDL的简单使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">AIDL的简单使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

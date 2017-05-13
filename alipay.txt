@@ -1,0 +1,56 @@
+
+**** 客户端——>本地接口
+一、充值页面
+   同微信
+
+二、popwindow
+   基本同微信。
+   将n个本地值拼成url，在子线程中传给项目类MobileSecurePayer的自定义方法requestOrderInfo()方法中。
+
+三、请求接口，获取数据（MobileSecurePayer类）
+   1.请求接口
+     requestOrderInfo()中进行HttpURLConnection网络请求，返回的json中应该包括了如下数据：
+
+
+**** 本地接口——>客户端
+
+     body商品描述 ，partner合作商ID , seller商户支付宝号 , sign商户私钥签名 ， out_trade_no外部订单号 ， notify_url支付宝给本地接口的url ， total_fee价格 ， errno错误码 ， subject 9个参数。
+
+   2.传递数据
+     将数据从子线程传出到主线程。新建Message对象，what字段设为4，obj字段设为获得的json数据，sendMessage()。
+
+四、解析数据
+   1.Handler接收数据
+     Handler接口的方法handleMessage()中先判断what字段是否为4，然后提取出obj字段的json数据。
+   2.解析出订单信息
+     json数据传递给项目方法getOrderInfo()，在里面对9个变量加入&和\进行拼接成一个stringBuilder，这就是订单信息。
+
+
+
+**** 客户端——>支付宝服务端
+
+五、提交订单信息
+   1.开启支付宝的“安全支付服务”
+    先在外部newServiceConnection接口，重写onServiceConnected()和onServcieDisconnected()方法，前者：先加同步锁，再mAlixPay=IAlixPay.Stub.asInterface(service), 后者：mAlixPay=null。
+    在项目方法pay()中bindService()。
+   2.开启子线程
+   3.try中提交
+     1>.先判断同步锁。
+     2>.为安全支付服务注册回调。 mAliPay.registerCallback(回调对象)。
+     3>.正式提交，调用mAliPay.pay()，参数传入订单信息。
+     4>.发送交易结果，新建Message对象，what字段设为1，obj字段设为SDK的pay()的返回值。利用刚才的回调对象sendMessage()。
+   4.catch中提交
+     同样的新建Message后发送，obj字段为e。
+   5.finally中解除回调 + 取绑服务
+     mAlixPay.unregisterCallback(回调对象)。判断若在绑定，执行unbindService()。
+
+
+**** 支付宝服务端——>客户端
+
+六、Handler接收数据
+   1.Handler接口的方法handleMessage()中先判断what字段是否为1。
+   2.新建签名检验类ResultChecker对象，构造函数中传入obj字段。
+   3.ResultChecker对象调用getResultStatus()，获得支付状态，支付状态若等于9000，表示支付成功。
+   4.清除handler,lock,context,serviceConnection,callback。
+
+

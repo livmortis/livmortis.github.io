@@ -1,0 +1,82 @@
+图片OOM处理方法：UIL,lrucatch，bitmapFactory。
+
+
+一、bitmapFactory
+1.Bitmap类的构造函数是私有的，外面并不能实例化，只能是通过JNI实例化。这必然是某个辅助类提供了创建Bitmap的接口，而这个类的实现通过JNI接口来实例化Bitmap的，这个类就是BitmapFactory。
+2.bitmapFactory是为了从图片资源中解析(decode)出位图(bitmap)对象。
+3.用法：
+  1>.从文件中解出bitmap.   BitmapFactory.decodeFile(路径)
+  2>.从图片资源中解出bitmap.    BitmapFactory.decodeResource(getResource(),R.图位置.图片名)
+
+
+
+防止OOM.
+一、大图——压缩图片之BitmapFactory
+ 1.bitmapFactory.Option的几个重要属性。
+   1>。inJustDecodeBounds  boolean类型，决定是否"让解析方法禁止为bitmap分配内存"。返回值也不再是一个Bitmap对象，而是null。
+   2>。inSampleSize  int类型，压缩比率。
+   3>。outHeight 图片高度。
+   4>。outWidth 图片宽度。
+   5>。outMimeType 图片MIME类型。
+ 2.压缩图片的思路：
+    传入图片和期望高度和期望宽度，利用option得到真实高度和宽度，相比求得压缩比率inSampleSize，最后将option传入decodeXX方法即可。
+
+
+   压缩图片的代码：
+   （关键注意点：解析时一定不要忘了传入第三个参数options！！！！！）
+    BitmapFactory.Options options = new BitmapFactory.Options();              //建option
+    options.inJustDecodeBounds = true;                   //inJustDecodeBounds为true，表示下面的decodeXX方法并不压缩图片，只是获取图片大小。  
+    BitmapFactory.decodeResource(getResources(), R.id.myimage, options);      //第一次解析！！！ 为了得到option数据。
+    int height = options.outHeight;                                          //获得图片宽高和MIME
+    int width = options.outWidth;  
+    String imageType = options.outMimeType;  
+ 
+        if (height > reqHeight || width > reqWidth) {                           //reqHeight和reqWidth是我们想要的图片大小。
+           
+            final int heightRatio = Math.round((float) height / (float) reqHeight);  // 计算出实际宽高和目标宽高的比率，求得inSampleSize。 
+            final int widthRatio = Math.round((float) width / (float) reqWidth);  
+            option.inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;  
+        } 
+                  
+    options.inJustDecodeBounds = false;                         //inJustDecodeBounds参数设为false。表示下面的decodeXX方法要压缩图片。
+    Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.id.myimage, options);          //第二次解析！！！将图片成功压缩。
+
+
+二、多图——缓存图片之LruCache 
+  1. 把被移除屏幕的图片GC回收，优点可以节省内存，缺点导致GC频繁。
+     过去软引用或弱引用，但从 Android 2.3 (API Level 9)开始，垃圾回收器更倾向于回收持有软引用或弱引用的对象，这让软引用和弱引用变得不再可靠。
+  2. 思路
+     在内存中通过new LruCatch(大小)开辟出一块缓存空间。将来加载图片先判断，缓存中有则直接拿出来，没有则开一个子线程加载该图片并加入缓存。
+     lru两个方法 get(key), put(key,bitmap)
+  3. 代码
+          
+    int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);  // 获取可用的最大内存(单位B)，使用内存超出这个值会引起OutOfMemory异常。 
+    int cacheSize = maxMemory / 8;                                   // 缓存的大小。  最大内存除以8.
+    LruCache<String, Bitmap> lru = new LruCache<String, Bitmap>(cacheSize) {        // LruCache通过构造函数传入缓存值，(单位KB)
+        @Override  
+        protected int sizeOf(String key, Bitmap bitmap) {  
+            return bitmap.getByteCount() / 1024;                 // 重写此方法来衡量每张图片的大小，默认返回图片数量。  
+        }  
+    };  
+    
+    key=String.valueOf(图片id);
+    if (lru.get(key)!= null) {                                   
+        imageView.setImageBitmap(lru.get(key));                 //直接将图片get出缓存空间。
+    } else {  
+        imageView.setImageResource(站位图片id);  
+        B task = new B(imageView);    //自建线程类，见下方。
+        task.execute(图片id);  
+    }
+    
+
+    class B extends AsyncTask<Integer, Void, Bitmap> {      
+        // 在后台加载图片。  
+        @Override  
+        protected Bitmap doInBackground(Integer... params) {       //待会儿顺势将参数params转换为字符串，作为当前图片的key。(put方法需要制定key)
+            final Bitmap bitmap = decodeSampledBitmapFromResource(getResources(), params[0], 100, 100); 
+         if (lru.get(key) == null) {  
+          lru.put(String.valueOf(params[0]), bitmap);              //要先将图片put进缓存空间。
+         }  
+            return bitmap;  
+        }  
+    }  

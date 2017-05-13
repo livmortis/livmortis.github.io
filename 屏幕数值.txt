@@ -1,0 +1,44 @@
+一、屏幕高度和宽度
+   DisplayMestrics类中有widthPixels和heightPixels两个变量，分别是宽度的像素和高度的像素。还有density密度。相乘即为高度和宽度。
+   1.获取DisplaymMetrix对象: 
+       方法一：DisplayMetrics dm = new DisplayMetrics() 
+               etWindowManager().getDefaultDisplay().getMetrics(dm)
+       方法二：context.getResource().getDisplayMestrics()
+   2.调用像素和密度计算长度：
+      int w = dm.widthPixels * dm.density
+      int h = dm.heightPixels * dm.density
+    
+   注意屏幕高度不是该页面总高度，是手机显示的当前页面的高度。
+
+
+二、控件的高度和宽度。
+    view.getGlobalVisibleRect()
+   获取该控件的四个坐标值，坐标原点是整个屏幕的左上角。
+    view.getLocalVisibleRect()
+   获取该控件的四个坐标值，坐标原点是“可见范围内的”该控件的左上
+
+   参数是Rect的对象，方法效果是将控件的四个坐标传给Rect对象身上。 
+   有了 rect对象，利用top,bottom,left,right值可以计算控件各种长度。
+
+三、通过decorView获取各种顶层view高度和宽度。
+   1.decorView是window中最顶层view。获取方法：getWindow().getDecorViw()。
+   2.获取状态栏高度：
+     decorview.getWindowVisibleDisplayFrame()，可以获得除状态栏外的所有区域。参数为Rect对象。区域的top值便是状态栏高度。
+   3.获取标题栏高度：
+     getWindow().findViewById(Window.ID_ANDROID_CONTENT)，可以取得除状态栏和标题栏的所有区域，返回值直接是个rect，取top值，减去状态栏高度就是标题栏高度。
+   
+
+四、屏幕滚动
+   1.scrollview的scrollBy(x,y)
+     移动x,y的距离。
+     scrollview的scrollTo(x,y)
+     移动到x,y的位置。
+  
+
+五、改变控件高宽
+    view.setButtom() setTop() setLeft() setRight()。
+
+
+
+
+

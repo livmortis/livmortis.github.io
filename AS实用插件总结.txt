@@ -1,0 +1,16 @@
+setting的plugins中可以安装和卸载插件
+
+一、GsonFormat--将json数据自动提取到实体类
+   空白处右键选generate-GsonFormat，将json数据拷贝进来，修改好后即可新建实体类将json放入。
+
+二、ButterKnife--将布局控件自动生成butter代码到java代码中
+   1、先在module的gradle里依赖：compile 'com.jakewharton:butterknife:7.0,1'并sync now一下。
+   2、在Activity的setcontentview方法中，点选参数中的layout布局名，右键generate butterknife injections，即可插入butterknife代码。
+
+三、Android Code Generator--将布局控件自动关联到java代码中
+   xml中右键generate Android code---Activity  创建正常的java关联代码
+
+
+四、Android Selectors Generate--快速生成selector文件，设置点击样式改变。
+   1、将button点击前后的两张图片XXX_normal.png和XXX.pressed.png放入drawable中，右击drawable，generate android selectors（最好在project视图下），即可生成一个将两张图片添加到item标签后的selector文件XXX_selector.xml。
+   2、layout的控件调用@drawable时，将selector文件名写上去，便可自动将控件点击前后的显示设为那两张图片。

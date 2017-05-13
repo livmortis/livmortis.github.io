@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>跟投设置页面开发笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="长城证券爱投汇项目中开发”跟投设置”页面过程中的笔记 一、控件1.TextView相关　　1&amp;gt;、想要类似radiobutton　　setClickable()；setEnable()；setFocusable()　　主要还是setSelected()　　2&amp;gt;、ImeOptions属性　　控制软键盘右下角按键。　　actionNone : 回车键，按下后光标到下一行　　actionGo">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跟投设置页面开发笔记">
+<meta property="og:url" content="http://yoursite.com/2016/09/17/跟投设置页面开发笔记/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="长城证券爱投汇项目中开发”跟投设置”页面过程中的笔记 一、控件1.TextView相关　　1&amp;gt;、想要类似radiobutton　　setClickable()；setEnable()；setFocusable()　　主要还是setSelected()　　2&amp;gt;、ImeOptions属性　　控制软键盘右下角按键。　　actionNone : 回车键，按下后光标到下一行　　actionGo">
+<meta property="og:updated_time" content="2017-04-18T04:12:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="跟投设置页面开发笔记">
+<meta name="twitter:description" content="长城证券爱投汇项目中开发”跟投设置”页面过程中的笔记 一、控件1.TextView相关　　1&amp;gt;、想要类似radiobutton　　setClickable()；setEnable()；setFocusable()　　主要还是setSelected()　　2&amp;gt;、ImeOptions属性　　控制软键盘右下角按键。　　actionNone : 回车键，按下后光标到下一行　　actionGo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-跟投设置页面开发笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/17/跟投设置页面开发笔记/" class="article-date">
+  <time datetime="2016-09-17T15:28:16.000Z" itemprop="datePublished">2016-09-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      跟投设置页面开发笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>长城证券爱投汇项目中开发”跟投设置”页面过程中的笔记</p>
+<h2 id="一、控件"><a href="#一、控件" class="headerlink" title="一、控件"></a>一、控件</h2><h3 id="1-TextView相关"><a href="#1-TextView相关" class="headerlink" title="1.TextView相关"></a>1.TextView相关</h3><p>　　1&gt;、想要类似radiobutton<br>　　setClickable()；setEnable()；setFocusable()<br>　　主要还是setSelected()<br>　　2&gt;、ImeOptions属性<br>　　控制软键盘右下角按键。<br>　　actionNone : 回车键，按下后光标到下一行<br>　　actionGo ： Go，<br>　　actionSearch ： 一个放大镜<br>　　actionSend ： Send<br>　　actionNext ： Next<br>　　actionDone ： Done，隐藏软键盘，即使不是最后一个文本输入框 </p>
+<h3 id="2-RadioButton和RadioGroup相关"><a href="#2-RadioButton和RadioGroup相关" class="headerlink" title="2.RadioButton和RadioGroup相关"></a>2.RadioButton和RadioGroup相关</h3><p>　　两行radiobutton还是改用textview，因为每个radigroup只能排一个方向，不同group控制单选很难（如果互相clearCheck()效果不好）。<br>　　1&gt;、 RadioGroup.setOnCheckedChangeListener().接口的onCheckedChanged()方法，第一个参数是radiogroup暂时没有使用，第二个参数便是每个radioButton控件的id。<br>　　2&gt;、将前方加圆点样式改为radiobutton背景变色样式。<br>　　先将radiobutton的button属性改为”@null”，去掉了前面的圆点；再将背景设为有selected属性的selector文件；最后代码里setSelected(true/false)来控制被选背景颜色是否显示。selector文件如下：</p>
+<pre><code>&lt;selector xmls:android=&quot;http://schemas.android.com/apk/res.android&quot;&gt;
+    &lt;item android:drawable=&quot;@drawable/XXX&quot; android:state_pressed=&quot;true&quot;/&gt;
+    &lt;item android:drawable=&quot;@drawable/XXX&quot; android:state_selected=&quot;true&quot;/&gt;
+    &lt;item android:drawable=&quot;@drawable/XXX&quot; android:state_checked=&quot;true&quot;/&gt;
+    &lt;item android:drawable=&quot;@drawableXXX&quot;/&gt;
+&lt;/selector&gt;
+</code></pre><p>　　3&gt;、radiobutton.setChecked(false)和radiogroup.clearCheck()方法。<br>　　两个方法都能取消选择，但是都会重新走一遍onCheckedChanged()方法。如果此时onCheckedChanged()方法中有不想让执行的代码，可以用TAG选择过滤。</p>
+<h3 id="3-spinner相关"><a href="#3-spinner相关" class="headerlink" title="3.spinner相关"></a>3.spinner相关</h3><p>　　1&gt;、制作<br>　　ArrayAdapter adapter = new ArrayAdapter(getContext(),子项布局,显示字符串数组)<br>　　spinner.setAdapter(adapter)<br>　　2&gt;、监听</p>
+<pre><code>spinner.setOnItemSelectedListener(new OnItemSelectedListener()  {          
+        @Override  
+        public void  onItemSelected(AdapterView&lt;?&gt; adapterView, View view , int position, long id) {
+           //adapterView.getId()表示多个spinner中switch/case哪个。adapterView.getItemAtPosition(position)表示获取某个子项的文字。
+           //position表示选择了第几个子项，从0开始计算。
+        }
+        @Override
+        public void  onNothingSelected(AdapterView&lt;?&gt; arg0) {   
+           // 暂时不用该方法
+
+        }
+      });
+</code></pre><p>　　3&gt;、设置默认选中<br>　　spinner.setSelection(n)，n从0开始。</p>
+<h3 id="4-edittext相关"><a href="#4-edittext相关" class="headerlink" title="4.edittext相关"></a>4.edittext相关</h3><p>　　1&gt;、限制密码类型<br>　　xml:   android:inputType=”textPassword”<br>　　java:   myEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);<br>　　2&gt;、限制数字<br>　　xml:   android:digits=”0123456789”<br>　　3&gt;、限制小数<br>　　xml:   android:inputType=”numberDecimal”</p>
+<p>　　4&gt;、监听内容变化</p>
+<pre><code>editText.addTextChangedListener(new TextWatcher(){
+    public void onTextChanged(CharSequence s,int start, int before, int count){}
+    public void beforeTextChanged(CharSequence s ,int start,int count,int after){}
+    public void afterTextChanged(Editable s){}       
+});
+</code></pre><p>　　取消监听edittext.removeTextChangedListener(watcher)，可以用取消监听加增加监听两行代码包围一条edittext改变语句，让这条语句不被监听。</p>
+<p>　　5&gt;、监听软键盘回车键事件</p>
+<pre><code>editText.setOnEditorActionListener(new OnEditorActionListener() {  
+    @Override  
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {  
+        return false;  
+    }  
+});  
+</code></pre><p>　　6&gt;、点击空白处软键盘收回<br>　　将父布局设为clickable=true;<br>　　java中在父布局的点击事件中加入：</p>
+<pre><code>InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+imm.hideSoftInputFromWindow(v.getWindowToken(), 0); 
+这里v是onclick的参数，getSystemService是Context的方法。 
+</code></pre><h2 id="二、屏幕适配"><a href="#二、屏幕适配" class="headerlink" title="二、屏幕适配"></a>二、屏幕适配</h2><h3 id="1-横向居中"><a href="#1-横向居中" class="headerlink" title="1.横向居中"></a>1.横向居中</h3><p>　　使linearlayout为matchparent；使linearlayout的gravity为center。<br>　　使linearlayout内部的textview的宽度为固定值，而不是wrapContent。<br>　　textview然后想让字居中不是使用padding，而是使gravity为center。</p>
+<h3 id="2-字体适配"><a href="#2-字体适配" class="headerlink" title="2.字体适配"></a>2.字体适配</h3><p>　　values文件的dimens.xml文件中，新建多个dimens.xml(比如四个)，分别对应320dp,360dp,430dp,480dp的分辨率。<br>　　每个文件中设置各自的字体大小数值：  </p>
+<pre><code>&lt;resources&gt;
+    &lt;dimen name=&quot;XXX&quot;&gt;  Xdip &lt;/dimen&gt;
+&lt;/resources&gt;
+</code></pre><p>　　对应数值：默认、320 = 10dip ； 360 = 11dip ；420 = 13dip ；480 = 14.5dip   模拟器预览框预览的是360dp-hdpi版本的。<br>　　320/360=8/9 420/360=7/6 480/360=4/3</p>
+<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><p>　　能使用gravity和center解决的，不用padding和margin。如果需要纵向margin，让外层布局margin，内层控件不要margin直接gravitycenter。而横向margin基本可以用weight来代替。</p>
+<h3 id="4-weight的使用"><a href="#4-weight的使用" class="headerlink" title="4.weight的使用"></a>4.weight的使用</h3><p>　　利用textview可以占位、空白View可以占位两项神器，一切横向布局都可以使用weight来解决，完美解决屏幕适配问题。</p>
+<h2 id="三、字符串计算并保留两位"><a href="#三、字符串计算并保留两位" class="headerlink" title="三、字符串计算并保留两位"></a>三、字符串计算并保留两位</h2><h3 id="1-字符串转数字"><a href="#1-字符串转数字" class="headerlink" title="1.字符串转数字"></a>1.字符串转数字</h3><p>　　Double.parseDouble(字符串)   Float.parseFloat(字符串)   Integer.parseInt(字符串)<br>　　数字转字符串最好用 String.valueOf(数字)</p>
+<h3 id="2-保留两位"><a href="#2-保留两位" class="headerlink" title="2.保留两位"></a>2.保留两位</h3><pre><code>DecimalFormat d = new DecimalFormat(&quot;#.##&quot;)
+d.format(小数)
+</code></pre><h2 id="四、一个textview分段显示颜色-内容"><a href="#四、一个textview分段显示颜色-内容" class="headerlink" title="四、一个textview分段显示颜色/内容"></a>四、一个textview分段显示颜色/内容</h2><h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><pre><code>SpannableString spannableString = new SpannableString(字符串)；
+Pattern p = Pattern.compile(匹配的字段);
+Matcher m = p.matcher(spannableString);
+while(m.find()){
+    int start = m.start();
+    int end = m.end();
+}
+spannableString.setSpan(new ForegroundColorSpan (getResouces().getColor(R.color.XXX)) , start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="2-分段显示内容。"><a href="#2-分段显示内容。" class="headerlink" title="2.分段显示内容。"></a>2.分段显示内容。</h3><p>　　可用stringBuilder的replace()方法进行</p>
+<h2 id="五、java"><a href="#五、java" class="headerlink" title="五、java"></a>五、java</h2><p>　　整数/整数，该分数结果一定是整数，如果小于1就会变成0.<br>　　只需整数后面加.0，相除即可为浮点数。</p>
+<h2 id="六、TAG大法"><a href="#六、TAG大法" class="headerlink" title="六、TAG大法"></a>六、TAG大法</h2><p>　　利用TAG值来确定代码跳转来源。<br>　　举例：用TAG标记，是edittext的”内容改变监听”跳到radiobutton的onCheckedChanged()方法，还是正常走radiobutton的onCheckedChanged()方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/17/跟投设置页面开发笔记/" data-id="cj2n6xnuk001fvdpddyeo9pze" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/19/github模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MVP模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/14/获取屏幕数值/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">获取屏幕数值</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

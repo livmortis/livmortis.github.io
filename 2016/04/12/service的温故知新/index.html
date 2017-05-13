@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>service的温故知新 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、Service的基本创建步骤活动中　　1.启动服务，关闭服务，绑定服务，解绑服务：startservice(),stopservice(), bindservice(), unbindservice()。前两个参数参照startactivity()。都是由Activity调用的。　　2.bindservice的参数(intent,ServiceConnection接口、（用来侦听服务的状态）的">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="service的温故知新">
+<meta property="og:url" content="http://yoursite.com/2016/04/12/service的温故知新/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、Service的基本创建步骤活动中　　1.启动服务，关闭服务，绑定服务，解绑服务：startservice(),stopservice(), bindservice(), unbindservice()。前两个参数参照startactivity()。都是由Activity调用的。　　2.bindservice的参数(intent,ServiceConnection接口、（用来侦听服务的状态）的">
+<meta property="og:updated_time" content="2017-04-18T04:11:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="service的温故知新">
+<meta name="twitter:description" content="一、Service的基本创建步骤活动中　　1.启动服务，关闭服务，绑定服务，解绑服务：startservice(),stopservice(), bindservice(), unbindservice()。前两个参数参照startactivity()。都是由Activity调用的。　　2.bindservice的参数(intent,ServiceConnection接口、（用来侦听服务的状态）的">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-service的温故知新" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/12/service的温故知新/" class="article-date">
+  <time datetime="2016-04-12T15:17:44.000Z" itemprop="datePublished">2016-04-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      service的温故知新
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、Service的基本创建步骤"><a href="#一、Service的基本创建步骤" class="headerlink" title="一、Service的基本创建步骤"></a>一、Service的基本创建步骤</h1><h2 id="活动中"><a href="#活动中" class="headerlink" title="活动中"></a>活动中</h2><p>　　1.启动服务，关闭服务，绑定服务，解绑服务：startservice(),stopservice(), bindservice(), unbindservice()。前两个参数参照startactivity()。都是由Activity调用的。<br>　　2.bindservice的参数(intent,<strong>ServiceConnection接口</strong>、（用来侦听服务的状态）的对象，Context.BIND_AUTO_CREATE),    unbindservice(ServiceConnection的对象)。<br>　　3.实现ServiceConnection接口的两个方法：onserviceconnected()服务绑定后执行 onservicedisconnected()服务被杀掉时执行。<br>　　4.bindservice()—-同时执行了oncreate()和onserviceconnected(),   unbindservice()—同时执行了onservicedisconnected()和ondestroy()。startservice()—-执行oncreate()和onStartCommand()    stopservice()—执行ondestroy()。</p>
+<h2 id="服务中"><a href="#服务中" class="headerlink" title="服务中"></a>服务中</h2><p>　　1.继承Service后重写四个方法。onBind(), onCreate(), onDestroy(), onStartCommand()。<br>　　2.如需与活动建立连接，再自定义一个Callback接口和一个继承Binder的类。</p>
+<h1 id="二、Service的生命周期："><a href="#二、Service的生命周期：" class="headerlink" title="二、Service的生命周期："></a>二、Service的生命周期：</h1><p>　　1.onCreate()和onDestroy()。<br>　　2.activity和service绑定时，退出活动服务也自动停止，没绑定则不停。<br>　　3.oncreate()和onstartcommand()的区别，每次startservice时就会onstartcommand（）一次，而oncreate()只在第一次startservice时执行，之后一直存在。<br>　　4.若startService()和bindService()都执行了，再想销毁服务，必须stopService()和unBindService()都执行。</p>
+<h1 id="三、Activity与Service传递信息。"><a href="#三、Activity与Service传递信息。" class="headerlink" title="三、Activity与Service传递信息。"></a>三、Activity与Service传递信息。</h1><h2 id="1、活传服方法一利用onstartcommand-。"><a href="#1、活传服方法一利用onstartcommand-。" class="headerlink" title="1、活传服方法一利用onstartcommand()。"></a>1、活传服方法一利用onstartcommand()。</h2><p>　　activity要给service传递数据，Intent搞好后只需利用onstartcommand()参数中的intent接受即可</p>
+<h2 id="2、活传服方法二利用onbind-。"><a href="#2、活传服方法二利用onbind-。" class="headerlink" title="2、活传服方法二利用onbind()。"></a>2、活传服方法二利用onbind()。</h2><p>　　（更方便更快，不需要Intent）（要传递的信息变量放在自定义类A中）（必须绑定后才能传递数据，方法一开始即可传递）<br>       核心思想：传递数据即想办法给对方的成员变量str赋值。  关键环节：onbind()方法的返回值会传递到活动中的onServiceConnected()的参数中。<br>　　1&gt; Myservice中建内部类A，继承<strong>Binder</strong>。<br>　　2&gt; A中str是服务要printf的数据，为其建立setter方法。（str并不是在A中定义的）<br>　　3&gt; 让onbind()的返回值为A的对象<br>　　4&gt;这个对象会被传递到Activity中的onserviceconnected()中的第二个参数”service”。（别问为什么）<br>　　5&gt;在活动中新建一个A类型（Myservice.A）的变量a，把service赋给a，a调用setStr()即可给Service服务类中的str赋值。</p>
+<h2 id="3、侦听服务中数据（监听服务中的变化例如-）"><a href="#3、侦听服务中数据（监听服务中的变化例如-）" class="headerlink" title="3、侦听服务中数据（监听服务中的变化例如++）"></a>3、侦听服务中数据（监听服务中的变化例如++）</h2><p>　　–回调机制。将服务中的信息显示在活动UI中。<br>　　核心思想：上面是把str数据封装到set方法里，这里是把”接口的对象”封装到set方法里，而str数据藏在接口中的抽象方法里。<br>　　1&gt; 服务中新建一个接口Cb，定义一个抽象方法onchange(str)。通过这个方法传递服务到活动的数据。<br>　　2&gt; 建一个private类型的Cb成员变量cb，配上set和get方法来封装好(别人通过这俩方法调用它”NO!没人想调用cb”)。set方法是为了利用它的参数即接口的变量/对象cb。<br>　　3&gt; 在服务的oncreate()中（很可能是子线程中），将服务自己内部的可能是不停变换的那个数据，放入cb所调用的onchange(str)方法的参数里（自己当场建onchange()方法），传给了接口CB。【服务子线程onchange()传到了服务主线程onchange()】<br>　　4&gt; 内部类A中新建getsss()方法，返回MyServvv.this。(返回值是MyServvv)（因为A类的对象可以传递到活动中 见上回）<br>　　5&gt; 活动中，将onServiceConnected()的第二个IBinder类型参数赋给自己建的A类型的变量a（强制类型转换为MyServvv.A），a调用getservice()再调用set方法（而不是get方法），其参数就是接口的对象，用匿名类变成new Cb，重写方法onchange(str)，数据str传出。</p>
+<h2 id="4、支线数据传到主线。"><a href="#4、支线数据传到主线。" class="headerlink" title="4、支线数据传到主线。"></a>4、支线数据传到主线。</h2><p>　　1&gt;匿名类方式创建一个<strong>Handle</strong>对象，重写Handle接口的方法handleMessage(Message msg)。<br>　　2&gt;支线中创建<strong>Message</strong>对象msg,调用setData，参数必须是<strong>Bundle</strong>过后的数据。<br>　　3&gt;handle对象调用setmessage（），参数是msg。就将数据传递到了匿名类的handlemessage中。<br>　　4&gt;匿名类中msg调用getdata()，再getstring()即可。</p>
+<h1 id="四、一些细节："><a href="#四、一些细节：" class="headerlink" title="四、一些细节："></a>四、一些细节：</h1><p>　　1.<code>java.util.logging.Handler包的Handler</code>是错的。必须是<code>android.os.Handler</code>;。<br>　　2.message传递的是bundle包好的数据，handleMessage()中要对数据调用<strong>getData()+getString(key)</strong>两个方法才能提取出来。<br>　　3.如果不在onDestroy()设置结束服务，就会报<code>android.app.ServiceConnectionLeaked</code>错误。<br>　　4.如果服务子线程内部调用CallBack接口方法时没有if (callback != null) 条件句，会爆<code>java.lang.NullPointerException: Attempt to invoke interface method &#39;void com.baidu.myapplication.MySer$Callback.onChange(java.lang.String)on a null object reference</code>错误。因为此时callback变量还是null，我写的接口定义的语句还在下面没被执行到。<br>　　5.重要！Handler不能在子线程中创建对象，需在直接用外部UI线程创建好的Handler对象，否则报 <code>Can&#39;t create handler inside thread that has not called Looper.prepare()</code>错误。<br>　　6.开始、绑定、解绑、结束等方法里的intent对象必须共用，即提前初始化好Intent对象，才是指向同一个service的。<br>　　7.editText调用getText()同时必须toString()！<br>　　8.当通过onBinder()+Binder子类的方式，从活动传递信息给服务时，服务中接受并在子线程中展示的那个数据，必须在服务类下定义为全局变量，而Binder子类的作用仅仅是为该变量提供一个setter()方法供活动去修改。绝不可以把变量定义到Binder子类中作为局部变量再提供个getter()方法，而子线程中再new Binder子类，再通过getter()得到变量，这样接收到的数据是null，原因不明。</p>
+<h1 id="五、那么Service和子线程该怎么选择呢"><a href="#五、那么Service和子线程该怎么选择呢" class="headerlink" title="五、那么Service和子线程该怎么选择呢"></a>五、那么Service和子线程该怎么选择呢</h1><p>　　1.程序的进程关了service还在运行，子线程不行。<br>　　2.长时间在后台运行，用service。<br>　　3.默认情况下，Service其实是运行在主线程中的，如果任务占用CPU时间多，资源大的情况下，要使用线程。<br>　　4.可以在任何有 Context 的地方调用Context.startService、 Context.stopService、 Context.bindService， Context.unbindService，来控制它，你也可以在 Service 里注册 BroadcastReceiver，在其他地方通过发送 broadcast 来控制它，当然这些都是 Thread 做不到的。<br>　　5.Service的优先级高于后台挂起的Activity和Activity所创建的Thread，不易被杀。<br>　　6.其实应该考虑的问题是子线程应该在Activity开，还是Application中开，还是Service中开。前两者Thread的生命周期都不应该超出整个应用程序的生命周期，只有在Service里开线程可以在Activity结束后跟随service继续运行。
+　　</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/12/service的温故知新/" data-id="cj2n6xnto000mvdpdhgpzdylh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/13/AIDL的简单使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          AIDL的简单使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/10/手机UI适配相关/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">android手机UI适配相关</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

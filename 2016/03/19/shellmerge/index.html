@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Shell与Merge性能大比拼 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="比起Quick快排的风光无限，Shell和Merge不免稍显暗淡，但Shell的变幻莫测和Merge在大样本中的厚积薄发令他俩同样令人着迷，况且Quick也正是在Merge的divide-and-conquer思想下诞生的。与C++不同，java在对操作的依赖性上compare大于exchange，这又决定了jdk8中一定样本范围内选用快排而超出之后则选用Merge（Merge比较次数可以比快">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell与Merge性能大比拼">
+<meta property="og:url" content="http://yoursite.com/2016/03/19/shellmerge/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="比起Quick快排的风光无限，Shell和Merge不免稍显暗淡，但Shell的变幻莫测和Merge在大样本中的厚积薄发令他俩同样令人着迷，况且Quick也正是在Merge的divide-and-conquer思想下诞生的。与C++不同，java在对操作的依赖性上compare大于exchange，这又决定了jdk8中一定样本范围内选用快排而超出之后则选用Merge（Merge比较次数可以比快">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1000.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1000_.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/10000.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/10000_.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/100000.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/100000_.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1000000.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1000000_.png">
+<meta property="og:updated_time" content="2017-04-18T04:11:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell与Merge性能大比拼">
+<meta name="twitter:description" content="比起Quick快排的风光无限，Shell和Merge不免稍显暗淡，但Shell的变幻莫测和Merge在大样本中的厚积薄发令他俩同样令人着迷，况且Quick也正是在Merge的divide-and-conquer思想下诞生的。与C++不同，java在对操作的依赖性上compare大于exchange，这又决定了jdk8中一定样本范围内选用快排而超出之后则选用Merge（Merge比较次数可以比快">
+<meta name="twitter:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1000.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-shellmerge" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/19/shellmerge/" class="article-date">
+  <time datetime="2016-03-18T20:33:57.000Z" itemprop="datePublished">2016-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Shell与Merge性能大比拼
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　比起Quick快排的风光无限，Shell和Merge不免稍显暗淡，但Shell的变幻莫测和Merge在大样本中的厚积薄发令他俩同样令人着迷，况且Quick也正是在Merge的divide-and-conquer思想下诞生的。与C++不同，java在对操作的依赖性上compare大于exchange，这又决定了jdk8中一定样本范围内选用快排而超出之后则选用Merge（Merge比较次数可以比快排更少）。另外谈及快排绕不过的一点是，快排的优越是建立在Amortized Cost下，尽管概率极小但仍有可能到达N^2，就像一根哽在喉间鱼刺。同样强不稳定性的还有ShellSort,最坏情况是N^3/2(N^4/3\、N^5/4、N^6/5..似乎没有定论)，但其小巧的代码量和并不逊色的速度也让很多人对它情有独钟。《Algorithms》中对两者是这样评价的：</p>
+<p>  In practice, their running times are within a small constant factor of one another , so comparative performance depends on the implementations. </p>
+<pre><code>% java SortCompare 
+Merge Shell 100000 For 100000 random Double values   
+Merge is 1.2 times faster than Shell
+</code></pre><p>  In theory, no one has been able to prove that shellsort is linearithmic for random data, so there remains the possibility that the asymptotic growth of the average-case performance of shellsort is higher. Such a gap has been proven for worst-case performance, but it is not relevant in practice.</p>
+<p>　　本着实践出真知的精神，我用如下代码对它俩进行了一番测试。</p>
+<p>测定某一方一次运行的耗时：</p>
+<pre><code>public static double time(String alg, Double[] a) { 
+
+    long tim1=System.currentTimeMillis();
+    if (alg.equals(&quot;Shell&quot;))                Shell.sort(a); 
+    else if (alg.equals(&quot;Merge&quot;))           Merge.sort(a); 
+    else throw new IllegalArgumentException(&quot;Invalid algorithm: &quot; + alg);
+    long tim2=System.currentTimeMillis();
+    return tim2-tim1 ;
+}                        
+</code></pre><p>对给定的T个含有N个元素的数组，随机分配每个元素，调用T次time方法测出总时间：</p>
+<pre><code>public static double timeRandomInput(String alg, int N, int T)  {
+    double total = 0.0; 
+    Double[] a = new Double[N]; 
+    for (int t = 0; t &lt; T; t++) {
+        for (int i = 0; i &lt; N; i++) 
+            a[i] = random.nextDouble();
+        total += time(alg, a); 
+    } 
+    return total;      
+} 
+</code></pre><p>改变N和T的值开始测试：</p>
+<pre><code>public static void main(String[] args) { 
+
+    int N = 1000
+    int T = 100;
+    double time1, time2;
+    time1 = timeRandomInput(&quot;Shell&quot;, N, T); 
+    time2 = timeRandomInput(&quot;Merge&quot;, N, T); 
+    Double timesum=time1+time2;
+    System.out.printf(&quot;%d个元素的数组中，\n    %s的速度是&quot;, N, &quot;Shell&quot;); 
+    System.out.printf(&quot;%s的 %.1f 倍哦 \n&quot;, &quot;Merge&quot;,time2/time1); 
+    System.out.printf(&quot;        整个对比过程耗时&quot;+timesum+&quot;毫秒&quot;);
+} 
+</code></pre><p>第一次：<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/1000.png" alt="1"><br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/1000_.png" alt="2"></p>
+<p>第二次：<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/10000.png" alt="3"><br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/10000_.png" alt="4"></p>
+<p>第三次：<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/100000.png" alt="5"><br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/100000_.png" alt="6"></p>
+<p>第四次：<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/1000000.png" alt="7"><br>    <img src="http://7xs17a.com1.z0.glb.clouddn.com/1000000_.png" alt="8"><br>　　　　是的，百万个数组元素时已经等到了１９９秒－－４分钟。</p>
+<p>　　看出我们跟书本上得出了相反的结果，这自然跟很多因素有关，但同样也证实了两点：</p>
+<ul>
+<li>1、Shell和Merge的order of growth都在NlogN级别，相差也不过是常数级别，以至于孰优孰劣会在外界条件改变下互相转换。</li>
+<li>2、Shell的asymptotic growth（渐进增长率）更高，随着N值的十倍增长，Shell的领先优势被拉小，在可预见的阈值下会被反超。</li>
+</ul>
+<p>　　其实不只他俩，一切compare-based排序都受制于NlgN这个级别，正如Sedgewick在《Algorithms》中所言：</p>
+<p>　　both the number of compares used by mergesort in the worst case and the minimum number of compares that any compare-based sorting algorithm can guarantee are ~NlgN.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/19/shellmerge/" data-id="cj2n6xntr000ovdpdccdh8huu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/20/3-way-partition/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          小白兔的三向切分快排之旅
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/14/my-new-post/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">搭建hexo小屋的踩坑历程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

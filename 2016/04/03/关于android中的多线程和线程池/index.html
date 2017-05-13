@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于android中的多线程和线程池 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="首先get两个帮助测试时可以清晰了解线程动向的方法：Thread.currrentThread.getName() 显示当前线程。Thread.isAlive() 判断线程生命周期，只有新建和死亡两个阶段返回false。Runtime.getRuntime().availableProcessors() 显示CPU个数，可以依据这个创建线程个数。 　　接着区分几个概念：　　并发与并行：多条指令">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于android中的多线程和线程池">
+<meta property="og:url" content="http://yoursite.com/2016/04/03/关于android中的多线程和线程池/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="首先get两个帮助测试时可以清晰了解线程动向的方法：Thread.currrentThread.getName() 显示当前线程。Thread.isAlive() 判断线程生命周期，只有新建和死亡两个阶段返回false。Runtime.getRuntime().availableProcessors() 显示CPU个数，可以依据这个创建线程个数。 　　接着区分几个概念：　　并发与并行：多条指令">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/135658248.jpg.bmp">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/Executor-class_2.png">
+<meta property="og:updated_time" content="2017-04-18T04:11:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于android中的多线程和线程池">
+<meta name="twitter:description" content="首先get两个帮助测试时可以清晰了解线程动向的方法：Thread.currrentThread.getName() 显示当前线程。Thread.isAlive() 判断线程生命周期，只有新建和死亡两个阶段返回false。Runtime.getRuntime().availableProcessors() 显示CPU个数，可以依据这个创建线程个数。 　　接着区分几个概念：　　并发与并行：多条指令">
+<meta name="twitter:image" content="http://7xs17a.com1.z0.glb.clouddn.com/135658248.jpg.bmp">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-关于android中的多线程和线程池" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/03/关于android中的多线程和线程池/" class="article-date">
+  <time datetime="2016-04-03T10:01:50.000Z" itemprop="datePublished">2016-04-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于android中的多线程和线程池
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　首先get两个帮助测试时可以清晰了解线程动向的方法：Thread.currrentThread.getName() 显示当前线程。Thread.isAlive() 判断线程生命周期，只有新建和死亡两个阶段返回false。Runtime.getRuntime().availableProcessors() 显示CPU个数，可以依据这个创建线程个数。</p>
+<p>　　接着区分几个概念：<br>　　<strong>并发与并行</strong>：多条指令在多个处理器上同一时刻执行为并行，多条指令在快速轮换执行为并发。并发在宏观上表现类似于并行。一个CPU同时只能执行一个进程（即并行数小于等于CPU数）。<br>　　<strong>程序、进程与线程</strong>：程序是静态指令集和，进程是正在活动的指令集和，有生命周期和各种状态。线程是进程的执行单元，类比于进程和操作系统的地位。主线程是随着进程被创建一起创建的。进程之间不能共享内存而线程之间可以。</p>
+<hr>
+<p>　　下面分别讨论下线程的生命周期，线程的几种形态，和线程池三个方面。</p>
+<h1 id="一、线程的生命周期："><a href="#一、线程的生命周期：" class="headerlink" title="一、线程的生命周期："></a>一、线程的生命周期：</h1><h2 id="1、五个生命周期"><a href="#1、五个生命周期" class="headerlink" title="1、五个生命周期"></a>1、五个生命周期</h2><ul>
+<li><p>1&gt;<strong>新建(new)</strong>。new出一个线程开始。</p>
+</li>
+<li><p>2&gt;<strong>就绪(runnable)</strong>。start()方法执行后开始。java虚拟机会为其创建方法调用栈和程序计数器。不能改成调用run()方法来启动，因为这样系统就会把线程对象当做普通对象，把run()当做一个普通方法而不是线程方法来处理。就绪之后并不是马上执行，而会稍等一小段时间（时间长度由底层平台控制），若想让它立即运行，只需让主线程sleep(1)睡眠1毫秒。</p>
+</li>
+<li><p>3&gt;<strong>运行(running)</strong>。就绪的线程随后开始执行run()，然后通过JVM的线程调度器决定（不可控）让它进入运行状态。如果底层平台采用“抢占式调度策略”（桌面和服务器操作系统），即每个线程轮流执行一小会儿（次序由线程优先级决定）。若是“协作式调度策略”（手机等小型设备），必须等该线程通过yield()活sleep()主动放弃所占资源，其中yield()回到就绪状态，sleep()进入阻塞状态。</p>
+</li>
+<li><p>4&gt;<strong>阻塞(blocked)</strong>。五种情况会进入阻塞，同样五种方法可以解除阻塞回到就绪（不能直接回到运行），这部分放到后面。</p>
+</li>
+<li><p>5&gt;<strong>死亡(dead)</strong>。run()或call()执行结束后自然死亡。或者调用线程的stop()手动死亡。或者抛出exception/error非正常死亡。死亡的线程不可以重新start()。</p>
+</li>
+</ul>
+<h2 id="2、进入阻塞和阻塞解除"><a href="#2、进入阻塞和阻塞解除" class="headerlink" title="2、进入阻塞和阻塞解除"></a>2、进入阻塞和阻塞解除</h2><p>　　运行时的任务<strong>进入阻塞</strong>的五种情况：</p>
+<ul>
+<li>线程调用sleep()方法主动放弃所占资源。</li>
+<li>线程调用了一个阻塞式IO方法。</li>
+<li>线程试图获得一个同步监视器。</li>
+<li>线程在等待某个notify。</li>
+<li>程序调用了线程的suspend()将线程挂起。</li>
+</ul>
+<p>　　<strong>解除阻塞</strong>回到就绪的五种情况：</p>
+<ul>
+<li>sleep()方法时间到。</li>
+<li>阻塞式IO方法已经返回。</li>
+<li>成功获得了同步监视器。</li>
+<li>其它线程发送了notify。</li>
+<li><p>程序调用了挂起的线程的resume()恢复方法。</p>
+<p>  <img src="http://7xs17a.com1.z0.glb.clouddn.com/135658248.jpg.bmp" alt="1"></p>
+</li>
+</ul>
+<h1 id="二、线程的的几种形态："><a href="#二、线程的的几种形态：" class="headerlink" title="二、线程的的几种形态："></a>二、线程的的几种形态：</h1><ul>
+<li>Thread</li>
+<li>AsyncTask(底层线程池),</li>
+<li>IntentService(底层直接用线程),是一种服务不是后台线程，优先度高不易被杀死。</li>
+<li>HandlerThread(底层直接用线程)。</li>
+</ul>
+<h1 id="三、线程池。"><a href="#三、线程池。" class="headerlink" title="三、线程池。"></a>三、线程池。</h1><p>　　除非线程数小于等于CPU核心数，否则线程不可能做到绝对的并行，只会通过时间片轮转的方式调度每个线程。因此需要一个线程池存放线程的缓存，否则大量线程的创建和销毁会消耗大量时间，入不敷出。</p>
+<h2 id="1、ThreadPoolExecutor的六个构造参数"><a href="#1、ThreadPoolExecutor的六个构造参数" class="headerlink" title="1、ThreadPoolExecutor的六个构造参数"></a>1、ThreadPoolExecutor的六个构造参数</h2><p>　　线程池类ThreadPoolExecutor实现了接口Executor（事实上Java里面线程池的顶级接口是Executor，但是严格意义上讲Executor并不是一个线程池，而只是一个执行线程的工具。真正的线程池接口是ExecutorService，而ThreadPoolExecutor其实是实现了ExecutorService接口,关系见最下方图片）。其构造器共接受六个参数：</p>
+<ul>
+<li>int corePoolSize,</li>
+<li>int maximumPoolSize,</li>
+<li>long keepAliveTime,</li>
+<li>TimeUnit unit,</li>
+<li>BlockingQueue<runnable> workQueue,</runnable></li>
+<li>ThreadFactory threadFactory.</li>
+</ul>
+<p>　　分别是<strong>核心线程数</strong>，<strong>最大线程数</strong>（到达最大线程数后后续任务被阻塞），<strong>闲置超时时长</strong>（非核心任务闲置超过该参数就会被回收），<strong>时长单位</strong>（是一个枚举），<strong>任务队列</strong>（通过线程池的execute方法提交的Runnable对象会存在这里），<strong>线程工厂</strong>（可创建新线程）。</p>
+<p>　　拿熟悉的AsyncTask来说，它里面有两个线程池，分别是<strong>SerialExecutor</strong>和<strong>THREAD_POOL_EXECUTOR</strong>，前者用于任务的排队，后者是真正的执行任务。查看AsyncTask源码可以看到它对THREAD_POOL_EXECUTOR这个线程池进行了配置，这些参数的配置情况如下：</p>
+<pre><code>private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
+private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
+private static final int KEEP_ALIVE = 1;
+private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+private final AtomicInteger mCount = new AtomicInteger(1);
+
+public Thread newThread(Runnable r) {
+  return new Thread(r, &quot;AsyncTask #&quot; + mCount.getAndIncrement());
+}
+
+private static final BlockingQueue&lt;Runnable&gt; sPoolWorkQueue =new LinkedBlockingQueue&lt;Runnable&gt;(128);
+
+public static final Executor THREAD_POOL_EXECUTOR= new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
+</code></pre><p>　　ThreadPoolExecutor线程池执行任务时规则如下：1、线程池中线程数小于核心线程数，则直接启动一个核心线程。2、线程数超过核心线程数，进入任务队列排队。3、任务队列满了，启动一个非核心线程存放下一个任务。4、达到线程池最大线程数了，任务被拒绝。同时RejectedExecutionHandler会调用rejectedExecution()来通知调用者。</p>
+<p>　　另外关于keepAliveTime参数，它是针对非核心线程超时情况，核心线程默认会一直存活。若想使得闲置的核心线程同样在keepAliveTime到时时被回收，只需将ThreadPoolExecutor的<strong>allowCoreThreadTimeOut</strong>参数设为true即可。</p>
+<h2 id="2、四种常见线程池。"><a href="#2、四种常见线程池。" class="headerlink" title="2、四种常见线程池。"></a>2、四种常见线程池。</h2><p>　　它们都是通过Executors类（注意不是Executor接口，Executors类的作用正是创建线程池）的方法newXXXXThreadPool来创建，将线程放入线程池的操作都是通过它们自己的对象调用execute()/submit()方法（两者的区别留到以后讨论..），参数中传入线程名。四种线程池中FixedThreadPool，CachedThreadPool，SingleThreadExecutor是实现的ExecutorService接口（创建对象是创建ExecutorService的对象），ScheduledThreadPool是实现ScheduledExecutorService接口。</p>
+<h3 id="1-gt-、FixedThreadPool"><a href="#1-gt-、FixedThreadPool" class="headerlink" title="1&gt;、FixedThreadPool."></a>1&gt;、FixedThreadPool.</h3><p>　　只有核心线程且数量固定，线程空闲时不会被回收，任务队列没有大小限制。</p>
+<pre><code>public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue&lt;Runnable&gt;());
+}
+</code></pre><h3 id="2-gt-、CachedThreadPool"><a href="#2-gt-、CachedThreadPool" class="headerlink" title="2&gt;、CachedThreadPool."></a>2&gt;、CachedThreadPool.</h3><p>　　核心线程数0，非核心线程数任意大。超时时长60秒即被回收。因为最大线程数无限所以其SynchronousQueue队列不需要放入任务。适合大量的小任务。</p>
+<pre><code>public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+}
+</code></pre><h3 id="3-gt-、ScheduledThreadPool"><a href="#3-gt-、ScheduledThreadPool" class="headerlink" title="3&gt;、ScheduledThreadPool."></a>3&gt;、ScheduledThreadPool.</h3><p>　　核心线程数量固定，非核心线程任意大。超时时长0意味着闲置立马收回。适合定时任务和周期任务。</p>
+<pre><code>public static ScheduledExecutorService newScheduledThreadPool(
+        int corePoolSize, ThreadFactory threadFactory) {
+    return new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
+}
+</code></pre><h3 id="4-gt-、SingleThreadExecutor"><a href="#4-gt-、SingleThreadExecutor" class="headerlink" title="4&gt;、SingleThreadExecutor."></a>4&gt;、SingleThreadExecutor.</h3><p>　　只有一个线程且是核心线程。意义在于将多个线程统一到同一个线程中。</p>
+<pre><code>public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+}
+</code></pre><p>　　<br>　　下面是四种线程池的调用方法示例：</p>
+<pre><code>Runnable r=new Runnable() {
+    @Override
+    public void run() {
+        //do something
+    }
+};
+
+ExecutorService ftp= Executors.newFixedThreadPool(4);
+ftp.execute(r);
+
+ExecutorService ctp= Executors.newCachedThreadPool();
+ctp.execute(r);
+
+ScheduledExecutorService stp= Executors.newScheduledThreadPool(4);
+stp.execute(r);
+
+ExecutorService sintp= Executors.newSingleThreadExecutor();
+sintp.execute(r);
+</code></pre><p>　　最后是完整的线程池的类体系结构，图中清晰地展示了之前用到的Executor,Executors,ExecutorService,ScheduledExecutorService,ThreadPoolExecutor,ScheduledThreadPoolExecutor之间的关系。<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/Executor-class_2.png" alt="2"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/03/关于android中的多线程和线程池/" data-id="cj2n6xntz000yvdpd77jxjn1z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/05/自己制作美美的View界面/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          自己制作美美的View界面
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/03/漫谈android异步/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">漫谈android异步</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+
+手机屏幕尺寸：
+iPhone5s 4英寸；iPhone6 4.7英寸； iPhone6Plus 5.5英寸；mate7 6英寸
+
+small——小于3英寸 ；
+normal——小于4.5英寸；
+large——小于7英寸；
+extra large——小于10英寸  
+
+S5:5.1英寸
+
+
+分辨率：                    px*px(像素乘像素)  
+WVGA:800*480(三星G9198) 
+DVGA:960*640(果4) 
+HD720：1280*720(红米，S3)（占有率第一）   
+HD1080：1920*1080(MATE7，S5)（占有率第二）  
+WQHD（2K屏）:2560*1440(find7,S6,S7) 
+
+逻辑分辨率：dp为单位。320dp和360dp两种（指逻辑宽度）。
+
+
+像素密度：   S5:432ppi  
+120dpi(Ldpi)  
+160dpi(Mdpi)  
+240dpi(Hdpi)  
+320dpi(XHdpi) （占有率第一）  
+480dpi(XXHdpi)（占有率第二） 
+640dpi(XXXHdpi)(S7)。  
+
+其中Mdpi的1px=1dp。XXHdpi的1dp=3px。XXXHdpi1dp=4px。  因为dp=(160/ppi)*px

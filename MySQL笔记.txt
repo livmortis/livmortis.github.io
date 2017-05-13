@@ -1,0 +1,224 @@
+小括号的地方：select从句，添加索引时的字段，插入数据时的字段值，统计函数的参数。
+x=5
+x=4
+y=4+6=10 x=6
+10+6+7=23
+
+x=0
+x=-1
+y=-1+1=0 x=1
+1+0+2=3
+
+
+shell终端
+1.mysql -u root -p 进入sql命令
+2.show databases; 查看数据库列表
+3.use XXX; 在数据库列表界面下，进入某个库
+4.show tables; 在数据库界面下，查看表
+5.quit; 退出Mysql操作管理界面
+6.create tb if not exists XX;
+7.drop database XX
+
+P38BeXcSqpO
+Ca8M,sk;%2H-
+
+
+SQL基本结构
+1.SELECT+字段名称 查询
+2.FROM+数据表
+3.WHERE+查询条件
+
+SQL关键词
+数据定义：CREATE TABLE ,DROP TABLE ,ALTER TABLE(修改表结构)
+          CREATE INDEX(创建一个索引)，DROP INDEX
+          CREATE PROCEDURE（创建一个存储过程）,DROP PROCEDURE
+数据操作：SELECT,INSERT,UPDATE,DELETE (从数据表中操作指定的数据行)  
+权限控制：GRANT,REVOKE
+事务控制：start transaction(开启事务) COMMIT(提交事务)，ROLLBACK(回滚事务)
+
+
+数据类型
+整数：TINYINT(8),SMALLINT(16),MEDIUMINT(24),INT(32),BIGINT(64)
+实数：FLOAT(32),DOUBLE(64)，DECIMAL(精确小数)
+字符串：VARCHAR(可变长度)，CHAR(固定长度0-255)，
+        TEXT:TINYTEXT,TEXT,MEDIUMTEXT,LONGTEXT   （字符字符串）
+        BLOB:TINYBLOB ,BLOB ,MEDIUMBLOB ,LONGBLOB  (二进制字符串，字节字符串)
+日期：DATE,TIME,DATETIME+(精确度),TIMESTAMP（第一个timestamp是当前时间）,
+数据类型选择：最小原则，简单原则，避免索引列上的null
+               （优先选择数字->datetime->字符）
+
+
+
+
+顺序为：select, from, where, group by, having, order by, limit 
+顺序为：select, from, where, group by, having, order by, limit 
+顺序为：select, from, where, group by, having, order by, limit 
+
+
+操作数据库：
+1.create table XX(
+  xx 类型，
+  xx 类型
+  ）；
+  create index 索引名 on 表名（列表）；
+
+2.alter后的多个动作之间用逗号隔开。气候紧跟ignore表示关键行若重复则忽略这一步修改。
+  alter table XX add xx 类型
+                 add index xxxx
+                 add primary_key
+                 add unique
+  alter table XX drop xx。 （选加 if exists）
+  alter table XX change 旧列名 新列名 类型。
+  alter table XX change 旧列名 新列名 新类型。
+  alter table 旧XX rename 新XX。 
+或者   rename table 旧表 to 新表。
+
+3.drop table tb。
+
+
+操作数据
+1.增 insert into tb value(值，值..)                             into-value
+     insert into tb （字段，字段...）value(值，值...)
+     insert into tb （字段，字段...）value(值，值...)，(值，值...)，(值，值...)...
+     insert into tb1 (多字段) select (同样数量和类型的多字段) from tb2；
+     insert into tb set ..
+2.删 delete from tb where ..         from
+3.查 select后面要么跟字段，要么跟函数。
+     1.简单查询 
+       select * from tb where ..  (更改*来选择查询的列即字段，加where+and条件选择查询的行)    
+       select 字段 as 新字段名 from tb    （重命名）
+       select concat('XXXX',字段，字段..) from tb
+       关键字distinct 筛选掉重复数据
+     2.条件查询
+       where 后各条件用and或&&连接。
+       where 字段 （not）between 值1 and 值2。
+       where 字段 is null。  不能是“=null”,null是能是is。
+       where 字段 （not）in (逗号隔开的集合)。 是否在集合中有该字段。
+       where 字段 （not）like + 通配符。  通配符：%代表一切，_代表一个字符。
+       注意加通配符只能用like字段，不能用in和=。
+     3.排序查询
+       order by 
+       设置查询结果的顺序。
+       排序依据字段 ASC/DESC ，字段 ASC/DESC ..    （前者升序--有小到大） 注：放在where语句之后！！放在总的最后面（limit之前）     
+     4.限制显示数量
+       limit 起始行数-1 显示的行数；  （若只写一个数字则是显示的行数） 
+     5.统计函数
+       select count（字段或＊）自定义条数名 from tb；
+       select avg(字段) 均值名 from tb;
+       select sum(字段) 和名 from tb;
+       select min(字段) 最小值名 from tb;
+     6.分组查询
+       group by 字段，字段...；   每个组随机显示一个该组中的字段 
+       select 分组依据字段A ,group_concat(每组想要全部显示的那个字段B) B字段集组成的字段C from tb group by 分组依据字段；
+       having+条件 ；   分组之后的表，在显示时所有遵循的条件。必须放在group by语句之后。where是之前。即相当于分组中的where。
+       
+4.改 1、update tb set .. where ..             set
+     2、select into tb1 from tb2 。 用来复制表，select into from 要求目标表不存在，因为在插入时会自动创建。
+
+
+
+多表数据连接查询
+1.内连接 inner join ..on ..
+2.外连接 right/left join .. on..
+
+
+
+多表数据子查询
+子查询的从句要用小括号包围！！
+1.where中镶嵌单行单列，单行多列，多行单列。多表连接没有where限制时，对应多表对应集合的笛卡尔积连接
+  1.单行单列。
+     where 字段 >=<（select从句）
+  2.单行多列。
+     where (字段,字段..) >=<（select 字段，字段 的从句）
+  3.多行单列。
+     where 字段 in （select从句）        表示字段在子结果中存在,注意小括号。
+                                     尽量用in而不是=，防止可能是多行单列而不是单行单列。
+     where 字段 >=< any (select从句)     >表示大于子结果里的最小值，<表示小于子结果里的最大值，=则与in一样
+     where 字段 >=< all (select从句)     >表示大于子结果里的最大值，<表示小于子结果里的最小值。
+     where exists （select句）         子结果存在时返回，不存在时抛弃。
+  4.多行多列
+     from关键字
+
+
+join语句
+1.inner join
+2.left join
+3.right join
+4.full join = left join + union all + right join
+5.cross join 笛卡尔连接 不需要on....连接语句
+
+
+
+知识点
+1.与Mysql服务器相互作用的通讯协议包括TCP/IP，Socket，共享内存，命名管道
+2.SQL支持的备份类型有四种：完全数据库备份、差异备份或称增量备份、事务日志备份、数据库文件和文件组备份
+3.三大范式 
+  1.1NF，表示属性值是不可分割。
+  2.2NF，表示非主要的属性，必须完全依赖主要的属性，不能部分依赖
+  3.3NF，表示非主属性不要依赖于其他非主属性。
+4.@变量
+  @表示声明一个局部变量，@@表示声明一个全局变量。
+  declare @变量名 数据类型 select @num=value;  声明一个局部变量并未其赋值。数据类型可不写。
+
+
+
+
+
+关键字
+1.not null/null
+2.default+默认值
+3.primary key  (单字段主键约束，效果除了成为主键，还等同于唯一约束+非空约束。)
+  constraint primary key(a,b,c...) （多字段主键，在字段定义完之后统一设置主键）
+  constraint foreign key(外键字段) preferences 父表名 （父表的主键字段）
+4.auto_increment 搭配 primary key+(主字段)    或    直接primary key + auto_increment
+5.unique （使用方法:添加唯一性----alter table tb add unique）
+6.zerofill 0填补
+7.comment'' 备注
+8.索引
+   1.建表时创建索引：(unique) index 索引名 (字段 (索引长度) ASC/DESC)  （在字段定义完之后统一设置索引）
+   2.已有表里创建索引1：create (unique) index  索引名 on 表名 （字段 （索引长度）ASC/DESC）
+   3.已有表里创建索引2：alter table 表名 add (unique) index 索引名(字段 （长度）ASC/DESC)
+   4.全文索引 index前加fulltext。
+   5.多列索引 括号中的字段有两个或多个，之间用逗号隔开。
+   6.删除索引 drop index 索引名 on 表名
+   7.复合索引 可以只使用复合索引中的一部分，但必须是由最左部分开始，且可以存在常量。  
+
+
+
+
+
+
+视图
+1.创建视图。  create view vv as 查询语句； 查询视图时将视图看做表用select即可。
+              封装复杂查询语句：常量语句、聚合函数、排序功能、表内连接、表外连接、子查询、记录联合。
+2.更新视图。 视图包含下列结构是不可以更新的
+		1：集合运算符 union，union all, intersect，minus
+		2：distinct关键字
+		3：group by,order by,connect by,或者start with
+		4：子查询
+		5：分组函数
+		6：需要更新的列不是视图定义的
+		7：具有连接查询(可以更新键值保存表的数据)
+		8：违反基表的约束条件；连接视图是指基于多表连接查询创建的视图（一般不容易修改，但通用instead of触发器可以实现修改的功能）
+
+
+
+
+命令
+show variables like '%部分关键字%'
+truncate table tb 彻底删除表
+show databases;
+show tables;  所有表的名字
+show table status;  所有表的名字和信息  
+use 数据库名;
+describe 表名或视图名;  或  show columns from 表名
+drop table/view xx
+
+
+
+
+
+
+
+
+

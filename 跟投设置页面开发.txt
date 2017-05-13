@@ -1,0 +1,217 @@
+一、控件
+ 1.TextView相关
+   1>、想要类似radiobutton
+     setClickable()；setEnable()；setFocusable()
+     主要还是setSelected()
+   2>、ImeOptions属性
+     控制软键盘右下角按键。
+        actionNone : 回车键，按下后光标到下一行 
+        actionGo ： Go， 
+        actionSearch ： 一个放大镜 
+        actionSend ： Send 
+        actionNext ： Next 
+        actionDone ： Done，隐藏软键盘，即使不是最后一个文本输入框 
+
+ 2.RadioButton和RadioGroup相关
+   两行radiobutton还是改用textview，因为每个radigroup只能排一个方向，不同group控制单选很难（如果互相clearCheck()效果不好）。
+   1>、 RadioGroup.setOnCheckedChangeListener().接口的onCheckedChanged()方法，第一个参数是radiogroup暂时没有使用，第二个参数便是每个radioButton控件的id。
+   2>、将前方加圆点样式改为radiobutton背景变色样式。 
+     先将radiobutton的button属性改为@null，去掉了前面的圆点；再将背景设为有selected属性的selector文件；最后代码里setSelected(true/false)来控制被选背景颜色是否显示。selector文件如下：
+    <selector xmls:android="http://schemas.android.com/apk/res.android">
+      <item android:drawable="@drawable/XXX" android:state_pressed="true"/>
+      <item android:drawable="@drawable/XXX" android:state_selected="true"/>
+      <item android:drawable="@drawable/XXX" android:state_checked="true"/>
+      <item android:drawable="@drawableXXX"/>
+    </selector>
+ 
+   3>、radiobutton.setChecked(false)和radiogroup.clearCheck()方法。
+     两个方法都能取消选择，但是都会重新走一遍onCheckedChanged()方法。如果此时onCheckedChanged()方法中有不想让执行的代码，可以用TAG选择过滤。
+
+  3.spinner相关
+    1>、制作
+       ArrayAdapter adapter = new ArrayAdapter(getContext(),子项布局,显示字符串数组)
+       spinner.setAdapter(adapter)
+    2>、监听
+       spinner.setOnItemSelectedListener(new OnItemSelectedListener()  {          
+            @Override  
+            public void  onItemSelected(AdapterView<?> adapterView, View view , int position, long id) {
+               //adapterView.getId()表示多个spinner中switch/case哪个。adapterView.getItemAtPosition(position)表示获取某个子项的文字。
+               //position表示选择了第几个子项，从0开始计算。
+            }
+            @Override
+            public void  onNothingSelected(AdapterView<?> arg0) {   
+               // 暂时不用该方法
+
+            }
+          });
+     3>、设置默认选中
+         spinner.setSelection(n)，n从0开始。
+
+  4.edittext相关
+    1>、限制密码类型 
+        xml:   android:inputType="textPassword"
+        java:   myEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+    2>、限制数字
+        xml:   android:digits="0123456789"
+    3>、限制小数
+        xml:   android:inputType="numberDecimal"
+
+    4>、监听内容变化
+        editText.addTextChangedListener(new TextWatcher(){
+            public void onTextChanged(CharSequence s,int start, int before, int count){}
+            public void beforeTextChanged(CharSequence s ,int start,int count,int after){}
+            public void afterTextChanged(Editable s){}       
+        });
+        取消监听edittext.removeTextChangedListener(watcher)，可以用取消监听加增加监听两行代码包围一条edittext改变语句，让这条语句不被监听。
+
+    5>、监听软键盘回车键事件
+        editText.setOnEditorActionListener(new OnEditorActionListener() {  
+            @Override  
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {  
+                return false;  
+            }  
+        });  
+
+    6>、点击空白处软键盘收回
+        将父布局设为clickable=true;
+        java中在父布局的点击事件中加入：
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0); 
+                这里v是onclick的参数，getSystemService是Context的方法。 
+
+二、屏幕适配
+  1.横向居中
+    使linearlayout为matchparent；使linearlayout的gravity为center。
+    使linearlayout内部的textview的宽度为固定值，而不是wrapContent。
+    textview然后想让字居中不是使用padding，而是使gravity为center。
+
+  2.字体适配
+    values文件的dimens.xml文件中，新建多个dimens.xml(比如四个)，分别对应320dp,360dp,430dp,480dp的分辨率。
+    每个文件中设置各自的字体大小数值：   
+     <resources>
+         <dimen name="XXX">  Xdip </dimen>
+     </resources>
+
+    对应数值：默认、320 = 10dip ； 360 = 11dip ；420 = 13dip ；480 = 14.5dip   模拟器预览框预览的是360dp-hdpi版本的。
+    320/360=8/9 420/360=7/6 480/360=4/3
+
+  3.能使用gravity和center解决的，不用padding和margin。如果需要纵向margin，让外层布局margin，内层控件不要margin直接gravitycenter。而横向margin基本可以用weight来代替。
+
+  4.weight的使用
+    利用textview可以占位、空白View可以占位两项神器，一切横向布局都可以使用weight来解决，完美解决屏幕适配问题。
+
+
+三、字符串计算并保留两位
+  1.字符串转数字
+    Double.parseDouble(字符串)   Float.parseFloat(字符串)   Integer.parseInt(字符串)
+    数字转字符串最好用 String.valueOf(数字)
+  2.保留两位
+    DecimalFormat d = new DecimalFormat("#.##")
+    d.format(小数)
+
+
+四、一个textview分段显示颜色/内容
+  1.SpannableString spannableString = new SpannableString(字符串)；
+    Pattern p = Pattern.compile(匹配的字段);
+    Matcher m = p.matcher(spannableString);
+    while(m.find()){
+      int start = m.start();
+      int end = m.end();
+    }
+    spannableString.setSpan(new ForegroundColorSpan (getResouces().getColor(R.color.XXX)) , start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+  2.分段显示内容，可用stringBuilder的replace()方法进行
+
+
+五、java
+   整数/整数，该分数结果一定是整数，如果小于1就会变成0.
+   只需整数后面加.0，相除即可为浮点数。
+
+六、TAG大法
+   利用TAG值来确定代码跳转来源。
+   举例：用TAG标记，是edittext的"内容改变监听"跳到radiobutton的onCheckedChanged()方法，还是正常走radiobutton的onCheckedChanged()方法。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2016.9.6
+1.switch缩短
+2.spinner后面空白可点
+3.radioButton设置weight
+4.风格radiogroup代码写短
+5.代码格式化
+6.资产从之前页面接口处获取数据
+7.代码备注
+
+2016.9.7
+8.参与资产不能输字母
+9.脱离edittext后键盘消失
+10.edittext输入时radiobutton取消选择状态
+11.总资产和可用资产越界
+12.保存设置时除了选项保存，数据也保存。
+13.跳转页面时先判断是否保存，若有保存展示保存选项。
+
+14.下一步增加业务逻辑，判断什么不能为空
+15.点击控件也能收起键盘
+
+
+
+支付宝
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

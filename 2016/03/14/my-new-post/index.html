@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>搭建hexo小屋的踩坑历程 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="耗费一整天时间终于搭好了这个小blog，总的来说花样坑集中在以下几个方面：  1.配置_config.yml文件时repository选择https还是SSH的问题。  2.一次更改github上repository仓库目录之后公匙验证失败问题。  3.创建好SSH公匙并传到github SSH key上后本地私匙无法添加到SSH代理中。  4.其他一些细节问题。   　　首先，拷贝githu">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建hexo小屋的踩坑历程">
+<meta property="og:url" content="http://yoursite.com/2016/03/14/my-new-post/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="耗费一整天时间终于搭好了这个小blog，总的来说花样坑集中在以下几个方面：  1.配置_config.yml文件时repository选择https还是SSH的问题。  2.一次更改github上repository仓库目录之后公匙验证失败问题。  3.创建好SSH公匙并传到github SSH key上后本地私匙无法添加到SSH代理中。  4.其他一些细节问题。   　　首先，拷贝githu">
+<meta property="og:updated_time" content="2017-04-18T04:11:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建hexo小屋的踩坑历程">
+<meta name="twitter:description" content="耗费一整天时间终于搭好了这个小blog，总的来说花样坑集中在以下几个方面：  1.配置_config.yml文件时repository选择https还是SSH的问题。  2.一次更改github上repository仓库目录之后公匙验证失败问题。  3.创建好SSH公匙并传到github SSH key上后本地私匙无法添加到SSH代理中。  4.其他一些细节问题。   　　首先，拷贝githu">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-my-new-post" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/14/my-new-post/" class="article-date">
+  <time datetime="2016-03-14T05:52:42.000Z" itemprop="datePublished">2016-03-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      搭建hexo小屋的踩坑历程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　耗费一整天时间终于搭好了这个小blog，总的来说花样坑集中在以下几个方面：</p>
+<ul>
+<li><p>1.配置_config.yml文件时repository选择https还是SSH的问题。</p>
+</li>
+<li><p>2.一次更改github上repository仓库目录之后公匙验证失败问题。</p>
+</li>
+<li><p>3.创建好SSH公匙并传到github SSH key上后本地私匙无法添加到SSH代理中。</p>
+</li>
+<li><p>4.其他一些细节问题。</p>
+</li>
+</ul>
+<p>　　首先，拷贝github库地址时开始一直使用https地址，deploy时报如下错误：…   <a id="more"></a></p>
+<pre><code>Error: bash: /dev/tty: No such device or address
+error: failed to execute prompt script (exit code 1)
+fatal: could not read Username for &apos;https://github.com&apos;: No error
+</code></pre><p>SegmentFault上的普遍解决方案是换SSH，于是满心欢喜改成SSH，万没想到即将面临的是一个更大的天坑。</p>
+<p>　　然后就是漫长的与SSH缠斗的时间。因为之前半途更改了一次github的repository路径，hexo d时抛错：</p>
+<pre><code>error: Host key verification failed. 
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights and the repository exists.
+</code></pre><p>看来即使更改配置文件中的repository地址仍然会导致公匙验证失败。摸索后的解决方法是删掉hexo文件，重新安装加初始化，该问题解决。</p>
+<p>　　接下来最终BOSS error登场，一半时间就耗在它身上：</p>
+<pre><code>Error: Permission denied (publickey).
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights and the repository exists.
+</code></pre><p>参考github官方文档，可能是向github提交公匙环节出了问题。一步步回溯，先检查SSHKey：<code>ls -al ~/.ssh</code>，确认其存在。查看该KEY能否使用，<br>先建一个代理<code>eval &quot;$(ssh-agent -s)&quot;</code>，查看本地的私匙<code>ssh-add -l -E md5</code>，正常情况会返回一长串密匙，但是显示如下错误：</p>
+<pre><code>The agent has no identities.
+</code></pre><p>这是按照官方步骤一步步执行，根据官方<a href="https://help.github.com/articles/error-permission-denied-publickey/" target="_blank" rel="external">帮助文档</a>建议此时要重新返回去创立新key，但重头再来几次都仍然卡在这一步，最后在stackoverflow上找到解决办法。代理打开之后要通过<code>ssh-add ~/.ssh/id_rsa</code>向该进程内添加自己的私钥文件后才能显示，试后成功。接着hexo d，代码成功传入github，泪流满面。<br>但故事远没有就此结束。由于repository名和github账号名不同导致页面404错误，更改repository后老问题<code>Permission denied (publickey).</code>再次出现，并且用上述方法无法解决。经过无数次尝试，在代理开辟前执行<code>`$ ssh-agent bash</code>，问题再次解决。</p>
+<p>　　另外还碰上的一些零星小坑包括：</p>
+<ul>
+<li>1&gt;    ERROR Deployer not found: git<br>　　解决方法：再来一次<code>npm install hexo-deployer-git --save</code> </li>
+<li>2&gt;    Error: fatal: Not a git repository (or any of the parent directories): .git<br>　　解决方法：重新init一遍</li>
+<li>3&gt;<code>hexo -version</code>查看自己的hexo版本，如果是3.0以后配置_config.yml要把type改为git，否则又是查不出缘由的错误。</li>
+<li><p>4&gt;<code>ssh -T -v git@github.com</code>非常好用的debug命令，通过它我找出如下错误：</p>
+<p>  debug1: Trying private key: /home/sunny/.ssh/id_rsa<br>  debug1: Trying private key: /home/sunny/.ssh/id_dsa<br>  debug1: Trying private key: /home/sunny/.ssh/id_ecdsa<br>  debug1: No more authentication methods to try. </p>
+</li>
+</ul>
+<p>说明id_rsa等密匙文件找不到而导致的出错，可以通过<code>cp github id_rsa &amp;&amp; cp gitbub.pub id_rsa.pub</code>还原出改之前所需文件。</p>
+<ul>
+<li>5&gt;最后编辑完.md文件保存时别忘选UTF-8编码避免中文乱码。<br>　　<br>　　整个过程虽然痛苦，但是不借助别人帮助下自己发现并解决问题，也算是对毅力和信心的一次小小提升^ ^。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/14/my-new-post/" data-id="cj2n6xntm000kvdpdrv3hmncc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/19/shellmerge/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Shell与Merge性能大比拼
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

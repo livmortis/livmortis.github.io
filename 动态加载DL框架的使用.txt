@@ -1,0 +1,119 @@
+android studio下动态加载DL框架的使用
+
+一、动态加载技术（dynamic-load-apk简称DL）和插件化的意义
+当公司项目越来越大时，第一应用的内存和CPU占用压力大幅度增大，第二添加新功能必须发布新补丁，频繁升级安装新版本。"插件化"的思想即是将应用拆分为许多插件，每个插件对应特有的功能，再加上"动态加载"技术，使插件不需要安装即可被调用。安装卸载整个应用从而变成了单个插件的热插拔。
+二、动态加载的思想。
+一个宿主程序（host），可以任意调用各个尚未安装的插件APK。
+三、动态加载的模式
+根据插件和宿主依赖与否分为三种，这里使用插件不依赖宿主的模式，即两者独立开发，各自依赖DL的jar包。
+三、功能实现。
+1.开源框架地址
+https://github.com/livmortis/dynamic-load-apk.git
+项目根目录下的脚本是无法运行的，需要打开对应子项目。其中有lib和sample两个文件，sample是一个演示demo，lib即是我们开发自己项目时需要的库文件。
+2.由于插件程序和宿主程序都需要DL的jar包即lib.jar，但是在宿主程序直接依赖的情况下，插件程序不能直接依赖，否则宿主调用插件时会出现类重复错误，support-v4同理。解决方法是插件项目中新建一个文件夹，将lib.jar和support-v4.jar放进去并进行依赖，这样即在编译时用到了库而又不会将库打包到APK中。
+项目的jar包在eclipse中会自动生成在lib文件夹中，而在AS中可以在build.gradle中用"task makeJar"语句生成。不过我们可以偷个懒，因为自带的demo中也有插件程序，在它自建的文件夹中可以找到直接拷。（lib-build-libs中也可找到lib.jar）
+3.插件程序开发
+这里只演示一个简单的textview.
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tvS = (TextView) findViewById(R.id.tv_success);
+
+    }
+插件中Activity必须继承自DLBasePluginActivity，相应的调用activity要用startPluginActivity(intent)。另外注意删掉styles.xml中的一些没用到的变量，否则打包时会出错。另外manifest.xml中活动的theme要分别设置。
+然后打包APK，放入手机存储或SD卡的指定路径。
+4.宿主程序开发
+
+        String dexPath = Environment.getExternalStorageDirectory() + "/AAAdltest";
+        File file = new File(dexPath);
+        File[] plugins = file.listFiles();
+首先逐个读取APK所在路径下的文件，可以挨个读取该路径下的APK。
+    public static class PluginItem {
+        public PackageInfo packageInfo;
+        public String pluginPath;
+        public String launcherActivityName;
+        public PluginItem() {
+        }
+    }
+将packageInfo,插件路径，插件程序活动名放入自定义内部类PluginItem中。
+        for (File plugin : plugins) {
+            item = new PluginItem();
+            item.pluginPath = plugin.getAbsolutePath();
+            item.packageInfo = DLUtils.getPackageInfo(this, item.pluginPath);
+
+这里packageInfo用到了框架类DLUtils中的getPackageInfo()方法，点开该类可以看到这个方法：
+    public static PackageInfo getPackageInfo(Context context, String apkFilepath) {
+        PackageManager pm = context.getPackageManager();
+        PackageInfo pkgInfo = null;
+
+        try {
+            pkgInfo = pm.getPackageArchiveInfo(apkFilepath, 5);
+        } catch (Exception var5) {
+            var5.printStackTrace();
+        }
+
+        return pkgInfo;
+    }
+方法返回值packageInfo，其实是通过PackageManager的getPackageArchiveInfo()方法得到的，该方法第一个参数要传入是想要得到包信息的apk的路径。
+
+有了packageInfo就可以得到插件程序中activity的数量，利用name属性将第一个activity也就是MainAcitivity名取出：
+
+            if (item.packageInfo.activities != null && item.packageInfo.activities.length > 0) {
+                item.launcherActivityName = item.packageInfo.activities[0].name;
+            }
+        DLPluginManager.getInstance(this).loadApk(item.pluginPath);
+        }
+
+最后调用DLPluginManager的startPluginActivity（）来启动插件程序的MainActivity。
+        DLPluginManager pluginManager = DLPluginManager.getInstance(this);
+        pluginManager.startPluginActivity(this, new DLIntent(item.packageInfo.packageName, item.launcherActivityName));
+
+5.宿主程序manifest.xml
+  添加代理Activity声明。这里如果不添加会报ActivityNotFoundException错误，而插件程序的库文件中虽然也有该活动，但程序没有调用到相关类，所以不声明也不会出错。
+         <activity
+            android:name="com.ryg.dynamicload.DLProxyActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.ryg.dynamicload.proxy.activity.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+  
+  加入读写SD卡权限
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+6.运行结果
+  宿主程序成功打开了未安装的插件程序apk。
+7.生命周期的思考
+  插件中的Activity在宿主程序调用后只是普通的Class，其生命周期也无从谈起，解决方法就是将宿主程序的生命周期与其绑定，看看源码中是怎么办到的。
+  反射加载插件程序中成员的逻辑是写在代理活动中的，所以宿主程序主要运行在DLProxyActivity生命周期中的。
+  打开代理类DLProxyActivity：
+    protected DLPlugin mRemoteActivity;
+      protected void onStart() {
+        this.mRemoteActivity.onStart();
+        super.onStart();
+    }
+
+    protected void onRestart() {
+        this.mRemoteActivity.onRestart();
+        super.onRestart();
+    }
+        ....
+    DLPlugin是一个接口，里面封装了生命周期相关所有方法。刚才写插件程序时提到了所有活动要继承DLBasePluginActivity，打开DLBasePluginActivity，发现它果然实现了DLPlugin接口，这也验证了我们的猜想。
+    
+8.类加载机理
+  上面宿主程序中用到了DLPluginManager的loadApk()方法，该方法内部主要调用了preparePluginEnv()方法，其中有如下语句：
+   DexClassLoader dexClassLoader = createDexClassLoader(dexPath);
+   打开createDexClassLoader()：
+   返回值为 DexClassLoader loader = new DexClassLoader(dexPath, dexOutputPath, mNativeLibDir, mContext.getClassLoader());
+   可见，android类加载器DexClassLoader构造器需要传入apk地址、dex文件存放地址、java类加载器ClassLoader()等参数。有了类加载器，我们就可以利用反射来调用插件中的各种对象了。
+   打开DLProxyImpl这个类，其中一个方法有如下内容：
+            Class<?> localClass = getClassLoader()（这里传入的类加载器正是上面我们得到的）.loadClass(mClass);
+            Constructor<?> localConstructor = localClass.getConstructor(new Class[] {});
+            Object instance = localConstructor.newInstance(new Object[] {});
+   这里的mClass是我们传入的插件中想要加载的类，利用反射原理，通过类加载器得到mClass的class对象，即可得到构造函数，从而得到mClass的实例对象instance。利用class对象也可以得到mClass的包括onCreate(）在内的各种方法，然后使用invoke()调用这些方法，最终完成插件程序的加载。
+
+   
+9.下一步工作
+  一款插件化的应用要更新某个功能时，

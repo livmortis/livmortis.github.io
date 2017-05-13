@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-eventbus" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/05/13/eventbus/" class="article-date">
-  <time datetime="2017-05-13T09:20:18.000Z" itemprop="datePublished">2017-05-13</time>
+    <a href="/2017/04/18/hello-world/" class="article-date">
+  <time datetime="2017-04-18T04:11:07.000Z" itemprop="datePublished">2017-04-18</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/13/eventbus/">eventbus</a>
+      <a class="article-title" href="/2017/04/18/hello-world/">Hello World</a>
     </h1>
   
 
@@ -83,23 +83,76 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Eventbus可代替：handler/message、intent、broadcast</p>
-<p>#基本用法</p>
-<p> ##建立javaBean类<br>    用来存放发送和接收的消息的实体类。</p>
-<p> ##接收方<br>    1&gt; 注册和解注册<br>         onCreate()中EventBus.getDefault().register(this);<br>         onDestroy()中EventBus.getDefault().unregister(this);<br>    2&gt; 新建接受方法<br>         加入注解：@Subscribe(threadMode = ThreadMode.XXX)<br>         接受方法参数为javaBean类对象。该方法必须是public。<br>    3&gt;ThreadMode分类<br>         四种：Main，background，async，posting</p>
-<p> ##发送方<br>    新建javaBean类对象，通过构造器传入数据。<br>    Event.getDefault().post(javaBean类对象)</p>
-<p>#粘性事件用法<br> 1.与基本用法区别：基本用法接收方先注册，发送方发送的一瞬间接受方立马会接收到；粘性事件先发送方先发送，接收方注册的一瞬间接受消息，不注册则发送方已发送的消息会一直存在于虚空中无法接受到。<br> 2.发送方<br>   EventBus.getDefault().postSticky(javaBean对象)<br> 3.接收方<br>   加入注解：@Subscribe(threadMode = ThreadMode.XXX, sticky = true)<br>   写接受方法<br> 4.接收方注册和解注册<br>    注册：EventBus.getDefault().register(this)<br>    解注册：EventBus.getDefault().removeAllStickyEvents()</p>
-<p>注意点：</p>
-<ol>
-<li>subscriber修饰的方法名字可以随便起，但一定得是public。</li>
-<li>两个activity之间跳转，要用粘性事件，普通的不行。</li>
-<li>threadmode为main和posting的时候，自定义方法里才可以写操作ui的逻辑。</li>
-</ol>
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is my very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. </p>
+<p>  If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static  files"></a>Generate static  files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/13/eventbus/" data-id="cj2n2dmg00000mapd7r9tr5o3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/18/hello-world/" data-id="cj2n6xntk000ivdpdimpln3lr" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-github模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/19/github模式/" class="article-date">
+  <time datetime="2016-09-19T15:18:19.000Z" itemprop="datePublished">2016-09-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/19/github模式/">MVP模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、与MVC的区别"><a href="#一、与MVC的区别" class="headerlink" title="一、与MVC的区别"></a>一、与MVC的区别</h1><p>　　mvp的View是xml文件和activity；mvc的View是xml，Controller是activity。<br>　　Modle都是业务逻辑和实体类，如处理数据，网络请求等。<br>　　mvp对Model层和View层的解耦做得更好。<br>　　mvp的View和Presenter之间交互通过接口，所以为View编写个接口Iview。<br>　　mvp的Model和Presenter之间交互通过接口，所以为Model编写接口Imodel。</p>
+<h1 id="二、demo制作。"><a href="#二、demo制作。" class="headerlink" title="二、demo制作。"></a>二、demo制作。</h1><p>　　实现伪登陆界面，判断账号密码是否正确，对应显示不同toast，并且正确时textview显示一行文字。</p>
+<h2 id="View包"><a href="#View包" class="headerlink" title="View包"></a>View包</h2><ul>
+<li><p>1.创建Iview接口。<br>　　view的职责有textview添加文字、获取edittext文字、清空edittext文字、显示和隐藏progressbar。<br>　　所以创建7个抽象方法。</p>
+<p>  String getViewAccount();<br>  void clearViewAccount();<br>  String getViewPass();<br>  void clearViewPass();<br>  void showViewBar();<br>  void removeViewBar();<br>  void addViewText(String s);</p>
+</li>
+<li><p>2.创建View类并实现Iview。<br>　　正是MainActivity。<br>　　1&gt;、纯view逻辑<br>　　重写7个方法，除了addViewText()其余全是只有view逻辑。<br>　　2&gt;、与presenter交互（访问presenter）。<br>　　创建presenter对象，将this从构造方法中传过去（因为ipresenter也要访问view）。<br>　　addViewText()中textview所set的文字来自于present。<br>　　登陆和清空两个点击事件中，是业务逻辑而不是界面展现，所以直接调用presenter的performLogin()和performClear()方法。</p>
+</li>
+</ul>
+<h2 id="Modle包"><a href="#Modle包" class="headerlink" title="Modle包"></a>Modle包</h2><ul>
+<li>1.实体类bean存放账号密码。</li>
+<li><p>2.创建Imodle接口。<br>　　modle的职责有控制textview要展示的数据、网络请求判断账号对错。<br>　　所以创建2个抽象方法。</p>
+<p>  void judgement(String ac, String pa, Model.SuccessCallback successCallback,Model.FailCallback failCallback);<br>  String queryData();</p>
+</li>
+<li><p>3.创建Modle类并实现Imodle<br>　　modle与presenter交互只是presenter单方面访问modle，所以modle中不需要创建presenter对象。<br>　　1&gt;、judgement()方法。<br>　　新建子线程进行网络请求，再在类中建两个回调接口，judgement()中进行账号对错核对（或发送请求给网络接口处理），再将成功失败结果回调出去。<br>　　2&gt;、queryData()方法。<br>　　处理数据，将数据返回。</p>
+</li>
+</ul>
+<h2 id="preseter包"><a href="#preseter包" class="headerlink" title="preseter包"></a>preseter包</h2><p>　　1.创建perfomLogin()和performClear()两个方法，体现了preseter层的职责是实现view页面的功能。<br>　　2.创建Imodle和Iview两个接口的对象，前者用Modle类构造器创建，后者不能创建对象，用从Activity中传入的this作为对象。<br>　　3.与modle交互。<br>　　performLogin()方法中调用judgement()方法，新建主线程（注意新建handler不能在子线程中），得到回调的结果（登陆成功与否）。<br>　　4.与view交互。<br>　　　　1&gt;、在调用的judgement()方法的成功回调中，调用view的去除progress方法removeViewBar()，和view的为textview赋值方法addViewText(String s)（传入的参数是model的queryData()的返回值，这一步完成了数据从model向view的转移，体现了model操控数据的功能）。失败回调中同样去除progressbar。<br>　　　　2&gt;、performClear()方法中调用view的clearViewAccount()和clearViewPass()两个方法。实现clear功能。</p>
+<p>ps: 1.子线程不能创建Handler对象。<br>     2.不能创建activity对象。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/19/github模式/" data-id="cj2n6xntg000dvdpdebwgf8lc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -111,10 +164,10 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-跟投设置页面开发笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/05/13/hello-world/" class="article-date">
-  <time datetime="2017-05-13T08:48:20.000Z" itemprop="datePublished">2017-05-13</time>
+    <a href="/2016/09/17/跟投设置页面开发笔记/" class="article-date">
+  <time datetime="2016-09-17T15:28:16.000Z" itemprop="datePublished">2016-09-17</time>
 </a>
     
   </div>
@@ -125,7 +178,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/13/hello-world/">Hello World</a>
+      <a class="article-title" href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
     </h1>
   
 
@@ -133,22 +186,692 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>长城证券爱投汇项目中开发”跟投设置”页面过程中的笔记</p>
+<h2 id="一、控件"><a href="#一、控件" class="headerlink" title="一、控件"></a>一、控件</h2><h3 id="1-TextView相关"><a href="#1-TextView相关" class="headerlink" title="1.TextView相关"></a>1.TextView相关</h3><p>　　1&gt;、想要类似radiobutton<br>　　setClickable()；setEnable()；setFocusable()<br>　　主要还是setSelected()<br>　　2&gt;、ImeOptions属性<br>　　控制软键盘右下角按键。<br>　　actionNone : 回车键，按下后光标到下一行<br>　　actionGo ： Go，<br>　　actionSearch ： 一个放大镜<br>　　actionSend ： Send<br>　　actionNext ： Next<br>　　actionDone ： Done，隐藏软键盘，即使不是最后一个文本输入框 </p>
+<h3 id="2-RadioButton和RadioGroup相关"><a href="#2-RadioButton和RadioGroup相关" class="headerlink" title="2.RadioButton和RadioGroup相关"></a>2.RadioButton和RadioGroup相关</h3><p>　　两行radiobutton还是改用textview，因为每个radigroup只能排一个方向，不同group控制单选很难（如果互相clearCheck()效果不好）。<br>　　1&gt;、 RadioGroup.setOnCheckedChangeListener().接口的onCheckedChanged()方法，第一个参数是radiogroup暂时没有使用，第二个参数便是每个radioButton控件的id。<br>　　2&gt;、将前方加圆点样式改为radiobutton背景变色样式。<br>　　先将radiobutton的button属性改为”@null”，去掉了前面的圆点；再将背景设为有selected属性的selector文件；最后代码里setSelected(true/false)来控制被选背景颜色是否显示。selector文件如下：</p>
+<pre><code>&lt;selector xmls:android=&quot;http://schemas.android.com/apk/res.android&quot;&gt;
+    &lt;item android:drawable=&quot;@drawable/XXX&quot; android:state_pressed=&quot;true&quot;/&gt;
+    &lt;item android:drawable=&quot;@drawable/XXX&quot; android:state_selected=&quot;true&quot;/&gt;
+    &lt;item android:drawable=&quot;@drawable/XXX&quot; android:state_checked=&quot;true&quot;/&gt;
+    &lt;item android:drawable=&quot;@drawableXXX&quot;/&gt;
+&lt;/selector&gt;
+</code></pre><p>　　3&gt;、radiobutton.setChecked(false)和radiogroup.clearCheck()方法。<br>　　两个方法都能取消选择，但是都会重新走一遍onCheckedChanged()方法。如果此时onCheckedChanged()方法中有不想让执行的代码，可以用TAG选择过滤。</p>
+<h3 id="3-spinner相关"><a href="#3-spinner相关" class="headerlink" title="3.spinner相关"></a>3.spinner相关</h3><p>　　1&gt;、制作<br>　　ArrayAdapter adapter = new ArrayAdapter(getContext(),子项布局,显示字符串数组)<br>　　spinner.setAdapter(adapter)<br>　　2&gt;、监听</p>
+<pre><code>spinner.setOnItemSelectedListener(new OnItemSelectedListener()  {          
+        @Override  
+        public void  onItemSelected(AdapterView&lt;?&gt; adapterView, View view , int position, long id) {
+           //adapterView.getId()表示多个spinner中switch/case哪个。adapterView.getItemAtPosition(position)表示获取某个子项的文字。
+           //position表示选择了第几个子项，从0开始计算。
+        }
+        @Override
+        public void  onNothingSelected(AdapterView&lt;?&gt; arg0) {   
+           // 暂时不用该方法
+
+        }
+      });
+</code></pre><p>　　3&gt;、设置默认选中<br>　　spinner.setSelection(n)，n从0开始。</p>
+<h3 id="4-edittext相关"><a href="#4-edittext相关" class="headerlink" title="4.edittext相关"></a>4.edittext相关</h3><p>　　1&gt;、限制密码类型<br>　　xml:   android:inputType=”textPassword”<br>　　java:   myEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);<br>　　2&gt;、限制数字<br>　　xml:   android:digits=”0123456789”<br>　　3&gt;、限制小数<br>　　xml:   android:inputType=”numberDecimal”</p>
+<p>　　4&gt;、监听内容变化</p>
+<pre><code>editText.addTextChangedListener(new TextWatcher(){
+    public void onTextChanged(CharSequence s,int start, int before, int count){}
+    public void beforeTextChanged(CharSequence s ,int start,int count,int after){}
+    public void afterTextChanged(Editable s){}       
+});
+</code></pre><p>　　取消监听edittext.removeTextChangedListener(watcher)，可以用取消监听加增加监听两行代码包围一条edittext改变语句，让这条语句不被监听。</p>
+<p>　　5&gt;、监听软键盘回车键事件</p>
+<pre><code>editText.setOnEditorActionListener(new OnEditorActionListener() {  
+    @Override  
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {  
+        return false;  
+    }  
+});  
+</code></pre><p>　　6&gt;、点击空白处软键盘收回<br>　　将父布局设为clickable=true;<br>　　java中在父布局的点击事件中加入：</p>
+<pre><code>InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+imm.hideSoftInputFromWindow(v.getWindowToken(), 0); 
+这里v是onclick的参数，getSystemService是Context的方法。 
+</code></pre><h2 id="二、屏幕适配"><a href="#二、屏幕适配" class="headerlink" title="二、屏幕适配"></a>二、屏幕适配</h2><h3 id="1-横向居中"><a href="#1-横向居中" class="headerlink" title="1.横向居中"></a>1.横向居中</h3><p>　　使linearlayout为matchparent；使linearlayout的gravity为center。<br>　　使linearlayout内部的textview的宽度为固定值，而不是wrapContent。<br>　　textview然后想让字居中不是使用padding，而是使gravity为center。</p>
+<h3 id="2-字体适配"><a href="#2-字体适配" class="headerlink" title="2.字体适配"></a>2.字体适配</h3><p>　　values文件的dimens.xml文件中，新建多个dimens.xml(比如四个)，分别对应320dp,360dp,430dp,480dp的分辨率。<br>　　每个文件中设置各自的字体大小数值：  </p>
+<pre><code>&lt;resources&gt;
+    &lt;dimen name=&quot;XXX&quot;&gt;  Xdip &lt;/dimen&gt;
+&lt;/resources&gt;
+</code></pre><p>　　对应数值：默认、320 = 10dip ； 360 = 11dip ；420 = 13dip ；480 = 14.5dip   模拟器预览框预览的是360dp-hdpi版本的。<br>　　320/360=8/9 420/360=7/6 480/360=4/3</p>
+<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><p>　　能使用gravity和center解决的，不用padding和margin。如果需要纵向margin，让外层布局margin，内层控件不要margin直接gravitycenter。而横向margin基本可以用weight来代替。</p>
+<h3 id="4-weight的使用"><a href="#4-weight的使用" class="headerlink" title="4.weight的使用"></a>4.weight的使用</h3><p>　　利用textview可以占位、空白View可以占位两项神器，一切横向布局都可以使用weight来解决，完美解决屏幕适配问题。</p>
+<h2 id="三、字符串计算并保留两位"><a href="#三、字符串计算并保留两位" class="headerlink" title="三、字符串计算并保留两位"></a>三、字符串计算并保留两位</h2><h3 id="1-字符串转数字"><a href="#1-字符串转数字" class="headerlink" title="1.字符串转数字"></a>1.字符串转数字</h3><p>　　Double.parseDouble(字符串)   Float.parseFloat(字符串)   Integer.parseInt(字符串)<br>　　数字转字符串最好用 String.valueOf(数字)</p>
+<h3 id="2-保留两位"><a href="#2-保留两位" class="headerlink" title="2.保留两位"></a>2.保留两位</h3><pre><code>DecimalFormat d = new DecimalFormat(&quot;#.##&quot;)
+d.format(小数)
+</code></pre><h2 id="四、一个textview分段显示颜色-内容"><a href="#四、一个textview分段显示颜色-内容" class="headerlink" title="四、一个textview分段显示颜色/内容"></a>四、一个textview分段显示颜色/内容</h2><h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><pre><code>SpannableString spannableString = new SpannableString(字符串)；
+Pattern p = Pattern.compile(匹配的字段);
+Matcher m = p.matcher(spannableString);
+while(m.find()){
+    int start = m.start();
+    int end = m.end();
+}
+spannableString.setSpan(new ForegroundColorSpan (getResouces().getColor(R.color.XXX)) , start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="2-分段显示内容。"><a href="#2-分段显示内容。" class="headerlink" title="2.分段显示内容。"></a>2.分段显示内容。</h3><p>　　可用stringBuilder的replace()方法进行</p>
+<h2 id="五、java"><a href="#五、java" class="headerlink" title="五、java"></a>五、java</h2><p>　　整数/整数，该分数结果一定是整数，如果小于1就会变成0.<br>　　只需整数后面加.0，相除即可为浮点数。</p>
+<h2 id="六、TAG大法"><a href="#六、TAG大法" class="headerlink" title="六、TAG大法"></a>六、TAG大法</h2><p>　　利用TAG值来确定代码跳转来源。<br>　　举例：用TAG标记，是edittext的”内容改变监听”跳到radiobutton的onCheckedChanged()方法，还是正常走radiobutton的onCheckedChanged()方法。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/13/hello-world/" data-id="cj2n2dmg50001mapdhnrvlzxv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/09/17/跟投设置页面开发笔记/" data-id="cj2n6xnuk001fvdpddyeo9pze" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-获取屏幕数值" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/14/获取屏幕数值/" class="article-date">
+  <time datetime="2016-09-14T13:40:35.000Z" itemprop="datePublished">2016-09-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、屏幕高度和宽度"><a href="#一、屏幕高度和宽度" class="headerlink" title="一、屏幕高度和宽度"></a>一、屏幕高度和宽度</h2><p>　　DisplayMestrics类中有widthPixels和heightPixels两个变量，分别是宽度的像素和高度的像素。还有density密度。相乘即为高度和宽度。</p>
+<ul>
+<li>1.获取DisplaymMetrix对象:<br>　　方法一：DisplayMetrics dm = new DisplayMetrics()<br>　　etWindowManager().getDefaultDisplay().getMetrics(dm)<br>　　方法二：context.getResource().getDisplayMestrics()</li>
+<li>2.调用像素和密度计算长度：<pre><code>int w = dm.widthPixels * dm.density
+int h = dm.heightPixels * dm.density
+</code></pre></li>
+</ul>
+<p>　　注意屏幕高度不是该页面总高度，是手机显示的当前页面的高度。</p>
+<h2 id="二、控件的高度和宽度。"><a href="#二、控件的高度和宽度。" class="headerlink" title="二、控件的高度和宽度。"></a>二、控件的高度和宽度。</h2><p>　　view.getGlobalVisibleRect()<br>　　获取该控件的四个坐标值，坐标原点是整个屏幕的左上角。<br>　　view.getLocalVisibleRect()<br>　　获取该控件的四个坐标值，坐标原点是“可见范围内的”该控件的左上</p>
+<p>　　参数是Rect的对象，方法效果是将控件的四个坐标传给Rect对象身上。<br>　　有了 rect对象，利用top,bottom,left,right值可以计算控件各种长度。</p>
+<h2 id="三、通过decorView获取各种顶层view高度和宽度。"><a href="#三、通过decorView获取各种顶层view高度和宽度。" class="headerlink" title="三、通过decorView获取各种顶层view高度和宽度。"></a>三、通过decorView获取各种顶层view高度和宽度。</h2><ul>
+<li>1.decorView是window中最顶层view。获取方法：getWindow().getDecorViw()。</li>
+<li>2.获取状态栏高度：<br>　　decorview.getWindowVisibleDisplayFrame()，可以获得除状态栏外的所有区域。参数为Rect对象。区域的top值便是状态栏高度。</li>
+<li>3.获取标题栏高度：<br>   getWindow().findViewById(Window.ID_ANDROID_CONTENT)，可以取得除状态栏和标题栏的所有区域，返回值直接是个rect，取top值，减去状态栏高度就是标题栏高度。</li>
+</ul>
+<h2 id="四、屏幕滚动"><a href="#四、屏幕滚动" class="headerlink" title="四、屏幕滚动"></a>四、屏幕滚动</h2><ul>
+<li>1.scrollview的scrollBy(x,y)<br>　　移动x,y的距离。</li>
+<li>2.scrollview的scrollTo(x,y)<br>　　移动到x,y的位置。</li>
+</ul>
+<h2 id="五、改变控件高宽"><a href="#五、改变控件高宽" class="headerlink" title="五、改变控件高宽"></a>五、改变控件高宽</h2><p>　　view.setButtom() setTop() setLeft() setRight()。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/14/获取屏幕数值/" data-id="cj2n6xnui001dvdpdpvifbkd1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-支付宝支付和微信支付SDK的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/" class="article-date">
+  <time datetime="2016-09-11T15:23:03.000Z" itemprop="datePublished">2016-09-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　目前工作的项目(投顾业务)中已有微信支付功能，下一步是要加入支付宝支付，结合项目代码来总结下两种sdk的使用。</p>
+<h1 id="微信支付"><a href="#微信支付" class="headerlink" title="微信支付"></a>微信支付</h1><h2 id="客户端——-gt-本地接口"><a href="#客户端——-gt-本地接口" class="headerlink" title="客户端——&gt;本地接口"></a>客户端——&gt;本地接口</h2><h3 id="一、充值页面（DklcRecharge）"><a href="#一、充值页面（DklcRecharge）" class="headerlink" title="一、充值页面（DklcRecharge）"></a>一、充值页面（DklcRecharge）</h3><ul>
+<li>1.先getPaymentList()，从接口获取”支付列表”，并将其放入GPaymentlist实体类中。</li>
+<li>2.从接口获得金豆选项view</li>
+<li>3.点击支付事件：弹出一个PopWindow。</li>
+</ul>
+<h3 id="二、popwindow（PayPopWindow）"><a href="#二、popwindow（PayPopWindow）" class="headerlink" title="二、popwindow（PayPopWindow）"></a>二、popwindow（PayPopWindow）</h3><ul>
+<li>1.获取以下内容：<br>  投顾ID，充值金额（GPaymentlist类的keyvalue变量），ip地址（分wifi和流量两种途径获取），交易类型（APP），body（GPaymentlist类的descr变量，并用UTF-8编码），金豆比率（GPaymentlist类的id变量）。</li>
+<li>2.点击微信支付事件：调用自定义WeiXinPay类的requestPay()方法，将上述6个值传入。</li>
+</ul>
+<h3 id="三、请求接口，获取数据（WeiXinPay）"><a href="#三、请求接口，获取数据（WeiXinPay）" class="headerlink" title="三、请求接口，获取数据（WeiXinPay）"></a>三、请求接口，获取数据（WeiXinPay）</h3><ul>
+<li><p>1.构造器中注册APP：<br>  1&gt;.创建微信SDK“IWXAPI类”的对象：IWXAPI api = WXAPIFactory.createWXAPI(context，APPID(获取方法见下))。<br>  2&gt;.调用微信SDK“IWXAPI类”的registerApp()方法，传入APPID。<br>  3&gt;.APPID来源：<br>   在微信开放平台填写包名和签名后可注册应用，注册应用后得到appid。<br>   项目中写在了function.properties文件中——wx973da9dd05403d3e，<br>   通过MiddlewareProxy.getFunctionManager().getProperty()方式获取，安卓原生获取方法是：<br>   Properties pro = new Properties();<br>   InputStream is = context.getAssets().open(“function.properties”);<br>   pro.load(is);</p>
+</li>
+<li><p>2.向本地接口发送请求<br>  判断完”是否安装微信”，”微信版本是否支持支付”之后，传入上述6个值开始发送请求</p>
+</li>
+</ul>
+<h2 id="本地接口——-gt-客户端"><a href="#本地接口——-gt-客户端" class="headerlink" title="本地接口——&gt;客户端"></a>本地接口——&gt;客户端</h2><ul>
+<li>3.处理数据<br>  1&gt;.获取的数据放在实体类里，包括appid , partnerid , prepayid , sign , noncestr , tiemstamp 7个值。<br>  2&gt;.新建SDK中的类PayReq的对象，将7个值放入该类的7个变量里</li>
+</ul>
+<h2 id="客户端——-gt-微信服务器"><a href="#客户端——-gt-微信服务器" class="headerlink" title="客户端——&gt;微信服务器"></a>客户端——&gt;微信服务器</h2><p>　　3&gt;.调用IWXAPI的sendReq()方法，将PayReq对象传入。完成。</p>
+<h1 id="支付宝支付"><a href="#支付宝支付" class="headerlink" title="支付宝支付"></a>支付宝支付</h1><h2 id="客户端——-gt-本地接口-1"><a href="#客户端——-gt-本地接口-1" class="headerlink" title="客户端——&gt;本地接口"></a>客户端——&gt;本地接口</h2><h3 id="一、充值页面"><a href="#一、充值页面" class="headerlink" title="一、充值页面"></a>一、充值页面</h3><p>   同微信</p>
+<h3 id="二、popwindow"><a href="#二、popwindow" class="headerlink" title="二、popwindow"></a>二、popwindow</h3><p>   基本同微信。<br>   将n个本地值拼成url，在子线程中传给项目类MobileSecurePayer的自定义方法requestOrderInfo()方法中。</p>
+<h3 id="三、请求接口，获取数据（MobileSecurePayer类）"><a href="#三、请求接口，获取数据（MobileSecurePayer类）" class="headerlink" title="三、请求接口，获取数据（MobileSecurePayer类）"></a>三、请求接口，获取数据（MobileSecurePayer类）</h3><p>　* 1.请求接口<br>     requestOrderInfo()中进行HttpURLConnection网络请求，返回的json中应该包括了如下数据：</p>
+<h2 id="本地接口——-gt-客户端-1"><a href="#本地接口——-gt-客户端-1" class="headerlink" title="本地接口——&gt;客户端"></a>本地接口——&gt;客户端</h2><p>　　body商品描述 ，partner合作商ID , seller商户支付宝号 , sign商户私钥签名 ， out_trade_no外部订单号 ， notify_url支付宝给本地接口的url ， total_fee价格 ， errno错误码 ， subject 9个参数。</p>
+<p>　* 2.传递数据<br>　　将数据从子线程传出到主线程。新建Message对象，what字段设为4，obj字段设为获得的json数据，sendMessage()。</p>
+<h3 id="四、解析数据"><a href="#四、解析数据" class="headerlink" title="四、解析数据"></a>四、解析数据</h3><ul>
+<li>1.Handler接收数据<br>   Handler接口的方法handleMessage()中先判断what字段是否为4，然后提取出obj字段的json数据。</li>
+<li>2.解析出订单信息<br>   json数据传递给项目方法getOrderInfo()，在里面对9个变量加入&amp;和\进行拼接成一个stringBuilder，这就是订单信息。</li>
+</ul>
+<h2 id="客户端——-gt-支付宝服务端"><a href="#客户端——-gt-支付宝服务端" class="headerlink" title="客户端——&gt;支付宝服务端"></a>客户端——&gt;支付宝服务端</h2><h3 id="五、提交订单信息"><a href="#五、提交订单信息" class="headerlink" title="五、提交订单信息"></a>五、提交订单信息</h3><ul>
+<li>1.开启支付宝的“安全支付服务”<br>  先在外部newServiceConnection接口，重写onServiceConnected()和onServcieDisconnected()方法，前者：先加同步锁，再mAlixPay=IAlixPay.Stub.asInterface(service), 后者：mAlixPay=null。<br>  在项目方法pay()中bindService()。</li>
+<li>2.开启子线程</li>
+<li>3.try中提交<br>   1&gt;.先判断同步锁。<br>   2&gt;.为安全支付服务注册回调。 mAliPay.registerCallback(回调对象)。<br>   3&gt;.正式提交，调用mAliPay.pay()，参数传入订单信息。<br>   4&gt;.发送交易结果，新建Message对象，what字段设为1，obj字段设为SDK的pay()的返回值。利用刚才的回调对象sendMessage()。</li>
+<li>4.catch中提交<br>   同样的新建Message后发送，obj字段为e。</li>
+<li>5.finally中解除回调 + 取绑服务<br>   mAlixPay.unregisterCallback(回调对象)。判断若在绑定，执行unbindService()。</li>
+</ul>
+<h2 id="支付宝服务端——-gt-客户端"><a href="#支付宝服务端——-gt-客户端" class="headerlink" title="支付宝服务端——&gt;客户端"></a>支付宝服务端——&gt;客户端</h2><h3 id="六、Handler接收数据"><a href="#六、Handler接收数据" class="headerlink" title="六、Handler接收数据"></a>六、Handler接收数据</h3><ul>
+<li>1.Handler接口的方法handleMessage()中先判断what字段是否为1。</li>
+<li>2.新建签名检验类ResultChecker对象，构造函数中传入obj字段。</li>
+<li>3.ResultChecker对象调用getResultStatus()，获得支付状态，支付状态若等于9000，表示支付成功。</li>
+<li>4.清除handler,lock,context,serviceConnection,callback。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/11/支付宝支付和微信支付SDK的使用/" data-id="cj2n6xnu50017vdpdyci3tfg9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-8-12晚观星" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/25/2016-8-12晚观星/" class="article-date">
+  <time datetime="2016-08-25T14:49:02.000Z" itemprop="datePublished">2016-08-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/25/2016-8-12晚观星/">2016.8.12晚观星</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　背景：8月12日晚至13日凌晨，英仙座流星雨，小和山工大朝北寝室，可见度较好凌晨一点起可看到昴宿星团的六颗星，观测时间0点到3点，以仙后座为参考位置</p>
+<p>　　1.  0点开始，北半天正中间是仙后座（王良四星等2.2），开口朝西（此处均假设寝室阳台朝向正北），西边是倒房子型五星仙王座（天钩五星等2.45），仙后和仙王的西南方向，或仙后的M反向延长线与M中心星的连线，向开口方向的延长线上可看到北极星，亮度较弱（星等1.95）。<br>　　东北处是英仙座，天船三（1.75），今天流星雨的主角。<br>　　抬高仰角，仙后座西南方向一颗亮星为天津四（星等1.25），所在的天鹅座气势磅礴，大鹏展翅霸占天空。形似翼手龙。天津四与右翼中翅连线延长线可看到最亮的织女一（星等0）。<br>　　高仰角。仙后座东南方向是半十字形状的仙女座，往东三角座（锐角等腰），往东白羊座（四星折线，间距递增）。</p>
+<p>　　2.　一点开始，昴宿星团和金牛座(毕宿五星等-0.85)五星等边三角型升起。</p>
+<p>　　3.　两点开始，御夫座(五车二星等-0.54)升起于东边，仙后仰角抬高天鹅降低，整体星空围绕北极星逆时针转动。<br>　　东边出现御夫座只手遮天，英仙座的天船三厚积薄发。<br>　　西边夏季大三角闪耀，天津四慢慢褪去光芒织女座照亮全场，河鼓二带着河鼓三在最西边形单影只，西南部由南鱼座的北落师门统领一方，与大三角组成畸形”大平行四边形”。</p>
+<p>　　4.　三点此时天空目视星等排名。<br>　　五车二=织女星&gt;毕宿五&gt;河鼓二&gt;北落师门&gt;天津四&gt;天船三&gt;五车五</p>
+<p>　　流星记录：0点06分第一颗，小熊座以北自动向西，短快暗。0点39分最长的一颗，仙王座主星和北极星之间自动向西走了接近20度。1点34最亮一颗，红色，仙后座第二主星划向王良四，星等远超当时老大织女，-5以上，残影两秒以上。一共看到十颗左右（0点到1点看到五颗：6分、18分、27分、39分、44分），晚两点左右频率极高，没再花时间看。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/25/2016-8-12晚观星/" data-id="cj2n6xnsu0001vdpdsef4e7hn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/science/">science</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-AS实用插件总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/01/AS实用插件总结/" class="article-date">
+  <time datetime="2016-07-31T16:24:36.000Z" itemprop="datePublished">2016-08-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/01/AS实用插件总结/">AS实用插件总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　setting的plugins中可以安装和卸载插件</p>
+<p>　　一、GsonFormat–将json数据自动提取到实体类<br>　　空白处右键选generate-GsonFormat，将json数据拷贝进来，修改好后即可新建实体类将json放入。</p>
+<p>　　二、ButterKnife–将布局控件自动生成butter代码到java代码中<br>　　1、先在module的gradle里依赖：compile ‘com.jakewharton:butterknife:7.0,1’并sync now一下。<br>　　2、在Activity的setcontentview方法中，点选参数中的layout布局名，右键generate butterknife injections，即可插入butterknife代码。</p>
+<p>　　三、Android Code Generator–将布局控件自动关联到java代码中<br>　　xml中右键generate Android code—Activity  创建正常的java关联代码</p>
+<p>　　四、Android Selectors Generate–快速生成selector文件，设置点击样式改变。<br>　　1、将button点击前后的两张图片XXX_normal.png和XXX.pressed.png放入drawable中，右击drawable，generate android selectors（最好在project视图下），即可生成一个将两张图片添加到item标签后的selector文件XXX_selector.xml。<br>　　2、layout的控件调用@drawable时，将selector文件名写上去，便可自动将控件点击前后的显示设为那两张图片。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/01/AS实用插件总结/" data-id="cj2n6xnsy0002vdpdyaqmpqt6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-自制Library并上传至Jcenter" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/31/自制Library并上传至Jcenter/" class="article-date">
+  <time datetime="2016-07-31T15:32:51.000Z" itemprop="datePublished">2016-07-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/31/自制Library并上传至Jcenter/">自制Library并上传至Jcenter</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　1.首先在Bintray上面用github账号登录，会自动帮你建好9个仓库，我们要用的只有maven的repositories。进去后add new package添加一个包，要输入name、license、version等信息，最后为你建好的这个包的包名格式就是：账号名/maven/输入的name 。<br>　　2.进入自己已经写好的库工程。<br>　　3.进入项目的build.gradle，引入bintray的插件。即在dependencies中加入classpath ‘com.novoda:bintray-release:0.3.4’.<br>　　(一个library的命名规则： GROUP_ID:ARTIFACT_ID:VERSION 分别是com.XX.XX、lib名、1.0.0)<br>　　4.进入module的build.gradle，配置bintray的信息。<br>　　申明bintray插件：apply plugin: ‘com.novoda.bintray-release’<br>　　发布信息(与apply和android平级)：</p>
+<pre><code>publish{
+userOrg=&apos;开发者名&apos;
+groupId=&apos;库命名第一项&apos;
+artifactId=&apos;库命名第二项&apos;
+publishVersion=&apos;库命名第三项&apos;
+desc=&apos;描述语句&apos;
+website=&apos;描述网址&apos;   
+}
+</code></pre><p>　　最后sync now编译<br>　　5.terminal中上传<br>　　gradlew clean build bintrayUpload -PbintrayUser=用户名 -PbintrayKey=APIkey(网站的profile里面找) -PdryRun=false<br>　　6.进入网站，在该项目中点击add to Jcenter即可提交到Jcenter中供所有人调用。</p>
+<p>　　我上传的库：</p>
+<p>一、roundPic</p>
+<pre><code>publish{
+userOrg=&apos;livmortis&apos;
+groupId=&apos;com.roundPic&apos;
+artifactId=&apos;roundPic&apos;
+publishVersion=&apos;1.0.0&apos;
+desc=&apos;draw a round picture for display&apos;
+website=&apos;&apos;
+}
+</code></pre><p>   调用方法： compile ‘com.roundPic:roundPic:1.0.0’<br>   可用类：MyImageView，用于绘制一个圆形头像。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/31/自制Library并上传至Jcenter/" data-id="cj2n6xnue0019vdpdmd66aakt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android热更新的实现" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/22/Android热更新的实现/" class="article-date">
+  <time datetime="2016-07-22T15:43:00.000Z" itemprop="datePublished">2016-07-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/22/Android热更新的实现/">Android热更新的实现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　发展逻辑<br>　　一个dex最多65536个方法。———-(1)插件化即独立功能做成独立apk，dexClassLoader动态加载反射调用插件中的类和方法（插件化只适合比较独立模块+必须使用框架）。——–(2)dex分包法，核心功能类放入第一个dex，其他放入第二个以及其余的dex中并以资源文件的形式打包入apk，多个dex文件都塞入classLoader中。———(3)QQ空间把修改过的类的class文件打包成patch.dex。</p>
+<p>　　QQ空间hotfix框架。<br>　　相关框架：HotFix-Nuwa-RocooFix , DroidFix。<br>　　hotfix地址：<a href="https://github.com/dodola/HotFix.git" target="_blank" rel="external">https://github.com/dodola/HotFix.git</a></p>
+<p>　　CLASS_ISPREVERIFIED的问题。<br>　　1、在虚拟机启动的时候，当verify选项被打开的时候(doVerify变量为true)，如果static方法、private方法、构造函数等，其中的直接引用（第一层关系）到的类都在同一个dex文件中，那么该类就会被打上CLASS_ISPREVERIFIED标志。那么，我们要做的就是，阻止该类打上CLASS_ISPREVERIFIED的标志。<br>　　2、举例：A类中的方法所引用到的B类和A类本身都在一个dex文件中，A就会被打上CLASS_ISPREVERIFIED标志。这是如果更新B补丁就会出错。<br>　　3、解决方案：AntilazyLoad类被打包成单独的hack.dex，让所有的类都在构造方法中引用AntilazyLoad类，就防止了类被打上CLASS_ISPREVERIFIED的标志了，只要没被打上这个标志的类都可以进行打补丁操作。注意hack.dex包要被优先加载。<br>　　4、解决方法：在dx工具执行之前，将LoadBugClass.class文件进行修改，再其构造中添加System.out.println(dodola.hackdex.AntilazyLoad.class)，然后继续打包的流程。注意：AntilazyLoad.class这个类是独立在hack.dex中。<br>　　5、解决过程：</p>
+<p>　　1&gt;.javassist修改类的class文件。</p>
+<pre><code>String path = &quot;/Users/zhy/develop_work/eclipse_android/imooc/JavassistTest/&quot;;
+        ClassPool classes = ClassPool.getDefault();
+        classes.appendClassPath(path + &quot;bin&quot;);//项目的bin目录即可
+        CtClass c = classes.get(&quot;dodola.hotfix.LoadBugClass&quot;);
+        CtConstructor ctConstructor = c.getConstructors()[0];
+        ctConstructor
+                .insertAfter(&quot;System.out.println(dodola.hackdex.AntilazyLoad.class);&quot;);
+        c.writeFile(path + &quot;/output&quot;);
+</code></pre><p>　　（为什么不编译时就修改呢?答：源码方式的引用会将引用的类打入同一个dex中，所以我们需要找到一种既能编译通过并且将两个互相引用的类分离到不同的dex中，于是就有了这个动态的代码植入方式。）<br>　　2&gt;.在dx之前进行javassist操作。只需修改app/build.gradle</p>
+<h2 id="一、注意点"><a href="#一、注意点" class="headerlink" title="一、注意点"></a>一、注意点</h2><p>　　1.由于原理是在数组中补丁类放在bug之前，优先执行从而使bug类不在执行，那么只要轮到bug执行了补丁就不会再被执行。所以demo无法实现使使用者看到bug由错误到正确的过程。<br>　　2.CLASS_ISPREVERIFIED的问题出现在较多类存在而发生的处在同一Dex中的问题，demo主程序规模较小，暂不考虑这个问题。<br>　　3.补丁类必须和bug类包名+类名完全相同。<br>　　4.dex文件中可以有多个类，由于一个完整的类是由包名+类名组成，在将.java类文件转换为dex文件过程中，.java和.class文件是不包含包名信息的，输入时必须前面跟上包名，所以若要使jar包中有包结构，即包含包名信息，class打包时要连同包路径一起打。</p>
+<h2 id="二、编写程序。"><a href="#二、编写程序。" class="headerlink" title="二、编写程序。"></a>二、编写程序。</h2><p>　　1.新建一个准备被替换的类BugClass，它肯定不会被执行。</p>
+<p>　　2.建一个与BugClass类包名+类名完全相同的补丁类，加入语句：</p>
+<pre><code>public class BugClass {
+     public String bug(){
+     return &quot;this is a bug&quot;;
+     }
+ }
+</code></pre><p>　　将它进行如下转换.java–&gt;.class–&gt;.jar–&gt;dex包，变为BugClass_dex.jar放入src-main-assets文件夹下，等待主程序中调用。</p>
+<p>　　3.新建一个类继承Application，它生命周期的onCreate()会优先于Activity的onCreate()，所以将引入补丁语句放到这里会保证它门能优先于Bug类执行，同理将CLASS_ISPREVERIFIED问题中的引入AntilazyLoad类语句放到这里，也是处于相同考虑，保证在类被贴上CLASS_ISPREVERIFIED标志前引用到AntilazyLoad类。加入语句如下：</p>
+<pre><code>public void onCreate() {
+    super.onCreate();
+    FileTrans mFileTrans= new FileTrans();
+    Fixbug mFixbug = new Fixbug();
+
+    File dexPath = new File(getDir(&quot;dex&quot;, Context.MODE_PRIVATE), &quot;BugClass_dex.jar&quot;);
+    mFileTrans.prepareDex(this.getApplicationContext(), dexPath, &quot;BugClass_dex.jar&quot;);
+    mFixbug.patch(this, dexPath.getAbsolutePath(), &quot;com.example.administrator.test.BugClass&quot;);
+}
+</code></pre><p>　　新建一个File对象用来存放我们暂存在assets中的dex文件。File构造器参数为File类型路径和String类型文件名，这里getDir采用了MODE_PRIVATE模式，这个私有路径是在/data/data/包名/files下，没刷root的机子是无法看到/data分区的，dex放在这里能增强隐蔽性。将返回的补丁文件路径传入trans()方法进行dex转移。再将这个路径下转移来的dex文件传入patch()方法。</p>
+<p>　　4.读取并转移dex，trans()方法如下：</p>
+<pre><code>public boolean trans(Context context, File dexInternalStoragePath, String dex_file) {
+        BufferedInputStream bis = null;
+        OutputStream dexWriter = null;
+
+        try {
+            bis = new BufferedInputStream(context.getAssets().open(dex_file));
+            dexWriter = new BufferedOutputStream(new FileOutputStream(dexInternalStoragePath));
+            byte[] buf = new byte[BUF_SIZE];
+            int len;
+            while ((len = bis.read(buf, 0, BUF_SIZE)) &gt; 0) {
+                dexWriter.write(buf, 0, len);
+            }
+            dexWriter.close();
+            bis.close();
+            return true;
+        } catch (IOException e) {
+            if (dexWriter != null) {
+                try {
+                    dexWriter.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+            return false;
+        }
+    }
+</code></pre><p>　　代码利用简单的输入输出流将dex从assets转移到了app的/data私人目录下。</p>
+<p>　　5.patch()方法如下：</p>
+<pre><code>public void patch(Context context, String patchDexFile, String patchClassName) {
+        if (patchDexFile != null &amp;&amp; new File(patchDexFile).exists()) {
+            try {
+                if (hasDexClassLoader()) {
+                    injectAboveEqualApiLevel14(context, patchDexFile, patchClassName);
+                } 
+            } catch (Throwable th) {
+            }
+        }
+    }
+private static boolean hasDexClassLoader() {
+    try {
+        Class.forName(&quot;dalvik.system.BaseDexClassLoader&quot;);
+        return true;
+    } catch (ClassNotFoundException e) {
+        return false;
+    }
+}
+</code></pre><p>　　这里加入一个判断句确保可以得到系统的DexClassLoader，接下来调用injectAboveEqualApiLevel14()方法，将补丁类路径patchDexFile和补丁类名patchClassName传入。</p>
+<p>　　6.下面到了最关键部分，injectAboveEqualApiLevel14()方法调用完便完成了补丁注入，具体内容如下：</p>
+<pre><code>private static void injectAboveEqualApiLevel14(Context context, String str, String str2)
+        throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+
+    PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();
+    Object a = combineArray(getDexElements(getPathList(pathClassLoader)),
+                            getDexElements(getPathList(
+                                new DexClassLoader(str, context.getDir(&quot;dex&quot;, 0).getAbsolutePath(), str,                                                        context.getClassLoader()  )
+                              )
+            ));
+    Object a2 = getPathList(pathClassLoader);
+    setField(a2, a2.getClass(), &quot;dexElements&quot;, a);
+    pathClassLoader.loadClass(str2);
+}
+</code></pre><p>　　简单说，得到了两个类加载器，PathClassLoader和DexClassLoader，前者由系统context.getClassLoader()获得，负责加载主程序中的类，将它传入getPathList(pathClassLoader)方法即可获得PathList对象，通过pathList对象，即将它传入getElements(pathList)即可获得dexElements数组，dexElements数组的每个元素是一个dex文件，每个Dex文件中保存着多个类，类加载便是遍历数组找类对应的dexFile。<br>　　从后者DexClassLoader的构造方法可以看出它是用来加载我们那个补丁dex中的类的一款类加载器。之前DL框架中研究过它的构造方法，这里在复习一遍，四个参数：</p>
+<pre><code>dexPath     需要装载的APK或者Jar文件的路径。包含多个路径用File.pathSeparator间隔开,在Android上默认是 &quot;:&quot; 
+optimizedDirectory     优化后的dex文件存放目录，不能为null
+libraryPath     目标类中使用的C/C++库的列表,每个目录用File.pathSeparator间隔开; 可以为 null
+parent     该类装载器的父装载器，一般用当前执行类的装载器
+</code></pre><p>　　我们这里的第一个参数正是上面传入的补丁BugClass_dex.jar的路径，所以创建对象时的构造方法即决定了一个DexClassLoader将要加载的是哪个类。然后是同样的方法的到补丁包的dexElements数组，我们这里只有一个元素BugClass.dex。<br>　　下一步利用combineArray()方法将两个数组合并，第二个放在第一个前面，得到新数组a。<br>　　旧pathList是a2，然后用setField(a2, a2.getClass(), “dexElements”, a)方法，这个方法就是反射得到“dexElements”成员变量，然后将第四个参数a即新数组放入了第一个参数a2即pathList中。方法的具体实现逻辑稍后再说。<br>　　补丁注入完成，简单来说这个方法的逻辑：PathClassLoader得到主程序的pathList中的dexElements数组，DexClassLoader得到我们补丁的pathList中DexClassLoader，两数组合并，新数组再放入pathList中，大功告成。</p>
+<p>　　7.介绍上一步调用的getPathList()getDexElements() getField() setField()combineArray()appendArray()六个方法内部逻辑。</p>
+<pre><code>private static Object getPathList(Object obj) throws ClassNotFoundException, NoSuchFieldException,
+        IllegalAccessException {
+    return getField(obj, Class.forName(&quot;dalvik.system.BaseDexClassLoader&quot;), &quot;pathList&quot;);
+}
+
+private static Object getDexElements(Object obj) throws NoSuchFieldException, IllegalAccessException {
+    return getField(obj, obj.getClass(), &quot;dexElements&quot;);
+}
+
+private static Object getField(Object obj, Class cls, String str)
+        throws NoSuchFieldException, IllegalAccessException {
+    Field declaredField = cls.getDeclaredField(str);
+    declaredField.setAccessible(true);
+    return declaredField.get(obj);
+}
+</code></pre><p>　　getPathList()和getDexElements()，本质上都是利用getField()得到自己所需的成员变量PathList和Elements。在看getField()，这里集中体现了反射思想，第二个参数是class对象，利用它可以调用该Class的变量、方法、构造方法等。这里调用了第三个参数为名字的成员变量，设好访问权限，返回该成员变量。<br>　　放到getPathList()，即是用BaseDexClassLoader的class对象调用并返回它的pathList变量。放到getDexElements()中，就是调用并返回PathList类的dexElements变量</p>
+<p>   8.</p>
+<pre><code>private static void setField(Object obj, Class cls, String str, Object obj2)
+        throws NoSuchFieldException, IllegalAccessException {
+    Field declaredField = cls.getDeclaredField(str);
+    declaredField.setAccessible(true);
+    declaredField.set(obj, obj2);
+}
+</code></pre><p>　　类似getField()，但是得到成员变量后，将其值由第一个参数值变为第四个参数值。回顾上面引用该方法的injectAboveEqualApiLevel14()，里面即是用新pathList替换旧pathList。</p>
+<p>   9.数组合并方法</p>
+<pre><code>private static Object combineArray(Object obj, Object obj2) {
+    Class componentType = obj2.getClass().getComponentType();
+    int length = Array.getLength(obj2);
+    int length2 = Array.getLength(obj) + length;
+    Object newInstance = Array.newInstance(componentType, length2);
+    for (int i = 0; i &lt; length2; i++) {
+        if (i &lt; length) {
+            Array.set(newInstance, i, Array.get(obj2, i));
+        } else {
+            Array.set(newInstance, i, Array.get(obj, i - length));
+        }
+    }
+    return newInstance;
+}
+
+private static Object appendArray(Object obj, Object obj2) {
+    Class componentType = obj.getClass().getComponentType();
+    int length = Array.getLength(obj);
+    Object newInstance = Array.newInstance(componentType, length + 1);
+    Array.set(newInstance, 0, obj2);
+    for (int i = 1; i &lt; length + 1; i++) {
+        Array.set(newInstance, i, Array.get(obj, i - 1));
+    }
+    return newInstance;
+}
+</code></pre><p>　　前者是将一个数组放在另一个数组前，后者是将一个对象放入一个数组前，这里用了前者。逻辑很好理解，看下图即可，需要一步反射得到参数类型作为新数组的元素类型。</p>
+<p>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/index2.png" alt="1"><br>　<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/index.png" alt="2"></p>
+<p>　　附：</p>
+<p>　　补丁类变为dex:<br>　　1. java-&gt;class, cmd进入java源码目录下(不是类所在目录，而是包目录，即上升3到4个目录)，<br>    [javac -source 1.6 -target 1.6 包名\abc.java]<br>　　2. class-&gt;jar,<br>    [jar cvf abc.jar  包名\abc.class]；<br>　　3. jar-&gt;dex, 先要进入dx所在文件（dx工具要复制到sdk的platform-tools下）。将jar包拷过来。<br>    [dx –dex –output abc_dex.jar  abc.jar], <em>*</em>是abc.jar的绝对路径；<br>　　4. 完成。</p>
+<p>　　反编译：<br>　　1.将dex反编译为jar<br>　　使用dex2jar工具，要将目标dex文件复制到dex2jar.bat所在目录dex2jar-0.0.9.15 文件夹。先进入该文件夹。<br>    [dex2jar.bat dex文件名]<br>　　2.读取jar文件<br>　　jd-gui工具。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/22/Android热更新的实现/" data-id="cj2n6xnta0009vdpd8rpo0q35" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-动态加载DL框架的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/19/动态加载DL框架的使用/" class="article-date">
+  <time datetime="2016-07-19T13:43:40.000Z" itemprop="datePublished">2016-07-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/19/动态加载DL框架的使用/">android studio下动态加载DL框架的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、DL和插件化的意义"><a href="#一、DL和插件化的意义" class="headerlink" title="一、DL和插件化的意义"></a>一、DL和插件化的意义</h2><p>　　动态加载技术即dynamic-load-apk，简称DL。当公司项目越来越大时，第一应用的内存和CPU占用压力大幅度增大，第二添加新功能必须发布新补丁，频繁升级安装新版本。”插件化”的思想即是将应用拆分为许多插件，每个插件对应特有的功能，再加上”动态加载”技术，使插件不需要安装即可被调用。安装卸载整个应用从而变成了单个插件的热插拔。</p>
+<h2 id="二、动态加载的思想。"><a href="#二、动态加载的思想。" class="headerlink" title="二、动态加载的思想。"></a>二、动态加载的思想。</h2><p>　　一个宿主程序（host），可以任意调用各个尚未安装的插件APK。</p>
+<h2 id="三、动态加载的模式"><a href="#三、动态加载的模式" class="headerlink" title="三、动态加载的模式"></a>三、动态加载的模式</h2><p>　　根据插件和宿主依赖与否分为三种，这里使用插件不依赖宿主的模式，即两者独立开发，各自依赖DL的jar包。</p>
+<h2 id="四、功能实现。"><a href="#四、功能实现。" class="headerlink" title="四、功能实现。"></a>四、功能实现。</h2><h3 id="1-开源框架地址"><a href="#1-开源框架地址" class="headerlink" title="1.开源框架地址"></a>1.开源框架地址</h3><p>　　<a href="https://github.com/livmortis/dynamic-load-apk.git" target="_blank" rel="external">https://github.com/livmortis/dynamic-load-apk.git</a><br>　　项目根目录下的脚本是无法运行的，需要打开对应子项目。其中有lib和sample两个文件，sample是一个演示demo，lib即是我们开发自己项目时需要的库文件。</p>
+<h3 id="2-导入框架"><a href="#2-导入框架" class="headerlink" title="2.导入框架"></a>2.导入框架</h3><p>　　由于插件程序和宿主程序都需要DL的jar包即lib.jar，但是在宿主程序直接依赖的情况下，插件程序不能直接依赖，否则宿主调用插件时会出现类重复错误，support-v4同理。解决方法是插件项目中新建一个文件夹，将lib.jar和support-v4.jar放进去并进行依赖，这样即在编译时用到了库而又不会将库打包到APK中。<br>　　项目的jar包在eclipse中会自动生成在lib文件夹中，而在AS中可以在build.gradle中用”task makeJar”语句生成。不过我们可以偷个懒，因为自带的demo中也有插件程序，在它自建的文件夹中可以找到直接拷。（lib-build-libs中也可找到lib.jar）</p>
+<h3 id="3-插件程序开发"><a href="#3-插件程序开发" class="headerlink" title="3.插件程序开发"></a>3.插件程序开发</h3><p>　　这里只演示一个简单的textview.</p>
+<pre><code>public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    tvS = (TextView) findViewById(R.id.tv_success);
+}
+</code></pre><p>　　插件中Activity必须继承自DLBasePluginActivity，相应的调用activity要用startPluginActivity(intent)。另外注意删掉styles.xml中的一些没用到的变量，否则打包时会出错。另外manifest.xml中活动的theme要分别设置。<br>　　然后打包APK，放入手机存储或SD卡的指定路径。</p>
+<h3 id="4-宿主程序开发"><a href="#4-宿主程序开发" class="headerlink" title="4.宿主程序开发"></a>4.宿主程序开发</h3><pre><code>String dexPath = Environment.getExternalStorageDirectory() + &quot;/AAAdltest&quot;;
+File file = new File(dexPath);
+File[] plugins = file.listFiles();
+</code></pre><p>　　首先逐个读取APK所在路径下的文件，可以挨个读取该路径下的APK。</p>
+<pre><code>public static class PluginItem {
+    public PackageInfo packageInfo;
+    public String pluginPath;
+    public String launcherActivityName;
+    public PluginItem() {
+    }
+}
+</code></pre><p>　　将packageInfo,插件路径，插件程序活动名放入自定义内部类PluginItem中。</p>
+<pre><code>for (File plugin : plugins) {
+    item = new PluginItem();
+    item.pluginPath = plugin.getAbsolutePath();
+    item.packageInfo = DLUtils.getPackageInfo(this, item.pluginPath);
+</code></pre><p>　　这里packageInfo用到了框架类DLUtils中的getPackageInfo()方法，点开该类可以看到这个方法：</p>
+<pre><code>public static PackageInfo getPackageInfo(Context context, String apkFilepath) {
+    PackageManager pm = context.getPackageManager();
+    PackageInfo pkgInfo = null;
+
+    try {
+        pkgInfo = pm.getPackageArchiveInfo(apkFilepath, 5);
+    } catch (Exception var5) {
+        var5.printStackTrace();
+    }
+
+    return pkgInfo;
+}
+</code></pre><p>　　方法返回值packageInfo，其实是通过PackageManager的getPackageArchiveInfo()方法得到的，该方法第一个参数要传入是想要得到包信息的apk的路径。</p>
+<p>　　有了packageInfo就可以得到插件程序中activity的数量，利用name属性将第一个activity也就是MainAcitivity名取出：</p>
+<pre><code>if (item.packageInfo.activities != null &amp;&amp; item.packageInfo.activities.length &gt; 0) {
+item.launcherActivityName = item.packageInfo.activities[0].name;
+}
+DLPluginManager.getInstance(this).loadApk(item.pluginPath);
+}
+</code></pre><p>　　最后调用DLPluginManager的startPluginActivity（）来启动插件程序的MainActivity。</p>
+<pre><code>DLPluginManager pluginManager = DLPluginManager.getInstance(this);
+pluginManager.startPluginActivity(this, new DLIntent(item.packageInfo.packageName, item.launcherActivityName));
+</code></pre><h3 id="5-宿主程序manifest-xml"><a href="#5-宿主程序manifest-xml" class="headerlink" title="5.宿主程序manifest.xml"></a>5.宿主程序manifest.xml</h3><p>　　添加代理Activity声明。这里如果不添加会报ActivityNotFoundException错误，而插件程序的库文件中虽然也有该活动，但程序没有调用到相关类，所以不声明也不会出错。</p>
+<pre><code>&lt;activity
+    android:name=&quot;com.ryg.dynamicload.DLProxyActivity&quot;
+    android:label=&quot;@string/app_name&quot; &gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name=&quot;com.ryg.dynamicload.proxy.activity.VIEW&quot; /&gt;
+        &lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;
+</code></pre><p>　　加入读写SD卡权限</p>
+<pre><code>&lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/&gt;
+&lt;uses-permission android:name=&quot;android.permission.MOUNT_UNMOUNT_FILESYSTEMS&quot;/&gt;
+</code></pre><h3 id="6-运行结果"><a href="#6-运行结果" class="headerlink" title="6.运行结果"></a>6.运行结果</h3><p>　　宿主程序成功打开了未安装的插件程序apk。<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/1111111111.png" alt="1"><br>    <img src="http://7xs17a.com1.z0.glb.clouddn.com/222222222222222221.png" alt="2">
+　　</p>
+<h3 id="7-生命周期的思考"><a href="#7-生命周期的思考" class="headerlink" title="7.生命周期的思考"></a>7.生命周期的思考</h3><p>　　插件中的Activity在宿主程序调用后只是普通的Class，其生命周期也无从谈起，解决方法就是将宿主程序的生命周期与其绑定，看看源码中是怎么办到的。<br>　　反射加载插件程序中成员的逻辑是写在代理活动中的，所以宿主程序主要运行在DLProxyActivity生命周期中的。<br>　　打开代理类DLProxyActivity：</p>
+<pre><code>protected DLPlugin mRemoteActivity;
+protected void onStart() {
+    this.mRemoteActivity.onStart();
+    super.onStart();
+}
+
+protected void onRestart() {
+    this.mRemoteActivity.onRestart();
+    super.onRestart();
+}
+    ....
+</code></pre><p>　　DLPlugin是一个接口，里面封装了生命周期相关所有方法。刚才写插件程序时提到了所有活动要继承DLBasePluginActivity，打开DLBasePluginActivity，发现它果然实现了DLPlugin接口，这也验证了我们的猜想。</p>
+<h3 id="8-类加载机理"><a href="#8-类加载机理" class="headerlink" title="8.类加载机理"></a>8.类加载机理</h3><p>　　上面宿主程序中用到了DLPluginManager的loadApk()方法，该方法内部主要调用了preparePluginEnv()方法，其中有如下语句：</p>
+<pre><code>DexClassLoader dexClassLoader = createDexClassLoader(dexPath);
+</code></pre><p>　　打开createDexClassLoader()：<br>　　返回值为 </p>
+<pre><code>DexClassLoader loader = new DexClassLoader(dexPath, dexOutputPath, mNativeLibDir, mContext.getClassLoader());
+</code></pre><p>　　可见，android类加载器DexClassLoader构造器需要传入apk地址、dex文件存放地址、java类加载器ClassLoader()等参数。有了类加载器，我们就可以利用反射来调用插件中的各种对象了。<br>　　打开DLProxyImpl这个类，其中一个方法有如下内容：</p>
+<pre><code>Class&lt;?&gt; localClass = getClassLoader()（这里传入的类加载器正是上面我们得到的）.loadClass(mClass);
+Constructor&lt;?&gt; localConstructor = localClass.getConstructor(new Class[] {});
+Object instance = localConstructor.newInstance(new Object[] {});
+</code></pre><p>　　这里的mClass是我们传入的插件中想要加载的类，利用反射原理，通过类加载器得到mClass的class对象，即可得到构造函数，从而得到mClass的实例对象instance。利用class对象也可以得到mClass的包括onCreate(）在内的各种方法，然后使用invoke()调用这些方法，最终完成插件程序的加载。</p>
+<h2 id="五-下一步工作"><a href="#五-下一步工作" class="headerlink" title="五.下一步工作"></a>五.下一步工作</h2><p>　　开始研究Android热更新，将动态加载应用到项目中。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/19/动态加载DL框架的使用/" data-id="cj2n6xnu20013vdpdmwt8549n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
     </footer>
   </div>
   
@@ -157,6 +880,10 @@
 
   
 
+
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">__('next') &raquo;</a>
+  </nav>
 </section>
         
           <aside id="sidebar">
@@ -168,7 +895,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
     </div>
   </div>
 
@@ -178,7 +905,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Code/" style="font-size: 10px;">Code</a>
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
     </div>
   </div>
 
@@ -187,7 +914,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
     </div>
   </div>
 
@@ -200,11 +927,23 @@
       <ul>
         
           <li>
-            <a href="/2017/05/13/eventbus/">eventbus</a>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
           </li>
         
           <li>
-            <a href="/2017/05/13/hello-world/">Hello World</a>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
           </li>
         
       </ul>

@@ -1,0 +1,54 @@
+2013年谷歌推出的网络通信库。
+优点：
+1.网络开发效率提升，更快更简单。
+2.Get和Post请求高效且异步化。
+3.网络请求排序优先级处理。
+4.网络请求的缓存。自动图片缓存防止OOM。
+5.多级别取消请求。同时取消多个请求。
+6.Activity生命周期联动。防止后台继续运行请求。onstop()中取消。
+缺点：
+不能上传和下载。
+
+四大内容：GET/POST请求方式,请求队列建立取消，Activity生命周期联动，二次回调封装。
+
+大体思想：
+RequestQueue队列中的每个元素是一个JsonRequest对象。
+
+
+使用步骤：
+1.建立Application类存放全局变量，在oncreate()方法中，新建一个RequestQueue类型请求队列对象，为其建立getter方法。
+2.Acitivity中建立   
+  1>StringRequest对象，构造器参数为请求method、url、成功回调、失败回调。
+  2>JsonRequest对象，构造器参数为请求method、url、jsonObject对象（如果是POST方法才有）、成功回调、失败回调。
+  3>ImageRequest对象，构造器参数为url，成功回调，宽，高（为0则原图大小），图片格式(Config.XXX)，失败回调。
+3.若是POST方法。
+  1>对于StringRequest，构造器后面加一个getParams()方法，里面建立一个add好数据的hashmap对象并返回。
+  2>对于JsonRequest,外部建立一个add好数据的hashmap对象，新建一个传入hashmap对象的jsonObject对象，并将其作为JsonRequest构造器第三个参数。
+4.XXXRequest对象建好后，先为其setTag()一个标签，再将其添加到Application类中的请求队列中去。
+5."成功回调"的方法参数里即是返回的数据。
+6.onStop()中将队列cancelAll()，参数为标签。
+
+
+
+ 
+网络图片缓存
+几项技术：ImageCache,LruCache,ImageLoader,ImageRequest,NetworkImageView
+
+一、ImageRequest法。方法类似StringRequest对象和StringRequest对象。
+
+二、ImageLoader法。（清晰思路：ImageLoader将队列、缓存、监听三者串联起来，加载图片）
+  1.Application和请求队列先建好。
+  2.活动中新建ImageLoader对象，参数为请求队列、imageCache对象。(imageCache的缓存功能实际是在内部借助LruCache实现的)
+  3.新建一个类，实现ImageCache接口。
+     1>.一个构造方法，里面创建LruCache对象，同时重写sizeOf()方法，返回图片大小。
+     2>.重写两个方法。getBitemap()返回"LruCache对象.get()"，即缓存中的对象。putBitmap()中执行"LruCache对象.put()"。
+  4.活动中新建ImageListener对象用来监听，ImageLoader.getImageListener()，参数为imageview控件、成功图片ID、失败图片ID。
+  4.imageLoader对象调用get()方法，参数为网络图片url、imageListener对象、宽度、高度。
+
+三、NetworkImageView法。
+  1.Application和请求队列先建好。
+  2.活动中新建ImageLoader对象，参数为请求队列、imageCache对象。
+  3.新建一个类，实现ImageCache接口。重写两个方法 getBitemap(),putBitmap()。一个构造方法，里面创建LruCache对象，同时重写sizeOf()方法，返回图片大小。
+  4.布局中建立networkImageView标签，活动中绑定。
+  5.networkImageView调用三个方法setDefaultImageResId(成功时图片)、setErrorImageResId(失败时图片)、setImageUrl(网络图片地址，imageLoader对象)。
+  

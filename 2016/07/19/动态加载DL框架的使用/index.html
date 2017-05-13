@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>android studio下动态加载DL框架的使用 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、DL和插件化的意义　　动态加载技术即dynamic-load-apk，简称DL。当公司项目越来越大时，第一应用的内存和CPU占用压力大幅度增大，第二添加新功能必须发布新补丁，频繁升级安装新版本。”插件化”的思想即是将应用拆分为许多插件，每个插件对应特有的功能，再加上”动态加载”技术，使插件不需要安装即可被调用。安装卸载整个应用从而变成了单个插件的热插拔。 二、动态加载的思想。　　一个宿主程序（">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android studio下动态加载DL框架的使用">
+<meta property="og:url" content="http://yoursite.com/2016/07/19/动态加载DL框架的使用/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、DL和插件化的意义　　动态加载技术即dynamic-load-apk，简称DL。当公司项目越来越大时，第一应用的内存和CPU占用压力大幅度增大，第二添加新功能必须发布新补丁，频繁升级安装新版本。”插件化”的思想即是将应用拆分为许多插件，每个插件对应特有的功能，再加上”动态加载”技术，使插件不需要安装即可被调用。安装卸载整个应用从而变成了单个插件的热插拔。 二、动态加载的思想。　　一个宿主程序（">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1111111111.png">
+<meta property="og:image" content="http://7xs17a.com1.z0.glb.clouddn.com/222222222222222221.png">
+<meta property="og:updated_time" content="2017-04-18T04:11:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android studio下动态加载DL框架的使用">
+<meta name="twitter:description" content="一、DL和插件化的意义　　动态加载技术即dynamic-load-apk，简称DL。当公司项目越来越大时，第一应用的内存和CPU占用压力大幅度增大，第二添加新功能必须发布新补丁，频繁升级安装新版本。”插件化”的思想即是将应用拆分为许多插件，每个插件对应特有的功能，再加上”动态加载”技术，使插件不需要安装即可被调用。安装卸载整个应用从而变成了单个插件的热插拔。 二、动态加载的思想。　　一个宿主程序（">
+<meta name="twitter:image" content="http://7xs17a.com1.z0.glb.clouddn.com/1111111111.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-动态加载DL框架的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/19/动态加载DL框架的使用/" class="article-date">
+  <time datetime="2016-07-19T13:43:40.000Z" itemprop="datePublished">2016-07-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android studio下动态加载DL框架的使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、DL和插件化的意义"><a href="#一、DL和插件化的意义" class="headerlink" title="一、DL和插件化的意义"></a>一、DL和插件化的意义</h2><p>　　动态加载技术即dynamic-load-apk，简称DL。当公司项目越来越大时，第一应用的内存和CPU占用压力大幅度增大，第二添加新功能必须发布新补丁，频繁升级安装新版本。”插件化”的思想即是将应用拆分为许多插件，每个插件对应特有的功能，再加上”动态加载”技术，使插件不需要安装即可被调用。安装卸载整个应用从而变成了单个插件的热插拔。</p>
+<h2 id="二、动态加载的思想。"><a href="#二、动态加载的思想。" class="headerlink" title="二、动态加载的思想。"></a>二、动态加载的思想。</h2><p>　　一个宿主程序（host），可以任意调用各个尚未安装的插件APK。</p>
+<h2 id="三、动态加载的模式"><a href="#三、动态加载的模式" class="headerlink" title="三、动态加载的模式"></a>三、动态加载的模式</h2><p>　　根据插件和宿主依赖与否分为三种，这里使用插件不依赖宿主的模式，即两者独立开发，各自依赖DL的jar包。</p>
+<h2 id="四、功能实现。"><a href="#四、功能实现。" class="headerlink" title="四、功能实现。"></a>四、功能实现。</h2><h3 id="1-开源框架地址"><a href="#1-开源框架地址" class="headerlink" title="1.开源框架地址"></a>1.开源框架地址</h3><p>　　<a href="https://github.com/livmortis/dynamic-load-apk.git" target="_blank" rel="external">https://github.com/livmortis/dynamic-load-apk.git</a><br>　　项目根目录下的脚本是无法运行的，需要打开对应子项目。其中有lib和sample两个文件，sample是一个演示demo，lib即是我们开发自己项目时需要的库文件。</p>
+<h3 id="2-导入框架"><a href="#2-导入框架" class="headerlink" title="2.导入框架"></a>2.导入框架</h3><p>　　由于插件程序和宿主程序都需要DL的jar包即lib.jar，但是在宿主程序直接依赖的情况下，插件程序不能直接依赖，否则宿主调用插件时会出现类重复错误，support-v4同理。解决方法是插件项目中新建一个文件夹，将lib.jar和support-v4.jar放进去并进行依赖，这样即在编译时用到了库而又不会将库打包到APK中。<br>　　项目的jar包在eclipse中会自动生成在lib文件夹中，而在AS中可以在build.gradle中用”task makeJar”语句生成。不过我们可以偷个懒，因为自带的demo中也有插件程序，在它自建的文件夹中可以找到直接拷。（lib-build-libs中也可找到lib.jar）</p>
+<h3 id="3-插件程序开发"><a href="#3-插件程序开发" class="headerlink" title="3.插件程序开发"></a>3.插件程序开发</h3><p>　　这里只演示一个简单的textview.</p>
+<pre><code>public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    tvS = (TextView) findViewById(R.id.tv_success);
+}
+</code></pre><p>　　插件中Activity必须继承自DLBasePluginActivity，相应的调用activity要用startPluginActivity(intent)。另外注意删掉styles.xml中的一些没用到的变量，否则打包时会出错。另外manifest.xml中活动的theme要分别设置。<br>　　然后打包APK，放入手机存储或SD卡的指定路径。</p>
+<h3 id="4-宿主程序开发"><a href="#4-宿主程序开发" class="headerlink" title="4.宿主程序开发"></a>4.宿主程序开发</h3><pre><code>String dexPath = Environment.getExternalStorageDirectory() + &quot;/AAAdltest&quot;;
+File file = new File(dexPath);
+File[] plugins = file.listFiles();
+</code></pre><p>　　首先逐个读取APK所在路径下的文件，可以挨个读取该路径下的APK。</p>
+<pre><code>public static class PluginItem {
+    public PackageInfo packageInfo;
+    public String pluginPath;
+    public String launcherActivityName;
+    public PluginItem() {
+    }
+}
+</code></pre><p>　　将packageInfo,插件路径，插件程序活动名放入自定义内部类PluginItem中。</p>
+<pre><code>for (File plugin : plugins) {
+    item = new PluginItem();
+    item.pluginPath = plugin.getAbsolutePath();
+    item.packageInfo = DLUtils.getPackageInfo(this, item.pluginPath);
+</code></pre><p>　　这里packageInfo用到了框架类DLUtils中的getPackageInfo()方法，点开该类可以看到这个方法：</p>
+<pre><code>public static PackageInfo getPackageInfo(Context context, String apkFilepath) {
+    PackageManager pm = context.getPackageManager();
+    PackageInfo pkgInfo = null;
+
+    try {
+        pkgInfo = pm.getPackageArchiveInfo(apkFilepath, 5);
+    } catch (Exception var5) {
+        var5.printStackTrace();
+    }
+
+    return pkgInfo;
+}
+</code></pre><p>　　方法返回值packageInfo，其实是通过PackageManager的getPackageArchiveInfo()方法得到的，该方法第一个参数要传入是想要得到包信息的apk的路径。</p>
+<p>　　有了packageInfo就可以得到插件程序中activity的数量，利用name属性将第一个activity也就是MainAcitivity名取出：</p>
+<pre><code>if (item.packageInfo.activities != null &amp;&amp; item.packageInfo.activities.length &gt; 0) {
+item.launcherActivityName = item.packageInfo.activities[0].name;
+}
+DLPluginManager.getInstance(this).loadApk(item.pluginPath);
+}
+</code></pre><p>　　最后调用DLPluginManager的startPluginActivity（）来启动插件程序的MainActivity。</p>
+<pre><code>DLPluginManager pluginManager = DLPluginManager.getInstance(this);
+pluginManager.startPluginActivity(this, new DLIntent(item.packageInfo.packageName, item.launcherActivityName));
+</code></pre><h3 id="5-宿主程序manifest-xml"><a href="#5-宿主程序manifest-xml" class="headerlink" title="5.宿主程序manifest.xml"></a>5.宿主程序manifest.xml</h3><p>　　添加代理Activity声明。这里如果不添加会报ActivityNotFoundException错误，而插件程序的库文件中虽然也有该活动，但程序没有调用到相关类，所以不声明也不会出错。</p>
+<pre><code>&lt;activity
+    android:name=&quot;com.ryg.dynamicload.DLProxyActivity&quot;
+    android:label=&quot;@string/app_name&quot; &gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name=&quot;com.ryg.dynamicload.proxy.activity.VIEW&quot; /&gt;
+        &lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;
+</code></pre><p>　　加入读写SD卡权限</p>
+<pre><code>&lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/&gt;
+&lt;uses-permission android:name=&quot;android.permission.MOUNT_UNMOUNT_FILESYSTEMS&quot;/&gt;
+</code></pre><h3 id="6-运行结果"><a href="#6-运行结果" class="headerlink" title="6.运行结果"></a>6.运行结果</h3><p>　　宿主程序成功打开了未安装的插件程序apk。<br>　　<img src="http://7xs17a.com1.z0.glb.clouddn.com/1111111111.png" alt="1"><br>    <img src="http://7xs17a.com1.z0.glb.clouddn.com/222222222222222221.png" alt="2">
+　　</p>
+<h3 id="7-生命周期的思考"><a href="#7-生命周期的思考" class="headerlink" title="7.生命周期的思考"></a>7.生命周期的思考</h3><p>　　插件中的Activity在宿主程序调用后只是普通的Class，其生命周期也无从谈起，解决方法就是将宿主程序的生命周期与其绑定，看看源码中是怎么办到的。<br>　　反射加载插件程序中成员的逻辑是写在代理活动中的，所以宿主程序主要运行在DLProxyActivity生命周期中的。<br>　　打开代理类DLProxyActivity：</p>
+<pre><code>protected DLPlugin mRemoteActivity;
+protected void onStart() {
+    this.mRemoteActivity.onStart();
+    super.onStart();
+}
+
+protected void onRestart() {
+    this.mRemoteActivity.onRestart();
+    super.onRestart();
+}
+    ....
+</code></pre><p>　　DLPlugin是一个接口，里面封装了生命周期相关所有方法。刚才写插件程序时提到了所有活动要继承DLBasePluginActivity，打开DLBasePluginActivity，发现它果然实现了DLPlugin接口，这也验证了我们的猜想。</p>
+<h3 id="8-类加载机理"><a href="#8-类加载机理" class="headerlink" title="8.类加载机理"></a>8.类加载机理</h3><p>　　上面宿主程序中用到了DLPluginManager的loadApk()方法，该方法内部主要调用了preparePluginEnv()方法，其中有如下语句：</p>
+<pre><code>DexClassLoader dexClassLoader = createDexClassLoader(dexPath);
+</code></pre><p>　　打开createDexClassLoader()：<br>　　返回值为 </p>
+<pre><code>DexClassLoader loader = new DexClassLoader(dexPath, dexOutputPath, mNativeLibDir, mContext.getClassLoader());
+</code></pre><p>　　可见，android类加载器DexClassLoader构造器需要传入apk地址、dex文件存放地址、java类加载器ClassLoader()等参数。有了类加载器，我们就可以利用反射来调用插件中的各种对象了。<br>　　打开DLProxyImpl这个类，其中一个方法有如下内容：</p>
+<pre><code>Class&lt;?&gt; localClass = getClassLoader()（这里传入的类加载器正是上面我们得到的）.loadClass(mClass);
+Constructor&lt;?&gt; localConstructor = localClass.getConstructor(new Class[] {});
+Object instance = localConstructor.newInstance(new Object[] {});
+</code></pre><p>　　这里的mClass是我们传入的插件中想要加载的类，利用反射原理，通过类加载器得到mClass的class对象，即可得到构造函数，从而得到mClass的实例对象instance。利用class对象也可以得到mClass的包括onCreate(）在内的各种方法，然后使用invoke()调用这些方法，最终完成插件程序的加载。</p>
+<h2 id="五-下一步工作"><a href="#五-下一步工作" class="headerlink" title="五.下一步工作"></a>五.下一步工作</h2><p>　　开始研究Android热更新，将动态加载应用到项目中。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/19/动态加载DL框架的使用/" data-id="cj2n6xnu20013vdpdmwt8549n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/22/Android热更新的实现/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android热更新的实现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/18/五个角度分析android性能优化问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">五个角度分析android性能优化问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

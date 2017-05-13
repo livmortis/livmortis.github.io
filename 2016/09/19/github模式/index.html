@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MVP模式 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、与MVC的区别　　mvp的View是xml文件和activity；mvc的View是xml，Controller是activity。　　Modle都是业务逻辑和实体类，如处理数据，网络请求等。　　mvp对Model层和View层的解耦做得更好。　　mvp的View和Presenter之间交互通过接口，所以为View编写个接口Iview。　　mvp的Model和Presenter之间交互通过接口">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MVP模式">
+<meta property="og:url" content="http://yoursite.com/2016/09/19/github模式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、与MVC的区别　　mvp的View是xml文件和activity；mvc的View是xml，Controller是activity。　　Modle都是业务逻辑和实体类，如处理数据，网络请求等。　　mvp对Model层和View层的解耦做得更好。　　mvp的View和Presenter之间交互通过接口，所以为View编写个接口Iview。　　mvp的Model和Presenter之间交互通过接口">
+<meta property="og:updated_time" content="2017-04-18T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MVP模式">
+<meta name="twitter:description" content="一、与MVC的区别　　mvp的View是xml文件和activity；mvc的View是xml，Controller是activity。　　Modle都是业务逻辑和实体类，如处理数据，网络请求等。　　mvp对Model层和View层的解耦做得更好。　　mvp的View和Presenter之间交互通过接口，所以为View编写个接口Iview。　　mvp的Model和Presenter之间交互通过接口">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-github模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/19/github模式/" class="article-date">
+  <time datetime="2016-09-19T15:18:19.000Z" itemprop="datePublished">2016-09-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MVP模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、与MVC的区别"><a href="#一、与MVC的区别" class="headerlink" title="一、与MVC的区别"></a>一、与MVC的区别</h1><p>　　mvp的View是xml文件和activity；mvc的View是xml，Controller是activity。<br>　　Modle都是业务逻辑和实体类，如处理数据，网络请求等。<br>　　mvp对Model层和View层的解耦做得更好。<br>　　mvp的View和Presenter之间交互通过接口，所以为View编写个接口Iview。<br>　　mvp的Model和Presenter之间交互通过接口，所以为Model编写接口Imodel。</p>
+<h1 id="二、demo制作。"><a href="#二、demo制作。" class="headerlink" title="二、demo制作。"></a>二、demo制作。</h1><p>　　实现伪登陆界面，判断账号密码是否正确，对应显示不同toast，并且正确时textview显示一行文字。</p>
+<h2 id="View包"><a href="#View包" class="headerlink" title="View包"></a>View包</h2><ul>
+<li><p>1.创建Iview接口。<br>　　view的职责有textview添加文字、获取edittext文字、清空edittext文字、显示和隐藏progressbar。<br>　　所以创建7个抽象方法。</p>
+<p>  String getViewAccount();<br>  void clearViewAccount();<br>  String getViewPass();<br>  void clearViewPass();<br>  void showViewBar();<br>  void removeViewBar();<br>  void addViewText(String s);</p>
+</li>
+<li><p>2.创建View类并实现Iview。<br>　　正是MainActivity。<br>　　1&gt;、纯view逻辑<br>　　重写7个方法，除了addViewText()其余全是只有view逻辑。<br>　　2&gt;、与presenter交互（访问presenter）。<br>　　创建presenter对象，将this从构造方法中传过去（因为ipresenter也要访问view）。<br>　　addViewText()中textview所set的文字来自于present。<br>　　登陆和清空两个点击事件中，是业务逻辑而不是界面展现，所以直接调用presenter的performLogin()和performClear()方法。</p>
+</li>
+</ul>
+<h2 id="Modle包"><a href="#Modle包" class="headerlink" title="Modle包"></a>Modle包</h2><ul>
+<li>1.实体类bean存放账号密码。</li>
+<li><p>2.创建Imodle接口。<br>　　modle的职责有控制textview要展示的数据、网络请求判断账号对错。<br>　　所以创建2个抽象方法。</p>
+<p>  void judgement(String ac, String pa, Model.SuccessCallback successCallback,Model.FailCallback failCallback);<br>  String queryData();</p>
+</li>
+<li><p>3.创建Modle类并实现Imodle<br>　　modle与presenter交互只是presenter单方面访问modle，所以modle中不需要创建presenter对象。<br>　　1&gt;、judgement()方法。<br>　　新建子线程进行网络请求，再在类中建两个回调接口，judgement()中进行账号对错核对（或发送请求给网络接口处理），再将成功失败结果回调出去。<br>　　2&gt;、queryData()方法。<br>　　处理数据，将数据返回。</p>
+</li>
+</ul>
+<h2 id="preseter包"><a href="#preseter包" class="headerlink" title="preseter包"></a>preseter包</h2><p>　　1.创建perfomLogin()和performClear()两个方法，体现了preseter层的职责是实现view页面的功能。<br>　　2.创建Imodle和Iview两个接口的对象，前者用Modle类构造器创建，后者不能创建对象，用从Activity中传入的this作为对象。<br>　　3.与modle交互。<br>　　performLogin()方法中调用judgement()方法，新建主线程（注意新建handler不能在子线程中），得到回调的结果（登陆成功与否）。<br>　　4.与view交互。<br>　　　　1&gt;、在调用的judgement()方法的成功回调中，调用view的去除progress方法removeViewBar()，和view的为textview赋值方法addViewText(String s)（传入的参数是model的queryData()的返回值，这一步完成了数据从model向view的转移，体现了model操控数据的功能）。失败回调中同样去除progressbar。<br>　　　　2&gt;、performClear()方法中调用view的clearViewAccount()和clearViewPass()两个方法。实现clear功能。</p>
+<p>ps: 1.子线程不能创建Handler对象。<br>     2.不能创建activity对象。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/19/github模式/" data-id="cj2n6xntg000dvdpdebwgf8lc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/18/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/17/跟投设置页面开发笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">跟投设置页面开发笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

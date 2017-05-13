@@ -1,0 +1,80 @@
+**  项目框架下使用自定义键盘(以WeituoLogin为例)
+
+键盘显示与隐藏
+
+一、创建HexinCommonSoftKeyboard类的对象，并判断监听是否存在——isListennersExist()。
+二、重写显示隐藏监听接口
+   1.创建OnKeyboardListener接口对象，重写onKeyboardShow()和onKeyBoardDismiss()方法，前者显示后者隐藏。
+   2.onKeyboardShow()中代码主要负责设定显示键盘时屏幕上移的距离。
+     其中分两种情况，view是账号输入框——位于第一排；view是账号输入框下面的三个密码输入框——竖直排布于下面三排。
+
+     ~~~账号输入框
+      $$ 1>.上移距离为“输入框距离顶部的长度”，即把账号输入框移到最顶部。
+            长度计算方法
+            计算三个值——输入框距离显示器最顶部的高度（输入框控件调用getGlobalVisibleRect()方法，取top）；
+                          标题栏高度（写死的）；
+                          任务栏高度（decorView调用getWindowVisibleDisplayFrame()方法，取top）。
+            相减便是。
+
+         2>.整个页面的scrollView向上移动。
+            scrollview.scrollBy(scrollview.getLeft(),上面计算的结果距离)
+
+     ~~~密码输入框
+        先判断有键盘时能否看得见button，这个页面基本上都为false。
+         1>.有键盘时看得见登录button。
+            上移距离为“输入框到顶部的长度”
+      $$ 2>.有键盘时看不见登录button。  （选这个）
+            上移距离为键盘高度。写死的410
+
+   3.onKeyBoardDismiss()中代码负责设定隐藏键盘时屏幕下移的距离。
+     ~~~账号输入框
+      $$ 1>.整个页面下移到scrollview位于顶部的这个初始位置。
+           scrollview.scrollTo(scrollview.getLeft(),0)
+
+     ~~~密码输入框
+         1>.有键盘时看得见登录button。
+            下移距离为“输入框到顶部的长度”取负值。
+      $$ 2>.有键盘时看不见登录button。   （选这个）
+            下移距离为键盘高度取负值。
+    
+三、HexinCommonSoftKeyboard对象注册键盘监听。
+    HexinCommonSoftKeyboard.registeOnKeyboardListener(OnKeyboardListener接口对象)
+
+四、单击空白处触发隐藏键盘事件
+    继承OnTouchListener接口，在onTouch(view , motionevent)方法中：
+      if(motionEvent.getAction() == MotionEvent.ACTION_DOWN ){
+          if(view == scrollView){
+             if(HexinCommonSoftKeyboard对象 != null){
+                HexinCommonSoftKeyboard对象.hideSoftKeyboard();
+             }
+          }
+      }
+ 
+
+五、注意一点：如果在显示键盘时，键盘弹出会遮盖住输入框，那么就需要更改页面长度。显示键盘时加长，隐藏键盘时还原。
+
+
+键盘enter键处理
+一、创建HexinCommonSoftKeyboard类的内部类HexinEditAndSoftKeyboardListener接口对象，重写其onHexinImeAction()方法。
+二、在方法中实现enter键逻辑
+三、HexinCommonSoftKeyboard对象注册enter键监听。
+    HexinCommonSoftKeyboard.registeHexinEditAndSoftKeyboardListener(HexinEditAndSoftKeyboardListener接口对象)
+
+
+
+注销对系统键盘响应
+一、创建HexinCommonSoftKeyboard类的内部类HexinEditTextHolder接口对象，参数传入输入框控件和HexinInputMethod.NUMBER_STANDUAR_TYPE。
+二、接口的setmIsCaptial()设为true或false
+三、HexinCommonSoftKeyboard对象注册注销系统键盘监听。
+    HexinCommonSoftKeyboard.registeEditToKeyboardHexinEditTextHolder接口对象)
+
+
+最后一步，注册键盘到当前构建所在page
+MiddlewareProxy.registeHexinKeyboardToCurrentPage( HexinCommonSoftKeyboard对象 )
+
+
+
+
+
+keyboardHeight=410   windowHeight=1184
+

@@ -1,0 +1,77 @@
+RecyclerView可以不用创建ListView标签的layout布局（创建也可以），而实现类似listView的滚屏效果。是将Listview优化甚至替代Listview的方法之一。ListView转换GridView超级方便。
+四大作用：Listview横向及纵向、gridview横向及纵向、瀑布流、定制item增加与删除动画。
+
+概述：
+主要就是在活动中配置setLayoutManager()和setAdapter()，addItemDecoration()三大方法。三者配合，第一者负责整体布局样式，第二者负责子项形状和滑动参数。
+
+
+
+不自定义子项布局：
+1.添加recyclerview-v7库
+
+2.onCreate()中新建RecyclerView对象，将new出的对象当作布局传入setContentView()。       
+ （这一步也可以是：创建layout布局，插入<RecyclerView>标签，setContentView()传入该布局，两者亲测都可以）
+
+3.调用对象的setLayoutManager()方法设置布局，参数为一个"布局Manager"的对象，如new LinearLayoutManager(this)。
+
+4.调用对象的setAdapter()方法，参数为一个RecyclerView.Adapter的匿名内部类。内部类中有四样东西。创建一个继承RecyclerView.ViewHolder的内部类。以及重写三个父类Adapter的方法：onCreateViewHolder()，onBindViewHolder()，getItemCount()。
+ （这一步也可以是：新建一个类继承RecyclerView.Adapter<“自建内部类”>，里面五样东西。“自建内部类”继承ViewHolder,重写三个父类（Adapter）方法，一个构造器。注意这里要有泛型，泛型决定继承方法的参数或返回值）
+
+5.ViewHolder子类中创建构造函数，里面创建一个控件，并不初始化控件对象，而是将构造函数参数中传入的itemView赋给控件对象。为控件对象造一个getter方法便于等会儿onBindViewHolder()访问。
+
+6.onCreateViewHolder()的目的是新建控件对象，并传给ViewHolder。返回一个创建好的ViewHolder子类的对象，创建时构造函数参数为新建的控件对象，可利用onCreateViewHolder()参数中的viewGroup来getContext。
+
+7.onBindViewHolder()的目的是为控件对象添加内容。调用ViewHolder子类的getter方法即可。注意获取ViewHolder子类对象的方法不是new新对象，而是将onBindViewHolder自己参数中的viewHolder赋给它即可（需要将RecyclerView.ViewHolder类型强制转换成自己新建的ViewHolder的子类的类型）。另外，添加内容时可利用参数中的i，方法会自动循环为每个以i为索引值的子项执行代码。
+
+8.getItemCount()方法返回子项数量即可。
+
+两个方法和一个内部类流程总结：onCreateViewHolder中创建好控件对象，传给RecyclerView子类（通过构造函数），子类其实并没有做什么，直接再将它传给onBindViewHolder（通过getter方法），onBindViewHolder在通过控件对象为其添加内容即可。
+
+
+
+
+
+自定义子项布局：
+1.onCreate()中方式一样。建RecyclerView——将其与setcontentView联系——setLayoutManager——setAdapter。
+2.建立一个子项布局。
+3.在RecyclerView.adapter中做变化：
+  1>.onCreateViewHolder中不再新建控件对象，而是用LayoutInflater新建布局对象，同样将其利用创建ViewHolder子类对象方式传给ViewHolder子类。
+  2>.ViewHolder子类中，利用传来的布局对象调用findviewbyid方法建立控件对象，并为控件对象设立getter方法。
+  3>.onBindViewHolder中同样是为控件添加内容。
+
+setLayoutManager()的大文章
+  LinearManager:线性布局，构造函数三个参数——this；竖直滚动或水平滚动；是否翻转。
+  GridManager:表格布局，构造函数三个参数——this；列数（默认垂直布局）或是行数（改为水平布局）；水平或竖直；是否翻转。
+  
+
+set方法汇总
+1.在setLayoutManager()方法的参数中传入的对象的区别
+  ListView:new LinearLayoutManager(context,列数)
+  GridView:new GridLayoutManager(context)
+  横向GrideView:new StaggeredGridLayoutManager(行数，StaggeredGridLayoutManager.HORIZONTAL/VERTICAL)
+2.setItemAnimator();
+  默认动画 new defaultItemAnimator()
+  配合notifyItemInserted(项数)和notifyItemRemoved(项数)。
+
+
+细节：
+1.把匿名类提取出成为内部类：右键-refactor-move。再次move可以变为外部类。
+2.如果子项数目有限，可将子项显示内容设为数组将会很方便，因为onBindViewHolder有int position参数可以自动遍历数组元素。
+3.实现瀑布流必备步骤，调整布局高度。
+  在onBindViewHolder()中：1.用参数-自定义viewholder来调用其itemview，从而调用getLayoutParams()来为LayoutParam创建对象。
+                          2.修改layoutParams对象的height变量
+                          3.同样方式调用setLayoutParams()，参数传入layoutParams对象。
+
+技巧：
+1、更改分割线形态
+   资源文件下新建文件，其中新建一个shape类型的xml文件————其中设置主标签中shape属性。"size"标签中height属性。"gradient"标签中start/center/end color三属性。————value的styles文件中，在一个"style"标签下新建一个"item"标签，name属性是android:listDivider，值是@shape所在文件夹名/shape文件名。
+
+
+
+
+
+特点：
+1.不关心item是否在正确位置——LayoutManager
+2.不关心item间如何分割——itemDecoration
+3.不关注item增加与删除的动画效果。——itemAnimator
+4.仅仅关注如何回收与复用view。

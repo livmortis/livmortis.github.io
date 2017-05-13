@@ -1,0 +1,68 @@
+一、与MVC的区别
+   
+    
+  mvp的View是xml文件和activity；mvc的View是xml，Controller是activity。
+  Modle都是业务逻辑和实体类，如处理数据，网络请求等。
+  mvp对Model层和View层的解耦做得更好。
+  mvp的View和Presenter之间交互通过接口，所以为View编写个接口Iview。
+  mvp的Model和Presenter之间交互通过接口，所以为Model编写接口Imodel。
+
+二、demo制作。
+  实现伪登陆界面，判断账号密码是否正确，对应显示不同toast，并且正确时textview显示一行文字。
+ **View包
+   1.创建Iview接口。
+      view的职责有textview添加文字、获取edittext文字、清空edittext文字、显示和隐藏progressbar。
+      所以创建7个抽象方法。
+
+String getViewAccount();
+void clearViewAccount();
+String getViewPass();
+void clearViewPass();
+void showViewBar();
+void removeViewBar();
+void addViewText(String s);
+  2.创建View类并实现Iview。
+     正是MainActivity。
+     1>、纯view逻辑
+            重写7个方法，除了addViewText()其余全是只有view逻辑。
+     2>、与presenter交互（访问presenter）。
+            创建presenter对象，将this从构造方法中传过去（因为ipresenter也要访问view）。
+            addViewText()中textview所set的文字来自于present。
+            登陆和清空两个点击事件中，是业务逻辑而不是界面展现，所以直接调用presenter的performLogin()和performClear()方法。
+
+ **Modle包
+   1.实体类bean存放账号密码。
+   2.创建Imodle接口。
+      modle的职责有控制textview要展示的数据、网络请求判断账号对错。
+      所以创建2个抽象方法。
+void judgement(String ac, String pa, Model.SuccessCallback successCallback,Model.FailCallback failCallback);
+String queryData();
+   3.创建Modle类并实现Imodle
+     modle与presenter交互只是presenter单方面访问modle，所以modle中不需要创建presenter对象。
+     1>、judgement()方法。
+            新建子线程进行网络请求，再在类中建两个回调接口，judgement()中进行账号对错核对（或发送请求给网络接口处理），再将成功失败结果回调出去。
+     2>、queryData()方法。
+            处理数据，将数据返回。
+  
+**preseter包
+  1.创建perfomLogin()和performClear()两个方法，体现了preseter层的职责是实现view页面的功能。
+  2.创建Imodle和Iview两个接口的对象，前者用Modle类构造器创建，后者不能创建对象，用从Activity中传入的this作为对象。
+  3.与modle交互。
+     performLogin()方法中调用judgement()方法，新建主线程（注意新建handler不能在子线程中），得到回调的结果（登陆成功与否）。
+  4.与view交互。
+     1>、在调用的judgement()方法的成功回调中，调用view的去除progress方法removeViewBar()，和view的为textview赋值方法addViewText(String s)（传入的参数是model的queryData()的返回值，这一步完成了数据从model向view的转移，体现了model操控数据的功能）。失败回调中同样去除progressbar。
+     2>、performClear()方法中调用view的clearViewAccount()和clearViewPass()两个方法。实现clear功能。
+     
+
+
+
+
+
+
+
+
+
+
+
+ps: 1.子线程不能创建Handler对象。
+     2.不能创建activity对象。

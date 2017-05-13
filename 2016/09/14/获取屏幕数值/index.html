@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>获取屏幕数值 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、屏幕高度和宽度　　DisplayMestrics类中有widthPixels和heightPixels两个变量，分别是宽度的像素和高度的像素。还有density密度。相乘即为高度和宽度。  1.获取DisplaymMetrix对象:　　方法一：DisplayMetrics dm = new DisplayMetrics()　　etWindowManager().getDefaultDispla">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="获取屏幕数值">
+<meta property="og:url" content="http://yoursite.com/2016/09/14/获取屏幕数值/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、屏幕高度和宽度　　DisplayMestrics类中有widthPixels和heightPixels两个变量，分别是宽度的像素和高度的像素。还有density密度。相乘即为高度和宽度。  1.获取DisplaymMetrix对象:　　方法一：DisplayMetrics dm = new DisplayMetrics()　　etWindowManager().getDefaultDispla">
+<meta property="og:updated_time" content="2017-04-18T04:12:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="获取屏幕数值">
+<meta name="twitter:description" content="一、屏幕高度和宽度　　DisplayMestrics类中有widthPixels和heightPixels两个变量，分别是宽度的像素和高度的像素。还有density密度。相乘即为高度和宽度。  1.获取DisplaymMetrix对象:　　方法一：DisplayMetrics dm = new DisplayMetrics()　　etWindowManager().getDefaultDispla">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-获取屏幕数值" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/14/获取屏幕数值/" class="article-date">
+  <time datetime="2016-09-14T13:40:35.000Z" itemprop="datePublished">2016-09-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      获取屏幕数值
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、屏幕高度和宽度"><a href="#一、屏幕高度和宽度" class="headerlink" title="一、屏幕高度和宽度"></a>一、屏幕高度和宽度</h2><p>　　DisplayMestrics类中有widthPixels和heightPixels两个变量，分别是宽度的像素和高度的像素。还有density密度。相乘即为高度和宽度。</p>
+<ul>
+<li>1.获取DisplaymMetrix对象:<br>　　方法一：DisplayMetrics dm = new DisplayMetrics()<br>　　etWindowManager().getDefaultDisplay().getMetrics(dm)<br>　　方法二：context.getResource().getDisplayMestrics()</li>
+<li>2.调用像素和密度计算长度：<pre><code>int w = dm.widthPixels * dm.density
+int h = dm.heightPixels * dm.density
+</code></pre></li>
+</ul>
+<p>　　注意屏幕高度不是该页面总高度，是手机显示的当前页面的高度。</p>
+<h2 id="二、控件的高度和宽度。"><a href="#二、控件的高度和宽度。" class="headerlink" title="二、控件的高度和宽度。"></a>二、控件的高度和宽度。</h2><p>　　view.getGlobalVisibleRect()<br>　　获取该控件的四个坐标值，坐标原点是整个屏幕的左上角。<br>　　view.getLocalVisibleRect()<br>　　获取该控件的四个坐标值，坐标原点是“可见范围内的”该控件的左上</p>
+<p>　　参数是Rect的对象，方法效果是将控件的四个坐标传给Rect对象身上。<br>　　有了 rect对象，利用top,bottom,left,right值可以计算控件各种长度。</p>
+<h2 id="三、通过decorView获取各种顶层view高度和宽度。"><a href="#三、通过decorView获取各种顶层view高度和宽度。" class="headerlink" title="三、通过decorView获取各种顶层view高度和宽度。"></a>三、通过decorView获取各种顶层view高度和宽度。</h2><ul>
+<li>1.decorView是window中最顶层view。获取方法：getWindow().getDecorViw()。</li>
+<li>2.获取状态栏高度：<br>　　decorview.getWindowVisibleDisplayFrame()，可以获得除状态栏外的所有区域。参数为Rect对象。区域的top值便是状态栏高度。</li>
+<li>3.获取标题栏高度：<br>   getWindow().findViewById(Window.ID_ANDROID_CONTENT)，可以取得除状态栏和标题栏的所有区域，返回值直接是个rect，取top值，减去状态栏高度就是标题栏高度。</li>
+</ul>
+<h2 id="四、屏幕滚动"><a href="#四、屏幕滚动" class="headerlink" title="四、屏幕滚动"></a>四、屏幕滚动</h2><ul>
+<li>1.scrollview的scrollBy(x,y)<br>　　移动x,y的距离。</li>
+<li>2.scrollview的scrollTo(x,y)<br>　　移动到x,y的位置。</li>
+</ul>
+<h2 id="五、改变控件高宽"><a href="#五、改变控件高宽" class="headerlink" title="五、改变控件高宽"></a>五、改变控件高宽</h2><p>　　view.setButtom() setTop() setLeft() setRight()。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/14/获取屏幕数值/" data-id="cj2n6xnui001dvdpdpvifbkd1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/17/跟投设置页面开发笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          跟投设置页面开发笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">支付宝支付和微信支付SDK的使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code/">Code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hardware/">Hardware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/movie/">movie</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Code/" style="font-size: 20px;">Code</a> <a href="/tags/Hardware/" style="font-size: 10px;">Hardware</a> <a href="/tags/code/" style="font-size: 16.67px;">code</a> <a href="/tags/movie/" style="font-size: 13.33px;">movie</a> <a href="/tags/science/" style="font-size: 10px;">science</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/18/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/github模式/">MVP模式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/17/跟投设置页面开发笔记/">跟投设置页面开发笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/14/获取屏幕数值/">获取屏幕数值</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/11/支付宝支付和微信支付SDK的使用/">支付宝支付和微信支付SDK的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+handler的四种异步控制UI方法
+一.handler.post(new Runnable(){public void run{}})中执行UI操作。
+二.handler.postDelayed(Runnable对象，间隔时间)。
+   1.让他停止：handler.removeCallbacks(runnable对象)。
+三.利用message
+   1.message含有的成员变量，即可用的字段：what(一般放key)，arg1 arg2..(放数据)，obj(可以放一个对象)。
+   2.sendMessage()能发送到handler的原因。Message类里面有一个obtain()方法，里面将handler对象赋给了target变量，target即为消息发送的对象。
+   3.handler.sendMessage()的替代方法：message.sendToTarget()。原因见第2点。
+
+
+并发问题
+   1.若不加锁，众多线程控制UI会导致混乱(并发问题)。若加锁性能下降。
+   2.所以使用Handler机制，消息队列中轮询处理UI请求。
+
+
+源码分析
+总结：handler负责发送消息，looper负责接收消息，并再回传给handler。
+一。looper
+   1.内部包含MessageQueue消息队列。
+   2.looper.looper()方法，无限轮询队列，若有消息发给handler
+
+二。Message。
+    Message类里面有一个obtain()方法，里面将handler对象赋给了target变量，target即为消息发送的对象。
+三。ActivityThread。系统线程，里面包含looper.
+四。ThreadLocal。
+    用来在线程中保存一些变量，有setter和getter方法。想创建和线程有关的变量是可以用它。
+五。分析源码
+   1.主线程关联looper源码：
+      1>.进入系统主线程ActivityThread，找到main()方法，里面有looper.preparedMainLooper()方法。里面又有prepare（）方法。再里面有创建Looper对象语句
+      2>.点开Looper类，看到MessageQueue对象创建语句。
+
+   2.looper关联Handler源码：
+      1>.进入Handler类，调用了looper.mylooper()方法，进入该方法，只有一句返回ThreadLocal.get()，这是为了得到looper对象。（看来looper对象是放在threadlocal中的）
+      2>.回到Handler类，通过looper对象取出了消息队列，完成关联。
+
+   3.looper()方法源码：
+      1>.有个for死循环，消息列表取出消息，调用“消息.target.dispatchMessage()方法”。
+      2>.在Handler中进入handler的dispatchMessage()方法，里面调用handlerMessage()。
+
+   3和2说明了为什么sendMessage（）可以传到handlerMessage（）
+
+
+
+
+主线程给子线程发消息
+ 
+
+
+子线程更新UI法
+ activity刚运行时viewRootImpl还没有被创建，onRusume()时才创建。
+
+
+
+can't create handler inside thread that has not called Looper.prepare()出错原因：Handler必须与Looper一一对应。
+Handler新建对象时会调用ThreadLocal.get()寻找一个looper，如果在子线程中，则没有looper就会报错。
+主线程是和looper关联的，所以新建Handler时存在looper，不会出错
+子线程中没有looper，可以在新建Handler时构造器参数传入"context.getMainLooper()"，便不出错了。

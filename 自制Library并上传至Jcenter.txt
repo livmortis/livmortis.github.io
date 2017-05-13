@@ -1,0 +1,36 @@
+1.首先在Bintray上面用github账号登录，会自动帮你建好9个仓库，我们要用的只有maven的repositories。进去后add new package添加一个包，要输入name、license、version等信息，最后为你建好的这个包的包名格式就是：账号名/maven/输入的name 。
+2.进入自己已经写好的库工程。
+3.进入项目的build.gradle，引入bintray的插件。即在dependencies中加入classpath 'com.novoda:bintray-release:0.3.4'.
+  (一个library的命名规则： GROUP_ID:ARTIFACT_ID:VERSION 分别是com.XX.XX、lib名、1.0.0)
+4.进入module的build.gradle，配置bintray的信息。
+   申明bintray插件：apply plugin: 'com.novoda.bintray-release’
+   发布信息(与apply和android平级)：
+               publish{
+                 userOrg='开发者名'
+                 groupId='库命名第一项'
+                 artifactId='库命名第二项'
+                 publishVersion='库命名第三项'
+                 desc='描述语句'
+                 website='描述网址'   
+                 }
+   最后sync now编译
+5.terminal中上传
+  gradlew clean build bintrayUpload -PbintrayUser=用户名 -PbintrayKey=APIkey(网站的profile里面找) -PdryRun=false
+6.进入网站，在该项目中点击add to Jcenter即可提交到Jcenter中供所有人调用。
+
+
+
+
+我上传的库：
+   publish{
+    userOrg='livmortis'
+    groupId='com.roundPic'
+    artifactId='roundPic'
+    publishVersion='1.0.0'
+    desc='draw a round picture for display'
+    website=''
+}
+
+   
+   调用方法： compile 'com.roundPic:roundPic:1.0.0'
+   可用类：MyImageView，用于绘制一个圆形头像。

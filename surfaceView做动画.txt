@@ -1,0 +1,45 @@
+  主动更新时需要一个线程去操作，此时选择surfaceView而不选View。
+  新建类继承SurefaceView类，实现SurfaceHolder.CallBack接口。
+  实现一个构造器和三个方法：surfaceChanged()surfaceCreated()surfaceDestroyed()，参数都包含SurfaceHolder对象。——这三个方法是SurfaceHolder.CallBack接口中的抽象方法。
+  构造器中创建一个回调函数，getHolder().addCallBack(this)。初始化paint画笔。
+  自定义一个draw()方法，创建Canvas画布,并在开头和结尾添加锁定（getHolder().lockCanvas()）和解锁画布(getHolder().unlockCanvasAndPost(canvas))两条语句。中间用画布Canvas绘制之。
+  在surfaceCreated()中调用自定义方法draw()。
+
+Canvas
+  1.canvas的drawColor()改变的是画布背景，要放在绘制语句前面，否则背景会掩盖绘制的图像。paint的setColor()改变的是画笔的颜色。
+  2.canvas的save()和restore()方法成对出现，效果是让它俩之间的操作如rotate()（旋转画布）不影响restore()之后的操作。
+  3.canvas的drawBitmap(Bitmap bitmap, Rect src, RectF dst, Paint paint)； 
+    Rect src: 是对图片进行裁截，若是空null则显示整个图片 。
+    RectF dst：是图片在Canvas画布中显示的区域。大于src则把src的裁截区放大，小于src则把src的裁截区缩小。
+
+
+
+@@@利用容器绘制组合图形
+思想：父容器类中有一个存放容器的集合，每个容器都是一个子view，并且都有一个继承了父容器类的类。所以每个子view也有自己的集合也可以添加其他子view（图形组合拼接）。
+1。新建一个容器类Container。
+   构造器中创建容器类泛型List集合，集合元素是容器（其实是子view）（每个子view是一个图形）。
+   新建两个方法。一个是draw()方法，另一个是childrenView()。在draw()中首先调用childrenView()(因为真正的绘制代码在这里)，然后foreach遍历集合中的子view（每个元素都是一个图形），再递归的调用自己即“container的draw()”。逻辑梳理：若集合中有了多个子view，那么子view肯定已经有了childrenView()这个绘制图形的能力，那就让这些子view依次调用childrenView()即可绘制。通过一个draw()的递归行为来实现这一目的。
+   新建两个向集合中添加和删除容器的方法。
+   
+2。新建一个代表具体图形的子view继承Container容器类。
+   构造器中初始化paint画笔。
+   重写父类的childrenView()，绘制图像（真正的图形的绘制代码在这里）。
+
+3。新建一个类继承surfaceView实现Callback。
+   构造器中首先创建好Container和图形类的对象。别忘addCallBack()。
+   其次建立一个自定义方法drawuck()，内部先用锁画布+解锁画布包裹后再开始写代码。让多个图形拼接，即一个调用"添加集合方法"添加另一个，直到把母图形添加到container中。最后重写Container的draw()进行绘制。
+   绘制行为的调用关系：surfaceView调用Container的draw()，draw()递归的调用自己让集合每个元素调用childrenView()，子view类重写childrenView()添加真正的绘制行为。
+
+@@@利用容器使组合图形移动
+1.1>容器类中建立坐标变量x,y，并为之添加get()set()方法。
+  2>在容器类draw()方法中书写移动逻辑。调用canvas自带的瞬移方法translate()，两个参数为两个坐标的get()方法。将之用save()restore()包裹。
+2.在Rect类中的childrenView()方法里，获取translate()的两个参数将其递增——get()作为set()的参数...
+3. 1>surfaceView子类中建立两个方法——startTimer()，stopTimer()。
+   2>在startTimer()中创建两个对象——Timer对象，TimerTask对象。
+   首先用schedule()方法启动Timer，参数为TimerTask对象和间隔时间。
+   然后在TimierTask接口匿名类中的run()里面写入drawuck()（surfaceView中自定义的绘制方法）。
+   3>stopTimer()中确定timer不为空后cancel()，然后赋予null。
+   4>分别将startTimer()和stopTimer()放入surfaceCreate()和surfaceDestroyed()。
+
+
+

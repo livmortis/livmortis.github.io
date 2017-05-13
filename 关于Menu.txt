@@ -1,0 +1,12 @@
+一.Menu文件下的menu的xml文件
+每一个Item标签代表一个menu菜单子项。
+属性：title
+
+二.Activity中的方法
+1、onCreateOptionsMenu()
+   
+   
+2、onOptionsItemSelected(MenuItem item)
+   类似与onclick()方法，但是不必和某个控件关联。
+   item.getItemId()即为控件的ID。
+      

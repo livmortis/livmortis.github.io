@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017 | Hexo</title>
+  <title>自制Library并上传至Jcenter | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+  <meta name="description" content="1.首先在Bintray上面用github账号登录，会自动帮你建好9个仓库，我们要用的只有maven的repositories。进去后add new package添加一个包，要输入name、license、version等信息，最后为你建好的这个包的包名格式就是：账号名/maven/输入的name 。　　2.进入自己已经写好的库工程。　　3.进入项目的build.gradle，引入bintr">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自制Library并上传至Jcenter">
+<meta property="og:url" content="http://yoursite.com/2016/07/31/自制Library并上传至Jcenter/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.首先在Bintray上面用github账号登录，会自动帮你建好9个仓库，我们要用的只有maven的repositories。进去后add new package添加一个包，要输入name、license、version等信息，最后为你建好的这个包的包名格式就是：账号名/maven/输入的name 。　　2.进入自己已经写好的库工程。　　3.进入项目的build.gradle，引入bintr">
+<meta property="og:updated_time" content="2017-04-18T04:11:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="自制Library并上传至Jcenter">
+<meta name="twitter:description" content="1.首先在Bintray上面用github账号登录，会自动帮你建好9个仓库，我们要用的只有maven的repositories。进去后add new package添加一个包，要输入name、license、version等信息，最后为你建好的这个包的包名格式就是：账号名/maven/输入的name 。　　2.进入自己已经写好的库工程。　　3.进入项目的build.gradle，引入bintr">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -59,39 +64,83 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/04/18/hello-world/" class="archive-article-date">
-  <time datetime="2017-04-18T04:11:07.000Z" itemprop="datePublished">Apr 18</time>
+        <section id="main"><article id="post-自制Library并上传至Jcenter" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/31/自制Library并上传至Jcenter/" class="article-date">
+  <time datetime="2016-07-31T15:32:51.000Z" itemprop="datePublished">2016-07-31</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/18/hello-world/">Hello World</a>
+    <h1 class="article-title" itemprop="name">
+      自制Library并上传至Jcenter
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　1.首先在Bintray上面用github账号登录，会自动帮你建好9个仓库，我们要用的只有maven的repositories。进去后add new package添加一个包，要输入name、license、version等信息，最后为你建好的这个包的包名格式就是：账号名/maven/输入的name 。<br>　　2.进入自己已经写好的库工程。<br>　　3.进入项目的build.gradle，引入bintray的插件。即在dependencies中加入classpath ‘com.novoda:bintray-release:0.3.4’.<br>　　(一个library的命名规则： GROUP_ID:ARTIFACT_ID:VERSION 分别是com.XX.XX、lib名、1.0.0)<br>　　4.进入module的build.gradle，配置bintray的信息。<br>　　申明bintray插件：apply plugin: ‘com.novoda.bintray-release’<br>　　发布信息(与apply和android平级)：</p>
+<pre><code>publish{
+userOrg=&apos;开发者名&apos;
+groupId=&apos;库命名第一项&apos;
+artifactId=&apos;库命名第二项&apos;
+publishVersion=&apos;库命名第三项&apos;
+desc=&apos;描述语句&apos;
+website=&apos;描述网址&apos;   
+}
+</code></pre><p>　　最后sync now编译<br>　　5.terminal中上传<br>　　gradlew clean build bintrayUpload -PbintrayUser=用户名 -PbintrayKey=APIkey(网站的profile里面找) -PdryRun=false<br>　　6.进入网站，在该项目中点击add to Jcenter即可提交到Jcenter中供所有人调用。</p>
+<p>　　我上传的库：</p>
+<p>一、roundPic</p>
+<pre><code>publish{
+userOrg=&apos;livmortis&apos;
+groupId=&apos;com.roundPic&apos;
+artifactId=&apos;roundPic&apos;
+publishVersion=&apos;1.0.0&apos;
+desc=&apos;draw a round picture for display&apos;
+website=&apos;&apos;
+}
+</code></pre><p>   调用方法： compile ‘com.roundPic:roundPic:1.0.0’<br>   可用类：MyImageView，用于绘制一个圆形头像。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/31/自制Library并上传至Jcenter/" data-id="cj2n6xnue0019vdpdmd66aakt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/01/AS实用插件总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          AS实用插件总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/22/Android热更新的实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android热更新的实现</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         

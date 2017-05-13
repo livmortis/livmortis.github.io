@@ -1,0 +1,79 @@
+
+一、Service的基本创建步骤
+
+活动中
+
+1.启动服务，关闭服务，绑定服务，解绑服务：startservice(),stopservice(),bindservice(),unbindservice()。前两个参数参照startactivity（）。都是由Activity调用的。
+2.bindservice的参数(intent,ServiceConnection【用来侦听服务的状态】的对象，Context.BIND_AUTO_CREATE),    unbindservice(ServiceConnection的对象)。
+3.实现ServiceConnection接口的两个方法：onserviceconnected()服务绑定后执行 onservicedisconnected()服务被杀掉时执行。
+4.bindservice()----同时执行了oncreate()和onserviceconnected(),   unbindservice()---同时执行了onservicedisconnected()和ondestroy()。
+   startservice()----执行oncreate()和onStartCommand()    stopservice()---执行ondestroy()。
+
+服务中
+
+1.继承Service后重写四个方法。onBind(), onCreate(), onDestroy(), onStartCommand()。
+2.如需与活动建立连接，再自定义一个Callback接口和一个继承Binder的类。
+
+
+
+
+二、Service的生命周期：
+1.onCreate()和onDestroy()。
+2.activity和service绑定时，退出活动服务也自动停止，没绑定则不停。
+3.oncreate()和onstartcommand()的区别，每次startservice时就会onstartcommand（）一次，而oncreate()只在第一次startservice时执行，之后一直存在。
+4.若startService()和bindService()都执行了，再想销毁服务，必须stopService()和unBindService()都执行。
+
+
+
+
+
+三、Activity与Service传递信息。
+
+
+1、活传服方法一利用onstartcommand()。activity要给service传递数据，Intent搞好后只需利用onstartcommand()参数中的intent接受即可
+2、活传服方法二利用onbind()。（更方便更快，不需要Intent）（要传递的信息变量放在自定义类A中）（必须绑定后才能传递数据，方法一开始即可传递）
+       核心思想：传递数据即想办法给对方的成员变量str赋值。  关键环节：onbind()方法的返回值会传递到活动中的onServiceConnected()的参数中。     
+             1> Myservice中建内部类A，继承Binder。   
+             2> A中str是服务要printf的数据，为其建立setter方法。（str并不是在A中定义的）
+             3> 让onbind()的返回值为A的对象  
+          ***4>这个对象会被传递到Activity中的onserviceconnected()中的第二个参数"service"。（别问为什么）
+             5>在活动中新建一个*A类型*（Myservice.A）的变量a，把service赋给a，a调用setStr()即可给Service服务类中的str赋值。
+
+
+3、侦听服务中数据（监听服务中的变化例如++）
+
+                --回调机制。将服务中的信息显示在活动UI中。
+                  核心思想：上面是把str数据封装到set方法里，这里是把"接口的对象"封装到set方法里，而str数据藏在接口中的抽象方法里。
+                             1> 服务中新建一个接口Cb，定义一个抽象方法onchange(str)。通过这个方法传递服务到活动的数据。
+                             2> 建一个private类型的Cb成员变量cb，配上set和get方法来封装好(别人通过这俩方法调用它"NO!没人想调用cb")。set方法是为了利用它的参数即接口的变量/对象cb。
+                             3> 在服务的oncreate()中（很可能是子线程中），将服务自己内部的可能是不停变换的那个数据，放入cb所调用的onchange(str)方法的参数里（自己当场建onchange()方法），传给了接口CB。【服务子线程onchange()传到了服务主线程onchange()】
+                             4> 内部类A中新建getsss()方法，返回MyServvv.this。(返回值是MyServvv)（因为A类的对象可以传递到活动中 见上回）
+                             5> 活动中，将onServiceConnected()的第二个IBinder类型参数赋给自己建的A类型的变量a（强制类型转换为MyServvv.A），a调用getservice()再调用set方法（而不是get方法），其参数就是接口的对象，用匿名类变成new Cb，重写方法onchange(str)，数据str传出。
+
+
+4、支线数据传到主线。1>匿名类方式创建一个Handle对象，重写Handle接口的方法handleMessage(Message msg)。
+                     2>支线中创建Message对象msg,调用setData，参数必须是bundle过后的数据。
+                     3>handle对象调用setmessage（），参数是msg。***就将数据传递到了匿名类的handlemessage中。【setmessage()传到了handlemessage()】
+                     3>匿名类中msg调用getdata()，再getstring().即可。
+
+四、一些细节：
+1.java.util.logging.Handler包的Handler是错的。必须是android.os.Handler;。
+2.message传递的是bundle包好的数据，handleMessage()中要对数据调用getData()+getString(key)两个方法才能提取出来。
+3.如果不在onDestroy()设置结束服务，就会报android.app.ServiceConnectionLeaked错误。
+4.如果服务子线程内部调用CallBack接口方法时没有if (callback != null) 条件句，会爆java.lang.NullPointerException: Attempt to invoke interface method 'void com.baidu.myapplication.MySer$Callback.onChange(java.lang.String)' on a null object reference错误。因为此时callback变量还是null，我写的接口定义的语句还在下面没被执行到。
+5.重要！Handler不能在子线程中创建对象，需在直接用外部UI线程创建好的Handler对象，否则报 Can't create handler inside thread that has not called Looper.prepare()错误。
+
+
+
+五、那么Service和子线程该怎么选择呢
+1.程序的进程关了service还在运行，子线程不行。
+2.长时间在后台运行，用service。
+3.默认情况下，Service其实是运行在主线程中的，如果任务占用CPU时间多，资源大的情况下，要使用线程。
+4.可以在任何有 Context 的地方调用Context.startService、Context.stopService、Context.bindService，Context.unbindService，来控制它，你也可以在 Service 里注册 BroadcastReceiver，在其他地方通过发送 broadcast 来控制它，当然这些都是 Thread 做不到的。
+5.Service的优先级高于后台挂起的Activity和Activity所创建的Thread，不易被杀。
+6.其实应该考虑的问题是子线程应该在Activity开，还是Application中开，还是Service中开。前两者Thread的生命周期都不应该超出整个应用程序的生命周期，只有在Service里开线程可以在Activity结束后跟随service继续运行。
+7.开始、绑定、解绑、结束等方法里的intent对象必须共用，即提前初始化好Intent对象，才是指向同一个service的。
+8.！editText调用getText()同时必须toString()！
+9.当通过onBinder()+Binder子类的方式，从活动传递信息给服务时，服务中接受并在子线程中展示的那个数据，必须在服务类下定义为全局变量，而Binder子类的作用仅仅是为该变量提供一个setter()方法供活动去修改。绝不可以把变量定义到Binder子类中作为局部变量再提供个getter()方法，而子线程中再new Binder子类，再通过getter()得到变量，这样接收到的数据是null，原因不明。
+
+

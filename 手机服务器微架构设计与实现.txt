@@ -1,0 +1,23 @@
+传输层协议：TCP  UDP
+TCP:1.面向连接，三次握手四次挥手，必须建立连接才能通信
+    2.数据可靠性，
+      1>每一个数据包都有校验位(对数据内容签名)，数据接收方通过校验位保证数据完整性。
+      2>接收方返回ACK，可以防丢包
+UDP:不是面向连接，没有数据可靠性机制，但是速度快。
+
+应用层协议：HTTP FTP SMTP (前三者tcp,后两者udp)  XMPP POP
+
+网络层协议：IP
+
+
+Socket基础
+服务端：
+1.建立ServerSocket对象。
+2.bind()方法对指定IP端口做监听
+3.accept()等待端口上的连接，远端传回数据后返回对应该远端的socket对象。
+4.再用inputstream和Outputstream对socket进行输入输出操作。
+5.close()关闭socket连接。
+客户端：
+1.connect()连接指定IP端口
+2.再用inputstream和Outputstream对socket进行输入输出操作。
+3.close()关闭socket连接。

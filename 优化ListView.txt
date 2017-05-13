@@ -1,0 +1,22 @@
+listView在手机APP开发上真的是非常常用，除了基本操作，一些优化方法可以让我们的listView给用户带来更高的体验。
+1.convertView对抗快速滚动
+  在自定义适配器的getView()方法的参数中，有一个convertView参数，它默默的为我们缓存了之前加载好的view子项布局（也就是listview的每一行的小布局）。因此在为view连接子项layout布局时，可以加个if判断convertView是否存在，存在就可以直接把它赋给view，避免每次滑动到之前加载过的子项时还得重新连接。使得快速滚动是更加流畅。
+
+2.内部类ViewHolder储存控件实例
+  先建一个内部类ViewHolder(自定义名字)，里面存入子项中会出现的控件类型的成员变量。
+  同样在适配器的getView()方法中，在convertView条件判断为null语句中，用ViewHolder的成员变量去实例化控件，并将viewholder对象通过view的setTag()方法存入view中。这样在convertView条件判断为非NULL中，即可直接通过view的getTag()取出加载过的子项里已经存好的ViewHolder对象，从而省去了反复实例化控件的过程。
+
+3.ListActivity免布局快速创建法
+  建一个继承了ListActivity的Activity。注意以下几点：
+  1>关联适配器可以直接在onCreat()中调用setListAdapter(),参数是建好的适配器的对象。
+  2>没有布局有适配器即可创建ListView了。若还是想自定义Layout布局，它所关联的Layout必须有ListView标签并且其id必须是“@android:id/list”。
+
+4.recyclerView代替listview
+
+
+
+1.适配器 ListAdapter 子类有ArrayAdapter BaseAdapter。 ArrayAdapter是BaseAdapter的派生类，在BaseAdapter的基础上，添加了一项重大的功能:可以直接使用泛型构造。数量大于100时使用arrayadapter。
+2.BaseAdapter构造器是两参数的，用适配器的add()方法亲手一条条添加子项显示内容。
+  ArrayAdapter构造器三个参数，第三个参数是一个arraylist集合。
+2.android.R和R。一个是系统提供的，一个是自己项目里的。
+3.若显示乱码，则重写toString()。

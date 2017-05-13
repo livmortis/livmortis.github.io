@@ -1,0 +1,37 @@
+ * 客户端——>本地接口
+
+一、充值页面（DklcRecharge）
+  1.先getPaymentList()，从接口获取"支付列表"，并将其放入GPaymentlist实体类中。
+  2.从接口获得金豆选项view
+  3.点击支付事件：弹出一个PopWindow。
+
+二、popwindow（PayPopWindow）
+  1.获取以下内容：
+    投顾ID，充值金额（GPaymentlist类的keyvalue变量），ip地址（分wifi和流量两种途径获取），交易类型（APP），body（GPaymentlist类的descr变量，并用UTF-8编码），金豆比率（GPaymentlist类的id变量）。
+  2.点击微信支付事件：调用自定义WeiXinPay类的requestPay()方法，将上述6个值传入。
+
+三、请求接口，获取数据（WeiXinPay）
+  1.构造器中注册APP：
+    1>.创建微信SDK“IWXAPI类”的对象：IWXAPI api = WXAPIFactory.createWXAPI(context，APPID(获取方法见下))。
+    2>.调用微信SDK“IWXAPI类”的registerApp()方法，传入APPID。
+    3>.APPID来源：
+     在微信开放平台填写包名和签名后可注册应用，注册应用后得到appid。
+     项目中写在了function.properties文件中——wx973da9dd05403d3e，
+     通过MiddlewareProxy.getFunctionManager().getProperty()方式获取，安卓原生获取方法是： 
+     Properties pro = new Properties();
+     InputStream is = context.getAssets().open("function.properties"); 
+     pro.load(is);
+
+  2.向本地接口发送请求
+    判断完"是否安装微信"，"微信版本是否支持支付"之后，传入上述6个值开始发送请求
+    
+ * 本地接口——>客户端
+
+  3.处理数据
+    1>.获取的数据放在实体类里，包括appid , partnerid , prepayid , sign , noncestr , tiemstamp 7个值。
+    2>.新建SDK中的类PayReq的对象，将7个值放入该类的7个变量里
+
+  
+ * 客户端——>微信服务器
+
+    3>.调用IWXAPI的sendReq()方法，将PayReq对象传入。完成。

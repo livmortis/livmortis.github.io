@@ -1,0 +1,24 @@
+本文目标：进程间服务通信（多个进程共用一个服务）
+AIDL:android interface definition language
+android5.0后启动服务只能用显式intent不能用隐式。
+
+一、程序B启动程序A中的服务。
+1.创立ComponentName对象，构造器参数一为包名，参数二为被启动的service包名+类名。
+2.创立Intent对象，调用setComponent()，参数为ComponentName对象。
+3.startService()。
+
+注意：建立Service最好通过软件直接自动新建一个Service类。如果是手动建的类手动继承Service，需要在manifest下声明service并且加入以下权限：
+            android:exported="true"
+            android:enabled="true"
+否则会报java.lang.SecurityException: Not allowed to start service Intent { cmp=com.baidu.myapplication/.Myservice } without permission android.permission.BIND_REMOTEVIEWS错误。
+
+
+
+二、程序B与程序A中的服务通信。
+1.A程序中Service同等级创建AIDL接口文件。然后Build---rebuild project或者make project。进入AIDI，建立抽象方法setAbc()（自定义）。
+2.Service的onBinder()中返回一个"AIDL子类对象.Stub()"（这说明AIDL实际上是一个Binder类型），并重写接口原有方法basicTypes()和自建方法setAbc()。
+3.在service中建立String全局变量abc，使setAbc()成为它的setter方法。（先有setter()后有变量）此时即可通过操作AIDL来向服务传递信息。
+5.B程序中创建Folder--AIDLfolder，里面新建与A程序包名相同的包，A程序中的AIDL文件拷贝到B程序中这个包里。rebuild或make。
+6.B程序中建立bindService()，将ServiceConnection接口的onServiceConnected()方法的第二个Binder类型的参数"service"，赋给一个自定义的AIDL类型变量b。这个赋值过程注意，不能直接将service强制类型转换成AIDL类型，因为这时转换成的是A包路径下的AIDL，必须用以下方式：b=AIDL接口名.Stub.asInterface("参数service")。
+7.b调用setAbc()向 服务传递信息。
+

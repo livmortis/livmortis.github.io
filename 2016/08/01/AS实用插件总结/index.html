@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017 | Hexo</title>
+  <title>AS实用插件总结 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+  <meta name="description" content="setting的plugins中可以安装和卸载插件 　　一、GsonFormat–将json数据自动提取到实体类　　空白处右键选generate-GsonFormat，将json数据拷贝进来，修改好后即可新建实体类将json放入。 　　二、ButterKnife–将布局控件自动生成butter代码到java代码中　　1、先在module的gradle里依赖：compile ‘com.jakew">
+<meta name="keywords" content="Code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AS实用插件总结">
+<meta property="og:url" content="http://yoursite.com/2016/08/01/AS实用插件总结/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="setting的plugins中可以安装和卸载插件 　　一、GsonFormat–将json数据自动提取到实体类　　空白处右键选generate-GsonFormat，将json数据拷贝进来，修改好后即可新建实体类将json放入。 　　二、ButterKnife–将布局控件自动生成butter代码到java代码中　　1、先在module的gradle里依赖：compile ‘com.jakew">
+<meta property="og:updated_time" content="2017-04-18T04:10:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="AS实用插件总结">
+<meta name="twitter:description" content="setting的plugins中可以安装和卸载插件 　　一、GsonFormat–将json数据自动提取到实体类　　空白处右键选generate-GsonFormat，将json数据拷贝进来，修改好后即可新建实体类将json放入。 　　二、ButterKnife–将布局控件自动生成butter代码到java代码中　　1、先在module的gradle里依赖：compile ‘com.jakew">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -59,39 +64,67 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/04/18/hello-world/" class="archive-article-date">
-  <time datetime="2017-04-18T04:11:07.000Z" itemprop="datePublished">Apr 18</time>
+        <section id="main"><article id="post-AS实用插件总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/01/AS实用插件总结/" class="article-date">
+  <time datetime="2016-07-31T16:24:36.000Z" itemprop="datePublished">2016-08-01</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/18/hello-world/">Hello World</a>
+    <h1 class="article-title" itemprop="name">
+      AS实用插件总结
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　setting的plugins中可以安装和卸载插件</p>
+<p>　　一、GsonFormat–将json数据自动提取到实体类<br>　　空白处右键选generate-GsonFormat，将json数据拷贝进来，修改好后即可新建实体类将json放入。</p>
+<p>　　二、ButterKnife–将布局控件自动生成butter代码到java代码中<br>　　1、先在module的gradle里依赖：compile ‘com.jakewharton:butterknife:7.0,1’并sync now一下。<br>　　2、在Activity的setcontentview方法中，点选参数中的layout布局名，右键generate butterknife injections，即可插入butterknife代码。</p>
+<p>　　三、Android Code Generator–将布局控件自动关联到java代码中<br>　　xml中右键generate Android code—Activity  创建正常的java关联代码</p>
+<p>　　四、Android Selectors Generate–快速生成selector文件，设置点击样式改变。<br>　　1、将button点击前后的两张图片XXX_normal.png和XXX.pressed.png放入drawable中，右击drawable，generate android selectors（最好在project视图下），即可生成一个将两张图片添加到item标签后的selector文件XXX_selector.xml。<br>　　2、layout的控件调用@drawable时，将selector文件名写上去，便可自动将控件点击前后的显示设为那两张图片。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/01/AS实用插件总结/" data-id="cj2n6xnsy0002vdpdyaqmpqt6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/25/2016-8-12晚观星/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2016.8.12晚观星
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/31/自制Library并上传至Jcenter/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">自制Library并上传至Jcenter</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
