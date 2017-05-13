@@ -5,17 +5,17 @@
   
   <title>eventbus | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法1.建立javaBean类用来存放发送和接收的消息的实体类。 2.接收方  1&amp;gt; 注册和解注册     onCreate()中EventBus.getDefault().register(this);     onDestroy()中EventBus.getDefault().unregis">
+  <meta name="description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法1.建立javaBean类  用来存放发送和接收的消息的实体类。 2.接收方  1&amp;gt; 注册和解注册     onCreate()中EventBus.getDefault().register(this);     onDestroy()中EventBus.getDefault().unreg">
 <meta name="keywords" content="Code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="eventbus">
 <meta property="og:url" content="http://yoursite.com/2017/05/13/eventbus/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法1.建立javaBean类用来存放发送和接收的消息的实体类。 2.接收方  1&amp;gt; 注册和解注册     onCreate()中EventBus.getDefault().register(this);     onDestroy()中EventBus.getDefault().unregis">
-<meta property="og:updated_time" content="2017-05-13T15:55:13.000Z">
+<meta property="og:description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法1.建立javaBean类  用来存放发送和接收的消息的实体类。 2.接收方  1&amp;gt; 注册和解注册     onCreate()中EventBus.getDefault().register(this);     onDestroy()中EventBus.getDefault().unreg">
+<meta property="og:updated_time" content="2017-05-13T15:56:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="eventbus">
-<meta name="twitter:description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法1.建立javaBean类用来存放发送和接收的消息的实体类。 2.接收方  1&amp;gt; 注册和解注册     onCreate()中EventBus.getDefault().register(this);     onDestroy()中EventBus.getDefault().unregis">
+<meta name="twitter:description" content="Eventbus可代替：handler/message、intent、broadcast 一、基本用法1.建立javaBean类  用来存放发送和接收的消息的实体类。 2.接收方  1&amp;gt; 注册和解注册     onCreate()中EventBus.getDefault().register(this);     onDestroy()中EventBus.getDefault().unreg">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -55,7 +55,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Søk"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -87,11 +87,15 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Eventbus可代替：handler/message、intent、broadcast</p>
-<h1 id="一、基本用法"><a href="#一、基本用法" class="headerlink" title="一、基本用法"></a>一、基本用法</h1><h2 id="1-建立javaBean类"><a href="#1-建立javaBean类" class="headerlink" title="1.建立javaBean类"></a>1.建立javaBean类</h2><pre><code>用来存放发送和接收的消息的实体类。
-</code></pre><h2 id="2-接收方"><a href="#2-接收方" class="headerlink" title="2.接收方"></a>2.接收方</h2><p>  1&gt; 注册和解注册<br>     onCreate()中EventBus.getDefault().register(this);<br>     onDestroy()中EventBus.getDefault().unregister(this);<br>  2&gt; 新建接受方法<br>     加入注解：@Subscribe(threadMode = ThreadMode.XXX)<br>     接受方法参数为javaBean类对象。该方法必须是public。<br>  3&gt;ThreadMode分<br>     四种：Main，background，async，posting</p>
+<h1 id="一、基本用法"><a href="#一、基本用法" class="headerlink" title="一、基本用法"></a>一、基本用法</h1><h2 id="1-建立javaBean类"><a href="#1-建立javaBean类" class="headerlink" title="1.建立javaBean类"></a>1.建立javaBean类</h2><p>  用来存放发送和接收的消息的实体类。</p>
+<h2 id="2-接收方"><a href="#2-接收方" class="headerlink" title="2.接收方"></a>2.接收方</h2><p>  1&gt; 注册和解注册<br>     onCreate()中EventBus.getDefault().register(this);<br>     onDestroy()中EventBus.getDefault().unregister(this);<br>  2&gt; 新建接受方法<br>     加入注解：@Subscribe(threadMode = ThreadMode.XXX)<br>     接受方法参数为javaBean类对象。该方法必须是public。<br>  3&gt;ThreadMode分<br>     四种：Main，background，async，posting</p>
 <h2 id="3-发送方"><a href="#3-发送方" class="headerlink" title="3.发送方"></a>3.发送方</h2><p> 新建javaBean类对象，通过构造器传入数据。<br> Event.getDefault().post(javaBean类对象)</p>
-<h1 id="二、粘性事件用法"><a href="#二、粘性事件用法" class="headerlink" title="二、粘性事件用法"></a>二、粘性事件用法</h1><p>1.与基本用法区别：基本用法接收方先注册，发送方发送的一瞬间接受方立马会接收到；粘性事件先发送方先发送，接收方注册的一瞬间接受消息，不注册则发送方已发送的消息会一直存在于虚空中无法接受到。<br>2.发送方<br>   EventBus.getDefault().postSticky(javaBean对象)<br>3.接收方<br>   加入注解：@Subscribe(threadMode = ThreadMode.XXX, sticky = true)<br>   写接受方法<br>         4.接收方注册和解注册<br>    注册：EventBus.getDefault().register(this)<br>    解注册：EventBus.getDefault().removeAllStickyEvents()</p>
-<h2 id="注意点："><a href="#注意点：" class="headerlink" title="注意点："></a>注意点：</h2><ol>
+<h1 id="二、粘性事件用法"><a href="#二、粘性事件用法" class="headerlink" title="二、粘性事件用法"></a>二、粘性事件用法</h1><h2 id="1-与基本用法区别"><a href="#1-与基本用法区别" class="headerlink" title="1.与基本用法区别"></a>1.与基本用法区别</h2><p>  基本用法接收方先注册，发送方发送的一瞬间接受方立马会接收到；粘性事件先发送方先发送，接收方注册的一瞬间接受消息，不注册则发送方已发送的消息会一直存在于虚空中无法接受到。</p>
+<h2 id="2-发送方"><a href="#2-发送方" class="headerlink" title="2.发送方"></a>2.发送方</h2><p>   EventBus.getDefault().postSticky(javaBean对象)</p>
+<h2 id="3-接收方"><a href="#3-接收方" class="headerlink" title="3.接收方"></a>3.接收方</h2><p>   加入注解：@Subscribe(threadMode = ThreadMode.XXX, sticky = true)<br>   写接受方法</p>
+<h2 id="4-接收方注册和解注册"><a href="#4-接收方注册和解注册" class="headerlink" title="4.接收方注册和解注册"></a>4.接收方注册和解注册</h2><pre><code>注册：EventBus.getDefault().register(this)
+解注册：EventBus.getDefault().removeAllStickyEvents()
+</code></pre><h2 id="注意点："><a href="#注意点：" class="headerlink" title="注意点："></a>注意点：</h2><ol>
 <li>subscriber修饰的方法名字可以随便起，但一定得是public。</li>
 <li>两个activity之间跳转，要用粘性事件，普通的不行。</li>
 <li>threadmode为main和posting的时候，自定义方法里才可以写操作ui的逻辑。</li>
@@ -100,7 +104,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/13/eventbus/" data-id="cj2ngdpz5000c7qpdcjk2ajr7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/05/13/eventbus/" data-id="cj2ngfjrs000c8bpdtdzy24v9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Code/">Code</a></li></ul>
@@ -150,7 +154,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Arkiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li></ul>
     </div>
@@ -160,7 +164,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Siste innlegg</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
